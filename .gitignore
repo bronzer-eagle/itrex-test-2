@@ -35,10 +35,8 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
-.idea/itrex-test-2.iml
-.idea/modules.xml
-.idea/watcherTasks.xml
-.idea/workspace.xml
+.idea/
 data/
 nano.save
 package.json
+public/

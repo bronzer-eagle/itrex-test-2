@@ -9,6 +9,7 @@ const   gulp        = require('gulp'),
         imagemin    = require('gulp-imagemin'),
         pngquant    = require('imagemin-pngquant'),
         concat      = require('gulp-concat'),
+        es6         = require('gulp-es6-transpiler');
         //path object
         path        = require('./gulp-conf/gulp-path');
 
@@ -27,6 +28,7 @@ gulp.task('js:dev', function () {
             transform: stringify(['.html']),
             debug: true
         }))
+        .pipe(es6())
         .pipe(gulp.dest(path.build.dev.js));
 });
 
@@ -81,6 +83,7 @@ gulp.task('js:prod', function () {
             transform: stringify(['.html']),
             debug: true
         }))
+        .pipe(es6())
         .pipe(gulp.dest(path.build.prod.js));
 });
 
