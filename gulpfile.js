@@ -11,7 +11,7 @@ const   gulp        = require('gulp'),
         concat      = require('gulp-concat'),
         es6         = require('gulp-es6-transpiler');
         //path object
-        path        = require('./gulp-conf/gulp-path');
+        path        = require('./configs/gulp-path');
 
 gulp.task('sass:dev', function () {
     return gulp.src(path.src.style)
