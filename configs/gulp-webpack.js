@@ -1,12 +1,14 @@
-const webpack   = require('webpack');
-const conf      = require('./configs/gulp-config');
-const path      = require('path');
+const webpack               = require('webpack');
+const path                  = require('path');
 
 const HtmlWebpackPlugin     = require('html-webpack-plugin');
-const BowerWebpackPlugin    = require('bower-webpack-plugin');
-const autoprefixer          = require('autoprefixer');
 
 module.exports = {
+    entry: path.join(process.cwd(), `/resources/index`),
+    output: {
+        path: path.join(process.cwd(), `/public`),
+        filename: 'index'
+    },
     module: {
         loaders: [
             {
@@ -20,17 +22,16 @@ module.exports = {
                 loaders: [
                     'style',
                     'css',
-                    'sass',
-                    'postcss'
+                    'sass'
                 ]
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loaders: [
-                    'ng-annotate',
-                    'babel'
-                ]
+                loader: "babel-loader",
+                query: {
+                    presets: ["es2015"]
+                }
             },
             {
                 test: /.html$/,
@@ -40,20 +41,11 @@ module.exports = {
             }
         ]
     },
+    resolveLoader: { root: path.join(process.cwd(), "node_modules") },
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.NoErrorsPlugin(),
-        new HtmlWebpackPlugin({
-            template: conf.path.src('index.html'),
-            inject: true
-        }),
+        new webpack.NoErrorsPlugin()
     ],
-    postcss: () => [autoprefixer],
-    debug: true,
-    devtool: 'cheap-module-eval-source-map',
-    output: {
-        path: path.join(process.cwd(), conf.paths.tmp),
-        filename: 'index.js'
-    },
-    entry: `./${conf.path.src('index')}`
+    watch: true,
+    devtool: 'cheap-module-eval-source-map'
 };
