@@ -24,9 +24,9 @@ module.exports              = {
             {
                 test         : /\.js$/,
                 exclude      : /node_modules/,
-                loader       : "babel-loader",
+                loader       : 'babel-loader',
                 query        : {
-                    presets  : ["es2015"]
+                    presets  : ['es2015']
                 }
             },
             {
@@ -35,7 +35,7 @@ module.exports              = {
             }
         ]
     },
-    resolveLoader            : { root: path.join(process.cwd(), "node_modules") },
+    resolveLoader            : { root: path.join(process.cwd(), 'node_modules') },
     plugins                  : [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoErrorsPlugin()
