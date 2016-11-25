@@ -4,10 +4,10 @@ const path                  = require('path');
 const HtmlWebpackPlugin     = require('html-webpack-plugin');
 
 module.exports = {
-    entry: path.join(process.cwd(), `/resources/index`),
+    entry: path.join(process.cwd(), `/resources/index.js`),
     output: {
         path: path.join(process.cwd(), `/public`),
-        filename: 'index'
+        filename: 'index.js'
     },
     module: {
         loaders: [
@@ -46,6 +46,6 @@ module.exports = {
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoErrorsPlugin()
     ],
-    watch: true,
+    ///watch: true,
     devtool: 'cheap-module-eval-source-map'
 };
