@@ -1,51 +1,44 @@
 const webpack               = require('webpack');
 const path                  = require('path');
 
-const HtmlWebpackPlugin     = require('html-webpack-plugin');
-
-module.exports = {
-    entry: path.join(process.cwd(), `/resources/index.js`),
-    output: {
-        path: path.join(process.cwd(), `/public`),
-        filename: 'index.js'
+module.exports              = {
+    entry                   : path.join(process.cwd(), `/resources/index.js`),
+    output                  : {
+        path                : path.join(process.cwd(), `/public`),
+        filename            : 'index.js'
     },
-    module: {
-        loaders: [
+    module                  : {
+        loaders             : [
             {
-                test: /.json$/,
-                loaders: [
-                    'json'
-                ]
+                test        : /.json$/,
+                loaders     : ['json']
             },
             {
-                test: /\.(css|scss)$/,
-                loaders: [
+                test        : /\.(css|scss)$/,
+                loaders     : [
                     'style',
                     'css',
                     'sass'
                 ]
             },
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                query: {
-                    presets: ["es2015"]
+                test         : /\.js$/,
+                exclude      : /node_modules/,
+                loader       : "babel-loader",
+                query        : {
+                    presets  : ["es2015"]
                 }
             },
             {
-                test: /.html$/,
-                loaders: [
-                    'html'
-                ]
+                test         : /.html$/,
+                loaders      : ['html']
             }
         ]
     },
-    resolveLoader: { root: path.join(process.cwd(), "node_modules") },
-    plugins: [
+    resolveLoader            : { root: path.join(process.cwd(), "node_modules") },
+    plugins                  : [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoErrorsPlugin()
     ],
-    ///watch: true,
-    devtool: 'cheap-module-eval-source-map'
+    devtool                  : 'cheap-module-eval-source-map'
 };
