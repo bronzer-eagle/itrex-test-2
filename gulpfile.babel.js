@@ -1,28 +1,13 @@
 const   gulp                = require('gulp'),
         gutil               = require('gulp-util'),
-        path                = require('path'),
 
+        path                = require('path'),
+        publicPath          = path.join(process.cwd(), '/public'),
         webpack             = require('webpack'),
         WebpackDevServer    = require('webpack-dev-server'),
         webpackConfig       = require('./configs/gulp-webpack');
 
-let     publicPath          = path.join(process.cwd(), '/public'),
-        gutilConf           = {
-            colors          : true,
-            chunks          : false,
-            hash            : false,
-            version         : false
-        },
-        wpServerConfig      = {
-            contentBase     : publicPath,
-            output          : {
-                publicPath  : publicPath
-            },
-            stats           : {
-                colors      : true
-            },
-            hot             : true
-        };
+import  {gutilConf, wpServerConfig} from './configs/gulp-config';
 
 function webpackCallback(callback, err, stats) {
     if(err) throw new gutil.PluginError('webpack', err);
@@ -46,14 +31,14 @@ gulp.task('wp:watch', callback => {
     webpack(webpackConfig, webpackCallback.bind(null, callback));
 });
 
-gulp.task('wp:serve', function(callback) {
+gulp.task('wp:serve', callback => {
     let compiler;
 
     webpackConfig.watch = true;
     compiler            = webpack(webpackConfig);
 
     new WebpackDevServer(compiler, wpServerConfig)
-        .listen(5050, 'localhost', function(err) {
+        .listen(5050, 'localhost', err => {
             if(err) throw new gutil.PluginError('webpack-dev-server', err);
 
             gutil.log('[webpack-dev-server]', 'http://localhost:8080');

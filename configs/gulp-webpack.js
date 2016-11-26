@@ -1,10 +1,11 @@
-const webpack               = require('webpack');
-const path                  = require('path');
+const webpack               = require('webpack'),
+      path                  = require('path'),
+      publicPath            = path.join(process.cwd(), '/public');
 
 module.exports              = {
     entry                   : path.join(process.cwd(), `/resources/index.js`),
     output                  : {
-        path                : path.join(process.cwd(), `/public`),
+        path                : publicPath,
         filename            : 'index.js'
     },
     module                  : {
