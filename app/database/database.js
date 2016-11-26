@@ -1,7 +1,7 @@
 const mongoose = require(`mongoose`);
 
 mongoose.connect(`mongodb://localhost/social`, function () {
-    console.log(`mongodb connected`)
+    console.log(`Mongodb connected`)
 });
 
 module.exports = mongoose;
