@@ -1,7 +1,11 @@
 const mongoose = require(`mongoose`);
 
-mongoose.connect(`mongodb://localhost/social`, function () {
+mongoose.connect(`mongodb://localhost:27017`, function (err) {
+    if (err) {
+        throw new Error(err.message)
+    }
+
     console.log(`Mongodb connected`)
 });
 
-module.exports = mongoose;
+require('./models/users');

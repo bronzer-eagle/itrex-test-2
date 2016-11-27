@@ -8,10 +8,13 @@ let config              = require(`./configs/app-config`),
     cookieParser        = require('cookie-parser'),
     passport            = require('passport')
 
+
     ;
 
-require('./app/database/database');
-//require('./app/config/passport');
+    require('./app/database/database');
+    require('./app/config/passport');
+
+let apiRoutes           = require('./app/routes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -21,8 +24,8 @@ app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + config.port + '/api');
 });
 
-// app.use(passport.initialize());
-// app.use('/api', routesApi);
+app.use(passport.initialize());
+app.use('/api', apiRoutes);
 
 app.listen(config.port, () => {
     console.log(`App listening on port: ${config.port}`);
