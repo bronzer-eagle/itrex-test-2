@@ -10,8 +10,6 @@ class AuthFlow {
     register(req, res) {
         let user, token, flag;
 
-        console.log(this);
-
         flag = this.validate(req, res);
 
         if (!flag) return;
