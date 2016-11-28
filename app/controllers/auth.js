@@ -1,6 +1,9 @@
+let _ = require('underscore');
+
 let     passport    = require('passport'),
         mongoose    = require('mongoose'),
-        User        = mongoose.model('User');
+        User        = mongoose.model('User'),
+        validator   = require('../helpers/validator.js');
 
 class AuthFlow {
     constructor() {
@@ -61,12 +64,16 @@ class AuthFlow {
     };
 
     validate(req, res) {
-        if(!req.body.email || !req.body.password) {
-          AuthFlow.sendJSONresponse(res, 400, {
-            "message": "All fields required"
-          });
+        let arr = validator.validate(req.body, 'registration');
 
-          return false;
+        let errors = _.filter(arr, item => {
+            return !item.flag
+        });
+
+        if (errors.length) {
+            AuthFlow.sendJSONresponse(res, 400, {errors : errors});
+
+            return false;
         }
 
         return true;

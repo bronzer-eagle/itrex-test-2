@@ -1,6 +1,6 @@
 let express     = require('express'),
     apiRoutes   = express.Router();
-    auth        = require('./controllers/auth');
+    auth        = require('./controllers/auth.js');
 
 const mongoose = require(`mongoose`);
 
