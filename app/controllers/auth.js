@@ -3,7 +3,8 @@ let _ = require('underscore');
 let     passport    = require('passport'),
         mongoose    = require('mongoose'),
         User        = mongoose.model('User'),
-        validator   = require('../helpers/validator.js');
+        validator   = require('../helpers/validator.js'),
+        emailVerification = require('./emailVerification');
 
 class AuthFlow {
     constructor() {
@@ -17,22 +18,26 @@ class AuthFlow {
 
         if (!flag) return;
 
-        user = new User();
-
-        user.name   = req.body.name;
-        user.email  = req.body.email;
-
-        user.setPassword(req.body.password);
-
-        user.save((err) => {
-            if (err) AuthFlow.processFail(err);
-
-            token = user.generateJwt();
-            res.status(200);
-            res.json({
-                "token" : token
-            });
+        user = new User({
+            name   : req.body.name,
+            email  : req.body.email
         });
+
+        emailVerification.sendVerification(user, res);
+
+
+
+        // user.setPassword(req.body.password);
+        //
+        // user.save((err) => {
+        //     if (err) AuthFlow.processFail(err);
+        //
+        //     token = user.generateJwt();
+        //     res.status(200);
+        //     res.json({
+        //         "token" : token
+        //     });
+        // });
 
     };
 

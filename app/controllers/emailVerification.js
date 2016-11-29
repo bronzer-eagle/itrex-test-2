@@ -1,40 +1,116 @@
 require('../database/models/users');
 
 let mongoose = require('mongoose'),
-    User = mongoose('User'),
+    crypto              = require('crypto'),
     nev = require('email-verification')(mongoose);
 
-nev.configure({
-    verificationURL: `http://localhost:8080/email-verification/\${URL}`,
-    persistentUserModel: User,
-    tempUserCollection: 'tempusers',
+let myHasher = function(password, tempUserData, insertTempUser, callback) {
+    password = toString(password);
+    tempUserData.salt = crypto.randomBytes(16).toString('hex');
+    tempUserData.hash = crypto.pbkdf2Sync(password, tempUserData.salt, 1000, 64, 'sha512').toString('hex');
+    return insertTempUser(tempUserData.hash, tempUserData, callback);
+};
 
-    transportOptions: {
-        service: 'Gmail',
-        auth: {
-            user: 'bronzer2010@gmail.com',
-            pass: 'uS4foultY'
-        }
-    },
-    verifyMailOptions: {
-        from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
-        subject: 'Please confirm account',
-        html: 'Click the following link to confirm your account:</p><p>${URL}</p>',
-        text: 'Please confirm your account by clicking the following link: ${URL}'
-    }
-}, function(error, options){
-    console.log(error)
-});
-
-// generating the model, pass the User model defined earlier
-nev.generateTempUserModel(User);
-
-// using a predefined file
-nev.generateTempUserModel(User, function(err, tempUserModel) {
-    if (err) {
-        console.log(err);
-        return;
+class EmailVerification {
+    constructor () {
+        this.init();
     }
 
-    console.log('generated temp user model: ' + (typeof tempUserModel === 'function'));
-});
+    init() {
+        let User = mongoose.model('User');
+
+        nev.configure({
+            verificationURL: `http://localhost:8080/api/email-verification/\${URL}`,
+            persistentUserModel: User,
+            tempUserCollection: 'tempusers',
+
+            transportOptions: {
+                service: 'Gmail',
+                auth: {
+                    user: 'bronzer2010@gmail.com',
+                    pass: 'uS4foultY'
+                }
+            },
+            hashingFunction: myHasher,
+            passwordFieldName: 'password',
+            verifyMailOptions: {
+                from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
+                subject: 'Please confirm account',
+                html: 'Click the following link to confirm your account:</p><p>${URL}</p>',
+                text: 'Please confirm your account by clicking the following link: ${URL}'
+            }
+        }, function(error, options){
+            console.log(error)
+        });
+
+        nev.generateTempUserModel(User, function(err, tempUserModel) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            console.log('generated temp user model: ' + (typeof tempUserModel === 'function'));
+        });
+    }
+
+    sendVerification(newUser, res) {
+        nev.createTempUser(newUser, function(err, existingPersistentUser, newTempUser) {
+            if (err) {
+                return res.status(404).send('ERROR: creating temp user FAILED');
+            }
+
+            // user already exists in persistent collection
+            if (existingPersistentUser) {
+                return res.json({
+                    msg: 'You have already signed up and confirmed your account. Did you forget your password?'
+                });
+            }
+
+            // new user created
+            if (newTempUser) {
+                let URL = newTempUser[nev.options.URLFieldName];
+
+                nev.sendVerificationEmail(newUser.email, URL, function(err, info) {
+                    if (err) {
+                        return res.status(404).send('ERROR: sending verification email FAILED');
+                    }
+                    res.json({
+                        msg: 'An email has been sent to you. Please check it to verify your account.',
+                        info: info
+                    });
+                });
+
+                // user already exists in temporary collection!
+            } else {
+                res.json({
+                    msg: 'You have already signed up. Please check your email to verify your account.'
+                });
+            }
+        });
+    }
+
+    verify(req, res) {
+        let url = req.params.URL;
+
+        nev.confirmTempUser(url, function(err, user) {
+            if (user) {
+                nev.sendConfirmationEmail(user.email, function(err, info) {
+                    if (err) {
+                        return res.status(404).send('ERROR: sending confirmation email FAILED');
+                    }
+                    res.json({
+                        msg: 'CONFIRMED!',
+                        info: info
+                    });
+                });
+            } else {
+                return res.status(404).send('ERROR: confirming temp user FAILED');
+            }
+        });
+    }
+}
+
+module.exports = new EmailVerification();
+
+
+

@@ -1,5 +1,6 @@
 let express     = require('express'),
-    apiRoutes   = express.Router();
+    apiRoutes   = express.Router(),
+    emailVerification = require('./controllers/emailVerification');
     auth        = require('./controllers/auth.js');
 
 const mongoose = require(`mongoose`);
@@ -11,6 +12,16 @@ apiRoutes.get('/users', function (req, res) {
     mongoose.model('User').find({}, (err, users) => {
         res.json(users);
     })
+});
+
+apiRoutes.get('/temp-users', function (req, res) {
+    mongoose.model('tempusers').find({}, (err, users) => {
+        res.json(users);
+    })
+});
+
+apiRoutes.get('/email-verification/:URL', function(req, res) {
+    emailVerification.verify(req, res);
 });
 
 

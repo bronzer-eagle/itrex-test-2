@@ -1,2 +1,7 @@
 mongod --dbpath=./data
 JWTSecret=alex node app
+mongo ---- start mongo
+use {{dbname}}
+show dbs
+show collections
+mongo --eval 'db.users.remove({"email":"alex-091@yandex.ru"});'
