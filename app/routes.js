@@ -24,5 +24,10 @@ apiRoutes.get('/email-verification/:URL', function(req, res) {
     emailVerification.verify(req, res);
 });
 
+apiRoutes.post('/resend-verification', function(req, res) {
+    emailVerification.resendVerification(req, res);
+});
+
+
 
 module.exports = apiRoutes;

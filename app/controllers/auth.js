@@ -14,37 +14,26 @@ class AuthFlow {
     register(req, res) {
         let user, token, flag;
 
-        flag = this.validate(req, res);
+        flag = this.validate(req, res, 'registration');
 
         if (!flag) return;
+
+        console.log(req.body);
 
         user = new User({
             name   : req.body.name,
             email  : req.body.email
         });
 
+        user.setPassword(req.body.password);
+
         emailVerification.sendVerification(user, res);
-
-
-
-        // user.setPassword(req.body.password);
-        //
-        // user.save((err) => {
-        //     if (err) AuthFlow.processFail(err);
-        //
-        //     token = user.generateJwt();
-        //     res.status(200);
-        //     res.json({
-        //         "token" : token
-        //     });
-        // });
-
     };
 
     login(req, res) {
         let user, token, flag;
 
-        flag = this.validate(req, res);
+        flag = this.validate(req, res, 'login');
 
         if (!flag) return;
 
@@ -68,8 +57,8 @@ class AuthFlow {
         })(req, res);
     };
 
-    validate(req, res) {
-        let arr = validator.validate(req.body, 'registration');
+    validate(req, res, type) {
+        let arr = validator.validate(req.body, type);
 
         let errors = _.filter(arr, item => {
             return !item.flag

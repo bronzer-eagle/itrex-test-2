@@ -7,6 +7,10 @@ class Validator {
                 'email'     : 'email',
                 'name'      : 'required',
                 'password'  : 'required'
+            },
+            'login' : {
+                'email'     : 'email',
+                'password'  : 'required'
             }
         };
     }

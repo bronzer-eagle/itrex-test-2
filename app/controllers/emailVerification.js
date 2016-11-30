@@ -5,6 +5,7 @@ let mongoose = require('mongoose'),
     nev = require('email-verification')(mongoose);
 
 let myHasher = function(password, tempUserData, insertTempUser, callback) {
+    console.log(password);
     password = toString(password);
     tempUserData.salt = crypto.randomBytes(16).toString('hex');
     tempUserData.hash = crypto.pbkdf2Sync(password, tempUserData.salt, 1000, 64, 'sha512').toString('hex');
@@ -13,7 +14,6 @@ let myHasher = function(password, tempUserData, insertTempUser, callback) {
 
 class EmailVerification {
     constructor () {
-        this.init();
     }
 
     init() {
@@ -31,8 +31,8 @@ class EmailVerification {
                     pass: 'uS4foultY'
                 }
             },
-            hashingFunction: myHasher,
-            passwordFieldName: 'password',
+            //hashingFunction: myHasher,
+            //passwordFieldName: 'password',
             verifyMailOptions: {
                 from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
                 subject: 'Please confirm account',
@@ -54,6 +54,7 @@ class EmailVerification {
     }
 
     sendVerification(newUser, res) {
+        console.log(newUser);
         nev.createTempUser(newUser, function(err, existingPersistentUser, newTempUser) {
             if (err) {
                 return res.status(404).send('ERROR: creating temp user FAILED');
@@ -84,6 +85,30 @@ class EmailVerification {
             } else {
                 res.json({
                     msg: 'You have already signed up. Please check your email to verify your account.'
+                });
+            }
+        });
+    }
+
+    resendVerification(req, res) {
+        user = new User({
+            name   : req.body.name,
+            email  : req.body.email
+        });
+
+        user.setPassword(req.body.password);
+
+        nev.resendVerificationEmail(user.email, function(err, userFound) {
+            if (err) {
+                return res.status(404).send('ERROR: resending verification email FAILED');
+            }
+            if (userFound) {
+                res.json({
+                    msg: 'An email has been sent to you, yet again. Please check it to verify your account.'
+                });
+            } else {
+                res.json({
+                    msg: 'Your verification code has expired. Please sign up again.'
                 });
             }
         });
