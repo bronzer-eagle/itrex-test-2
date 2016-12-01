@@ -52,6 +52,10 @@ class AuthFlow {
         })(req, res);
     };
 
+    restorePassword() {
+        //TODO: set password restore function
+    }
+
     static validate(req, res, type) {
         let arr     = validator.validate(req.body, type),
             errors  = getErrors();
