@@ -3,7 +3,8 @@ let _                   = require('underscore'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User'),
     validator           = require('../helpers/validator.js'),
-    emailVerification   = require('./emailVerification');
+    emailVerification   = require('./emailVerification'),
+    restorePass         = require('./restorePassword');
 
 class AuthFlow {
     constructor() {}
@@ -54,7 +55,7 @@ class AuthFlow {
 
     restorePassword(req, res) {
         //TODO: set password restore function
-
+        restorePass.sendLink(req, res);
     }
 
     static validate(req, res, type) {

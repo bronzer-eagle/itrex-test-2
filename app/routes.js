@@ -3,21 +3,20 @@ let express             = require('express'),
     emailVerification   = require('./controllers/emailVerification'),
     auth                = require('./controllers/auth.js'),
     mongoose            = require(`mongoose`),
-    jwt                 = require('express-jwt');
+    jwt                 = require('express-jwt'),
+    restorePass         = require('./controllers/restorePassword');
 
 let jwtCheck = jwt({
     secret: process.env.JWTSecret
 });
 
-// apiRoutes.get('/restore-password/:URL', jwtCheck, (req, res) => {
-//     console.log(req.user);
-//     res.sendStatus(200);
-// });
-//
-// apiRoutes.post('/restore-password/:URL', jwtCheck, (req, res) => {
-//     console.log(req.user);
-//     res.sendStatus(200);
-// });
+apiRoutes.get('/restore-password/:token', (req, res) => {
+    restorePass.checkUser(req, res);
+});
+
+apiRoutes.post('/restore-password/:token', (req, res) => {
+    restorePass.restore(req, res);
+});
 
 apiRoutes.get('/users', function (req, res) {
     mongoose.model('User').find({}, (err, users) => {

@@ -2,34 +2,19 @@ require('../database/models/users');
 
 let crypto = require('crypto'),
     mongoose = require('mongoose'),
-    User    = mongoose.models('User'),
-    nodemailer = require('nodemailer')
-    ;
+    User    = mongoose.model('User'),
+    nodemailer = require('nodemailer');
 class RestorePasswordFlow {
     constructor() {
-        this.smtpTransport = nodemailer.createTransport('SMTP', {
-            service: 'SendGrid',
-            auth: {
-                user: '!!! YOUR SENDGRID USERNAME !!!',
-                pass: '!!! YOUR SENDGRID PASSWORD !!!'
-            }
-        });
 
-        this.mailOptions = {
-            to: user.email,
-            from: 'passwordreset@demo.com',
-            subject: 'Node.js Password Reset',
-            text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-            'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-            'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        };
     }
 
-    restore(req, res) {
+    sendLink(req, res) {
         let token = crypto.randomBytes(16).toString('hex');
 
-        User.findOne({ email: req.body.email }, function(err, user) {
+        User.findOne({ email: req.body.email }, (err, user) => {
+
+            console.log(user);
 
             if (!user) {
                 res.status(401);
@@ -42,9 +27,32 @@ class RestorePasswordFlow {
                 user.resetPasswordToken = token;
                 user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-                user.save();
+                user.save(function (err) {
+                    if (err) throw new Error(err);
+                });
 
-                this.smtpTransport.sendMail(this.mailOptions, function(err) {
+                let mailOptions = {
+                    to: user.email,
+                    from: 'passwordreset@demo.com',
+                    subject: 'Node.js Password Reset',
+                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                    'http://' + req.headers.host + '/auth/restore-password/' + token + '\n\n' +
+                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                };
+
+                let smtpTransport = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: 'bronzer2010@gmail.com',
+                        pass: 'uS4foultY'
+                    }
+                });
+
+                smtpTransport.sendMail(mailOptions, function(err) {
+                    if (err) throw new Error(err);
                     res.status(200);
                     res.json({
                         'message': 'An e-mail has been sent to ' + user.email + ' with further instructions.'
@@ -54,6 +62,32 @@ class RestorePasswordFlow {
         });
     }
 
+    checkUser(req, res){
+        User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+            if (!user) {
+                res.status(401);
+                res.json({'error': 'Password reset token is invalid or has expired.'});
+            } else {
+                console.log('get');
+                res.status(200);
+                res.json({});
+            }
+        });
+    }
 
+    restore(req, res) {
+        User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+            if (!user) {
+                res.status(401);
+                res.json({'error': 'Password reset token is invalid or has expired.'});
+            } else {
+                user.setPassword(req.body.password);
+                res.status(200);
+                res.json({});
+            }
+        });
+    }
 }
+
+module.exports = new RestorePasswordFlow();
 

@@ -14,18 +14,22 @@ let     userSchema          = new mongoose.Schema({
             },
             admin           : Boolean,
             hash            : String,
-            salt            : String
+            salt            : String,
+            resetPasswordToken : String,
+            resetPasswordExpires : String
         });
 
 userSchema.methods.setPassword = function (password) {
-    password = toString(password);
+    password = String(password);
 
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
+
+    this.save();
 };
 
 userSchema.methods.validPassword = function (password) {
-    password = toString(password);
+    password = String(password);
 
     let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 
