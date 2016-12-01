@@ -1,31 +1,28 @@
 let config              = require(`./configs/app-config`),
     express             = require(`express`),
     bodyParser          = require(`body-parser`),
-    app                 = express(),
     path                = require('path'),
     favicon             = require('serve-favicon'),
     morgan              = require('morgan'),
     cookieParser        = require('cookie-parser'),
-    passport            = require('passport')
+    passport            = require('passport'),
+    apiRoutes           = require('./app/routes'),
 
-
+    app                 = express()
     ;
 
     require('./app/database/database');
     require('./app/config/passport');
 
-let apiRoutes           = require('./app/routes');
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use(passport.initialize());
+app.use('/auth', apiRoutes);
 
 app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + config.port + '/api');
 });
-
-app.use(passport.initialize());
-app.use('/api', apiRoutes);
 
 app.listen(config.port, () => {
     console.log(`App listening on port: ${config.port}`);

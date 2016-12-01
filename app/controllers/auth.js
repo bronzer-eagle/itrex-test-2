@@ -1,24 +1,19 @@
-let _ = require('underscore');
-
-let     passport    = require('passport'),
-        mongoose    = require('mongoose'),
-        User        = mongoose.model('User'),
-        validator   = require('../helpers/validator.js'),
-        emailVerification = require('./emailVerification');
+let _                   = require('underscore'),
+    passport            = require('passport'),
+    mongoose            = require('mongoose'),
+    User                = mongoose.model('User'),
+    validator           = require('../helpers/validator.js'),
+    emailVerification   = require('./emailVerification');
 
 class AuthFlow {
-    constructor() {
-
-    }
+    constructor() {}
 
     register(req, res) {
-        let user, token, flag;
+        let user, flag;
 
-        flag = this.validate(req, res, 'registration');
+        flag = AuthFlow.validate(req, res, 'registration');
 
         if (!flag) return;
-
-        console.log(req.body);
 
         user = new User({
             name   : req.body.name,
@@ -31,9 +26,9 @@ class AuthFlow {
     };
 
     login(req, res) {
-        let user, token, flag;
+        let token, flag;
 
-        flag = this.validate(req, res, 'login');
+        flag = AuthFlow.validate(req, res, 'login');
 
         if (!flag) return;
 
@@ -50,19 +45,22 @@ class AuthFlow {
                 res.json({
                     "token" : token
                 });
-
             } else {
                 res.status(401).json(info);
             }
+
         })(req, res);
     };
 
-    validate(req, res, type) {
-        let arr = validator.validate(req.body, type);
+    static validate(req, res, type) {
+        let arr     = validator.validate(req.body, type),
+            errors  = getErrors();
 
-        let errors = _.filter(arr, item => {
-            return !item.flag
-        });
+        function getErrors() {
+            _.filter(arr, item => {
+                return !item.flag
+            });
+        }
 
         if (errors.length) {
             AuthFlow.sendJSONresponse(res, 400, {errors : errors});
@@ -77,10 +75,6 @@ class AuthFlow {
         res.status(status);
         res.json(content);
     };
-
-    static processFail(err) {
-        if (err) throw new Error(err.message);
-    }
 }
 
 module.exports = new AuthFlow();

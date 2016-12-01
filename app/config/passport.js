@@ -1,19 +1,17 @@
+require('../controllers/emailVerification').init();
+
 let     passport        = require('passport'),
         LocalStrategy   = require('passport-local').Strategy,
         mongoose        = require('mongoose'),
-        User            = mongoose.model('User');
-
-        require('../controllers/emailVerification').init();
-
+        User            = mongoose.model('User'),
         TempUser        = mongoose.model('tempusers');
 
 let callback = function (username, password, done, err, user, tempUser) {
-    console.log(arguments);
     if (err) return done(err);
 
     if (!user) {
         if (tempUser == undefined) {
-            TempUser.findOne({ email: username }, (tempusererr, tempuser) => {
+            TempUser.findOne({ email: username }, (err, tempuser) => {
                 tempuser = tempuser || false;
                 callback(username, password, done, err, user, tempuser);
             });
@@ -38,7 +36,6 @@ let callback = function (username, password, done, err, user, tempUser) {
 
         return done(null, user);
     }
-
 };
 
 passport.use(new LocalStrategy(

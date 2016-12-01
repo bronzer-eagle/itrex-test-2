@@ -17,19 +17,16 @@ class Validator {
 
     validate(obj, authType){
         return _.map(_.keys(this.types[authType]), item => {
-            let val = obj[item];
+            let val     = obj[item];
+            let type    = this.types[authType][item];
 
-            let type = this.types[authType][item];
-
-            return this[type](val, item);
+            return Validator[type](val, item);
         })
     }
 
-    required(val, key) {
+    static required(val, key) {
         if (val) {
-            return {
-                flag: true
-            }
+            return {flag: true}
         } else {
             return {
                 flag    : false,
@@ -38,17 +35,17 @@ class Validator {
         }
     }
 
-    email(val) {
+    static email(val) {
         let re      = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let flag    = re.test(val);
+        let test    = re.test(val);
 
-        if (flag) {
+        if (test) {
             return {
-                flag: flag
+                flag: true
             }
         } else {
             return {
-                flag        : flag,
+                flag        : false,
                 message     : 'The email is not valid!'
             }
         }
