@@ -52,8 +52,9 @@ class AuthFlow {
         })(req, res);
     };
 
-    restorePassword() {
+    restorePassword(req, res) {
         //TODO: set password restore function
+
     }
 
     static validate(req, res, type) {
@@ -66,7 +67,7 @@ class AuthFlow {
             });
         }
 
-        if (errors.length) {
+        if (errors) {
             AuthFlow.sendJSONresponse(res, 400, {errors : errors});
 
             return false;

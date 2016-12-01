@@ -13,7 +13,7 @@ let callback = function (username, password, done, err, user, tempUser) {
         if (tempUser == undefined) {
             TempUser.findOne({ email: username }, (err, tempuser) => {
                 tempuser = tempuser || false;
-                callback(username, password, done, err, user, tempuser);
+                callback(username, password, done, err, user, tempuser); //TODO: change to async
             });
         }
         else if (tempUser) {

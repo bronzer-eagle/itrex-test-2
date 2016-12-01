@@ -1,16 +1,15 @@
 require('../database/models/users');
 
 let mongoose    = require('mongoose'),
-    nev         = require('email-verification')(mongoose);
+    nev         = require('email-verification')(mongoose),
+    User        = mongoose.model('User');
 
 class EmailVerification {
     constructor () {}
 
     init() {
-        let User = mongoose.model('User');
-
         nev.configure({
-            verificationURL     : `http://localhost:8080/api/email-verification/\${URL}`, //TODO: make .env
+            verificationURL     : `http://localhost:8080/auth/email-verification/\${URL}`, //TODO: make .env
             persistentUserModel : User,
             tempUserCollection  : 'tempusers',
 
@@ -69,7 +68,7 @@ class EmailVerification {
     }
 
     resendVerification(req, res) {
-        user = new User({
+        let user = new User({
             name   : req.body.name,
             email  : req.body.email
         });
@@ -110,6 +109,10 @@ class EmailVerification {
                 return res.status(404).send('ERROR: confirming temp user FAILED');
             }
         });
+    }
+
+    sendEmailForRestorePass(user, res) {
+
     }
 }
 
