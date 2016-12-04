@@ -14,8 +14,6 @@ class RestorePasswordFlow {
 
         User.findOne({ email: req.body.email }, (err, user) => {
 
-            console.log(user);
-
             if (!user) {
                 res.status(401);
                 res.json({
@@ -46,8 +44,8 @@ class RestorePasswordFlow {
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'bronzer2010@gmail.com',
-                        pass: 'uS4foultY'
+                        user: process.env.email,
+                        pass: process.env.emailPass
                     }
                 });
 
@@ -81,7 +79,7 @@ class RestorePasswordFlow {
                 res.status(401);
                 res.json({'error': 'Password reset token is invalid or has expired.'});
             } else {
-                user.setPassword(req.body.password);
+                user.setPassword(req.body.password, true);
                 res.status(200);
                 res.json({});
             }

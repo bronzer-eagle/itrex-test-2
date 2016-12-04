@@ -1,8 +1,9 @@
 require('../database/models/users');
 
-let mongoose    = require('mongoose'),
-    nev         = require('email-verification')(mongoose),
-    User        = mongoose.model('User');
+let mongoose            = require('mongoose'),
+    nev                 = require('email-verification')(mongoose),
+    User                = mongoose.model('User'),
+    adminController     = require('./adminController');
 
 class EmailVerification {
     constructor () {}
@@ -100,6 +101,8 @@ class EmailVerification {
                 nev.sendConfirmationEmail(user.email, function(err, info) {
                     if (err) return res.status(404).send('ERROR: sending confirmation email FAILED');
 
+                    adminController.checkAdmin(user);
+
                     res.json({
                         msg: 'CONFIRMED!',
                         info: info
@@ -109,10 +112,6 @@ class EmailVerification {
                 return res.status(404).send('ERROR: confirming temp user FAILED');
             }
         });
-    }
-
-    sendEmailForRestorePass(user, res) {
-
     }
 }
 

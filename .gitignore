@@ -40,3 +40,4 @@ data/
 nano.save
 package.json
 public/
+.env

@@ -1,49 +1,70 @@
-let express             = require('express'),
-    apiRoutes           = express.Router(),
-    emailVerification   = require('./controllers/emailVerification'),
-    auth                = require('./controllers/auth.js'),
-    mongoose            = require(`mongoose`),
-    jwt                 = require('express-jwt'),
-    restorePass         = require('./controllers/restorePassword');
+let express                 = require('express'),
+    authRoutes              = express.Router(),
+    testRoutes              = express.Router(),
+    protectedRoutes         = express.Router(),
+    adminRoutes             = express.Router(),
+    emailVerification       = require('./controllers/emailVerification'),
+    auth                    = require('./controllers/auth.js'),
+    mongoose                = require(`mongoose`),
 
-let jwtCheck = jwt({
-    secret: process.env.JWTSecret
-});
+    restorePass             = require('./controllers/restorePassword');
 
-apiRoutes.get('/restore-password/:token', (req, res) => {
+//auth flow
+
+authRoutes.get('/restore-password/:token', (req, res) => {
     restorePass.checkUser(req, res);
 });
 
-apiRoutes.post('/restore-password/:token', (req, res) => {
+authRoutes.post('/restore-password/:token', (req, res) => {
     restorePass.restore(req, res);
 });
 
-apiRoutes.get('/users', function (req, res) {
+authRoutes.post('/register', auth.register.bind(auth));
+authRoutes.post('/login', auth.login.bind(auth));
+authRoutes.post('/restore-password', auth.restorePassword.bind(auth));
+authRoutes.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
+
+authRoutes.get('/email-verification/:URL', function(req, res) {
+    emailVerification.verify(req, res);
+});
+
+authRoutes.post('/resend-verification', function(req, res) {
+    emailVerification.resendVerification(req, res);
+});
+
+//test db routes
+
+testRoutes.get('/users', function (req, res) {
     mongoose.model('User').find({}, (err, users) => {
         res.json(users);
     })
 });
 
-apiRoutes.get('/temp-users', function (req, res) {
+testRoutes.get('/temp-users', function (req, res) {
     mongoose.model('tempusers').find({}, (err, users) => {
         res.json(users);
     })
 });
 
-apiRoutes.post('/register', auth.register.bind(auth));
-apiRoutes.post('/login', auth.login.bind(auth));
-apiRoutes.post('/restore-password', auth.restorePassword.bind(auth));
-apiRoutes.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+//protected routes
+
+protectedRoutes.get('/user-data', function (req, res) {
+    res.status(200);
+    res.json({
+        'msg' : 'user-data'
+    })
 });
 
-apiRoutes.get('/email-verification/:URL', function(req, res) {
-    emailVerification.verify(req, res);
+//admin routes
+
+adminRoutes.get('/admin-data', function (req, res) {
+    res.status(200);
+    res.json({
+        'msg' : 'admin-data'
+    })
 });
 
-apiRoutes.post('/resend-verification', function(req, res) {
-    emailVerification.resendVerification(req, res);
-});
-
-module.exports = apiRoutes;
+module.exports = [authRoutes, testRoutes, protectedRoutes, adminRoutes];

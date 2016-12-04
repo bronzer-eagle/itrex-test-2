@@ -19,13 +19,15 @@ let     userSchema          = new mongoose.Schema({
             resetPasswordExpires : String
         });
 
-userSchema.methods.setPassword = function (password) {
+userSchema.methods.setPassword = function (password, save) {
     password = String(password);
 
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 
-    this.save();
+    if (save) {
+        this.save();
+    }
 };
 
 userSchema.methods.validPassword = function (password) {
@@ -34,6 +36,12 @@ userSchema.methods.validPassword = function (password) {
     let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 
     return this.hash === hash;
+};
+
+userSchema.methods.setAdmin = function () {
+    this.admin = true;
+
+    this.save();
 };
 
 userSchema.methods.generateJwt = function() {
