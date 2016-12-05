@@ -6,6 +6,7 @@ let express                 = require('express'),
     emailVerification       = require('./controllers/emailVerification'),
     auth                    = require('./controllers/auth.js'),
     mongoose                = require(`mongoose`),
+    userController          = require(`./controllers/userController`),
 
     restorePass             = require('./controllers/restorePassword');
 
@@ -57,6 +58,10 @@ protectedRoutes.get('/user-data', function (req, res) {
         'msg' : 'user-data'
     })
 });
+
+protectedRoutes.post('/send-message', userController.sendMessage.bind(userController));
+
+
 
 //admin routes
 

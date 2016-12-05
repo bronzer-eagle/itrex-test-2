@@ -9,7 +9,8 @@ let express                     = require(`express`),
     passport                    = require('passport'),
     [authRoutes, testRoutes, protectedRoutes, adminRoutes]    = require('./app/routes'),
     jwt                         = require('express-jwt'),
-    app                         = express()
+    app                         = express(),
+    adminController             = require('./app/controllers/adminController');
     ;
 
     require('./app/database/database');
@@ -41,7 +42,8 @@ function authorizationCheck(req, res, next) {
     if (!req.user) {
         return res.sendStatus(401);
     } else {
-
-        next();
+        adminController.isAdmin(req.user, res, function () {
+            next();
+        });
     }
 }

@@ -4,6 +4,7 @@ let crypto = require('crypto'),
     mongoose = require('mongoose'),
     User    = mongoose.model('User'),
     nodemailer = require('nodemailer');
+
 class RestorePasswordFlow {
     constructor() {
 

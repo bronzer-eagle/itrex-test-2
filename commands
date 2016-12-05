@@ -1,6 +1,6 @@
 mongod --dbpath=./data
 JWTSecret=alex node app
-mongo ---- start mongo
+mongo                   ---- start mongo
 use {{dbname}}
 show dbs
 show collections

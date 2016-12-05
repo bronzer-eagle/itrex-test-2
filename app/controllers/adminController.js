@@ -16,6 +16,19 @@ class AdminController {
             }
         });
     }
+
+    isAdmin(user, res, callback) {
+        User.findOne({email: user.email, admin: true}, function (err, user) {
+            if (user) {
+                callback();
+            } else {
+                res.status(401);
+                res.json({
+                    'error' : 'not admin'
+                })
+            }
+        })
+    }
 }
 
 module.exports = new AdminController();
