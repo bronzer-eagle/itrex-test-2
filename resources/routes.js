@@ -35,6 +35,15 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             component   : 'loginComponent'
         })
 
+        .state('register', {
+            parent      : 'auth',
+            url         : '/register',
+            component   : 'registerComponent'
+        })
+
+
+
+
         .state('home', {
             url         : '/home',
             component   : 'homeComponent'
