@@ -12,6 +12,13 @@ let     gutilConf           = {
             output          : {
                 publicPath  : publicPath
             },
+            historyApiFallback: true,
+            // proxy: {
+            //     "**": "http://localhost:5050/",
+            //     ignorePath: true,
+            //     changeOrigin: true,
+            //     secure: false
+            // },
             stats           : {
                 colors      : true
             },

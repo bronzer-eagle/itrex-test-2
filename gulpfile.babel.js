@@ -41,7 +41,7 @@ gulp.task('wp:serve', callback => {
         .listen(5050, 'localhost', err => {
             if(err) throw new gutil.PluginError('webpack-dev-server', err);
 
-            gutil.log('[webpack-dev-server]', 'http://localhost:8080');
+            gutil.log('[webpack-dev-server]', 'http://localhost:5050');
 
             callback();
     });
