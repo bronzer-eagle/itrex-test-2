@@ -1,1 +1,17 @@
-welcome home sanitarium
+home page
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">
+            <section ng-repeat="user in $ctrl.usersList">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {{user.email}}
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-xs-8">
+            {{$ctrl.user}}
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
     require('../database/models/messages');
 
-let mongoose    = require('mongoose'),
+let _           = require('underscore'),
+    mongoose    = require('mongoose'),
     Message        = mongoose.model('Message'),
     nodemailer = require('nodemailer');
 
@@ -45,6 +46,18 @@ class UserController {
                 'message': 'An e-mail has been sent to ' + req.body.receiver.email + ' with further instructions.'
             });
         });
+    }
+
+    createUserData(user) {
+        if (_.isArray(user)) {
+            return _.map(user, filterData);
+        } else {
+            return filterData(user)
+        }
+
+        function filterData(user) {
+            return _.pick(user, 'name', 'email')
+        }
     }
 }
 

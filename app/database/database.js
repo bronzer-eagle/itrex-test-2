@@ -7,3 +7,4 @@ mongoose.connect(`mongodb://localhost:27017`, function (err) {
 });
 
 require('./models/users');
+require('./models/messages');

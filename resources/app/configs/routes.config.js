@@ -7,22 +7,6 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $stateProvider
 
-        // .state('in', {
-        //     url:            '/',
-        //     abstract:       true,
-        //     template: '<ui-view/>'
-        // })
-
-        // .state('in.base', {
-        //
-        // })
-
-        // .state('home', {
-        //     parent:         'in.base',
-        //     url:            'home?jwttoken',
-        //     component:      'homeComponent'
-        // })
-
         .state('auth', {
             url         : '/auth',
             abstract    : true,
@@ -42,10 +26,15 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
         })
 
 
-
+        .state('base', {
+            url     : '/',
+            abstract: true,
+            template: require('../base/base.template.html')
+        })
 
         .state('home', {
-            url         : '/home',
+            parent      : 'base',
+            url         : 'home',
             component   : 'homeComponent'
         })
 }

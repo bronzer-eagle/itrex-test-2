@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-class HomeController {
+class MessengerController {
     /** @ngInject */
     constructor($http, utilService) {
         this.utilService    = utilService;
@@ -16,8 +16,7 @@ class HomeController {
     getData() {
         this.$http(this._getHttpOptions())
             .then(res => {
-                this.user     = res.data.user;
-                this.usersList = res.data.usersList;
+                console.log(res);
             })
     }
 
@@ -29,9 +28,9 @@ class HomeController {
     }
 }
 
-const HomeComponent = {
-    template        : require('./home-component.template.html'),
-    controller      : HomeController
+const MessengerComponent = {
+    template        : require('./messenger-component.template.html'),
+    controller      : MessengerController
 };
 
-export default HomeComponent;
+export default MessengerComponent;

@@ -13,6 +13,7 @@ class EmailVerification {
             verificationURL     : `http://localhost:8080/auth/email-verification/\${URL}`, //TODO: make .env
             persistentUserModel : User,
             tempUserCollection  : 'tempusers',
+            shouldSendConfirmation: false,
 
             transportOptions    : {
                 service         : 'Gmail',

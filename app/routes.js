@@ -7,6 +7,7 @@ let express                 = require('express'),
     auth                    = require('./controllers/auth.js'),
     mongoose                = require(`mongoose`),
     userController          = require(`./controllers/userController`),
+    homeController          = require(`./controllers/homeController`),
 
     restorePass             = require('./controllers/restorePassword');
 
@@ -52,12 +53,7 @@ testRoutes.get('/temp-users', function (req, res) {
 
 //protected routes
 
-protectedRoutes.get('/user-data', function (req, res) {
-    res.status(200);
-    res.json({
-        'msg' : 'user-data'
-    })
-});
+protectedRoutes.get('/user-data', homeController.sendData.bind(homeController));
 
 protectedRoutes.post('/send-message', userController.sendMessage.bind(userController));
 

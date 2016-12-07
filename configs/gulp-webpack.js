@@ -1,5 +1,6 @@
 const webpack               = require('webpack'),
       path                  = require('path'),
+      CopyWebpackPlugin     = require('copy-webpack-plugin'),
       publicPath            = path.join(process.cwd(), '/public');
 
 module.exports              = {
@@ -39,7 +40,13 @@ module.exports              = {
     resolveLoader            : { root: path.join(process.cwd(), 'node_modules') },
     plugins                  : [
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new CopyWebpackPlugin([
+                {
+                    from: path.join(process.cwd(), 'resources/libs'),
+                    to  : path.join(process.cwd(), 'public/libs')
+                }
+        ])
     ],
     devtool                  : 'cheap-module-eval-source-map'
 };

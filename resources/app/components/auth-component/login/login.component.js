@@ -34,6 +34,7 @@ class LoginController {
     _getHttpOptions(data) {
         return {
             url : this.utilService.apiPrefix('auth/login'),
+            skipAuthorization: true,
             method: 'POST',
             data: data
         }

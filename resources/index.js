@@ -1,9 +1,14 @@
 import angular          from 'angular';
 
 /**
- * MODULES
+ * LIBS
  */
-import routesConfig     from './routes';
+
+import 'angular-animate';
+import 'angular-touch';
+import 'angular-ui-bootstrap'
+import 'angular-ui-router';
+import 'angular-jwt';
 
 /**
  * COMPONENTS
@@ -14,8 +19,10 @@ import authComponent    from './app/components/auth-component/auth.component';
 import loginComponent   from './app/components/auth-component/login/login.component';
 import registerComponent   from './app/components/auth-component/register/register.component';
 
+//**************HOME************
 
-import homeComponent   from './app/components/home-component/home.component';
+import homeComponent        from './app/components/home-component/home.component';
+import messengerComponent   from './app/components/messanger-component/messenger.component';
 
 /**
  * SERVICES
@@ -23,12 +30,11 @@ import homeComponent   from './app/components/home-component/home.component';
 
 import UtilService      from './app/services/util.service'
 
-
 /**
- * LIBS
+ * MODULES
  */
-
-import 'angular-ui-router';
+import routesConfig     from './app/configs/routes.config';
+import angularJWTConfig from './app/configs/angularJWT.config';
 
 /**
  * OTHER
@@ -36,22 +42,29 @@ import 'angular-ui-router';
 
 import './index.scss';
 
-
 angular.module('app', [
-    'ui.router'
+    'ui.router',
+    'angular-jwt',
+    'ui.bootstrap'
 ])
+    .config(['$qProvider', function ($qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
+    }])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', routesConfig])
+    .config(['$httpProvider', 'jwtOptionsProvider', angularJWTConfig])
 
     .component('authComponent', authComponent)
     .component('loginComponent', loginComponent)
     .component('registerComponent', registerComponent)
 
     .component('homeComponent', homeComponent)
+    .component('messengerComponent', messengerComponent)
 
     .service('utilService', UtilService)
 
+    .run(function(authManager) {
+        authManager.redirectWhenUnauthenticated();
+        authManager.checkAuthOnRefresh();
+    })
+
 ;
-
-
-
-require('./app/testModule')();
