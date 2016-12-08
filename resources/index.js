@@ -23,12 +23,14 @@ import registerComponent   from './app/components/auth-component/register/regist
 
 import homeComponent        from './app/components/home-component/home.component';
 import messengerComponent   from './app/components/messenger-component/messenger.component';
+import MessageListComponent   from './app/components/message-list-component/message-list.component';
 
 /**
  * SERVICES
  */
 
-import UtilService      from './app/services/util.service'
+import UtilService              from './app/services/util.service'
+import paginationService      from './app/services/pagination.service'
 
 /**
  * CONFIGS
@@ -65,8 +67,10 @@ angular.module('app', [
 
     .component('homeComponent', homeComponent)
     .component('messengerComponent', messengerComponent)
+    .component('messageListComponent', MessageListComponent)
 
     .service('utilService', UtilService)
+    .service('paginationService', paginationService)
 
     .directive('addObject', addObjectDirective)
 

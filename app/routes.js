@@ -55,6 +55,7 @@ testRoutes.get('/temp-users', function (req, res) {
 //protected routes
 
 protectedRoutes.get('/user-data', homeController.sendData.bind(homeController));
+protectedRoutes.get('/get-messages', homeController.getMessages.bind(homeController));
 
 protectedRoutes.post('/send-message', userController.sendMessage.bind(userController));
 

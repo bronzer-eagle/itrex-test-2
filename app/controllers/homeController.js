@@ -1,9 +1,11 @@
 require('../database/database');
 
-let mongoose        = require('mongoose'),
+let async           = require('async'),
+    mongoose        = require('mongoose'),
     Message         = mongoose.model('Message'),
     User            = mongoose.model('User'),
     nodemailer      = require('nodemailer'),
+    dataController  = require('./dataController'),
     userController  = require('./userController');
 
 class HomeController {
@@ -22,16 +24,35 @@ class HomeController {
 
                     res.status(200);
                     res.json({
-                        user: user,
-                        usersList: usersList
+                        user,
+                        usersList
                     });
                 });
             } else {
                 res.status(500);
                 res.json({ err: 'Oops!' });
+                cb('error');
             }
         });
+    }
 
+    getMessages(req, res) {
+        let pagination = JSON.parse(req.query.pagination);
+
+        if (pagination) {
+            dataController.getSentMessages(req.user, pagination, (result)=>{
+                res.status(200);
+                res.json({
+                    'pagination': result.pagination,
+                    'messages': result.arr
+                })
+            })
+        } else {
+            res.status(400);
+            res.json({
+                'err': 'no pagination'
+            })
+        }
     }
 }
 

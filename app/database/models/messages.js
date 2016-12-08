@@ -3,7 +3,7 @@ const   mongoose            = require( 'mongoose' ),
         jwt                 = require('jsonwebtoken');
 
 let     message          = new mongoose.Schema({
-    body           : {
+    text            : {
         type        : String,
         required    : true
     },
@@ -12,8 +12,7 @@ let     message          = new mongoose.Schema({
         required    : true
     },
     sender           : String,
-    receiver         : String,
-    salt            : String
+    receivers        : String
 });
 
 message.method.setMessage = function (message, sender, receiver) {

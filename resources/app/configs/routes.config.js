@@ -3,7 +3,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-    $urlRouterProvider.otherwise('login');
+    $urlRouterProvider.otherwise('home/message-list');
 
     $stateProvider
 
@@ -34,6 +34,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
         .state('home', {
             parent      : 'base',
+            redirectTo  : 'message-list',
             url         : 'home',
             component   : 'homeComponent'
         })
@@ -45,6 +46,12 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             params      : {
                 receiver: null
             }
+        })
+
+        .state('message-list', {
+            parent      : 'home',
+            url         : '/message-list',
+            component   : 'messageListComponent',
         })
 }
 
