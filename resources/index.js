@@ -22,7 +22,7 @@ import registerComponent   from './app/components/auth-component/register/regist
 //**************HOME************
 
 import homeComponent        from './app/components/home-component/home.component';
-import messengerComponent   from './app/components/messanger-component/messenger.component';
+import messengerComponent   from './app/components/messenger-component/messenger.component';
 
 /**
  * SERVICES
@@ -31,10 +31,16 @@ import messengerComponent   from './app/components/messanger-component/messenger
 import UtilService      from './app/services/util.service'
 
 /**
- * MODULES
+ * CONFIGS
  */
 import routesConfig     from './app/configs/routes.config';
 import angularJWTConfig from './app/configs/angularJWT.config';
+
+/**
+ * DIRECTIVES
+ */
+
+import addObjectDirective from './app/directives/addObject.directive';
 
 /**
  * OTHER
@@ -61,6 +67,8 @@ angular.module('app', [
     .component('messengerComponent', messengerComponent)
 
     .service('utilService', UtilService)
+
+    .directive('addObject', addObjectDirective)
 
     .run(function(authManager) {
         authManager.redirectWhenUnauthenticated();

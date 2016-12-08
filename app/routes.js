@@ -26,7 +26,8 @@ authRoutes.post('/login', auth.login.bind(auth));
 authRoutes.post('/restore-password', auth.restorePassword.bind(auth));
 authRoutes.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.status(200);
+    res.json({});
 });
 
 authRoutes.get('/email-verification/:URL', function(req, res) {

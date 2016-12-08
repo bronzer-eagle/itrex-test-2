@@ -1,0 +1,29 @@
+<section class="messenger">
+    <form ng-submit="$ctrl.sendMessage()" name="$ctrl.messengerForm">
+        <div class="row">
+            <div class="col-xs-12 -pd-bottom-10">
+                <label class="app-label">Receiver: </label>
+                <span ng-repeat="receiver in $ctrl.message.receivers">
+                {{receiver.name}}
+            </span>
+                <add-object list="$ctrl.message.receivers" resource="$ctrl.home.usersList"></add-object>
+            </div>
+            <div class="col-xs-12 -pd-bottom-10">
+                <label class="app-label" for="subject">Subject: </label>
+                <input type="text" id="subject"
+                       required
+                       ng-model="$ctrl.message.subject" class="app-input">
+            </div>
+            <div class="col-xs-12 -pd-bottom-10">
+                <label class="app-label" for="message">Message: </label>
+                <textarea class="text-box" name="message" id="message" ng-model="$ctrl.message.text"></textarea>
+            </div>
+        </div>
+        <button
+                type="submit"
+                class="app-blue-btn"
+                ng-disabled="$ctrl.messengerForm.$invalid || !$ctrl.message.receivers[0]">
+            Send message
+        </button>
+    </form>
+</section>

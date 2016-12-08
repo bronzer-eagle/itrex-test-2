@@ -1,10 +1,12 @@
 import _ from 'underscore';
+import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService) {
+    constructor($http, utilService, $state) {
         this.utilService    = utilService;
         this.$http          = $http;
+        this.$state         = $state;
 
         this.init();
     }
@@ -19,6 +21,18 @@ class HomeController {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
             })
+    }
+
+    logout() {
+        this.$http({
+            url: this.utilService.apiPrefix('auth/logout'),
+            method: 'GET'
+        })
+            .then(() => {
+                localStorage.removeItem('token');
+                this.$state.go('login')
+            })
+
     }
 
     _getHttpOptions(data) {

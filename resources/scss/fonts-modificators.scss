@@ -1,0 +1,29 @@
+$max-font-size      : 5;
+$max-font-weight    : 900;
+
+@mixin font-size-list {
+  $i: 0;
+
+  @while $i <= $max-font-size {
+    .-fs-#{$i * 10} {
+        font-size: $i + rem;
+    }
+
+    $i: $i + 0.1;
+  }
+}
+
+@mixin font-weight-list {
+  $i: 100;
+
+  @while $i <= $max-font-weight {
+    .-fw-#{$i} {
+      font-weight: $i;
+    }
+
+    $i: $i + 100;
+  }
+}
+
+@include font-size-list;
+@include font-weight-list;

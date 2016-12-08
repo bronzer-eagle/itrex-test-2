@@ -11,41 +11,45 @@ class UserController {
     }
 
     sendMessage(req, res) {
-        console.log(req.body);
 
         let mailOptions = {
-            to: req.body.receiver.email,
-            from: req.body.sender.email,
+            to: _.map(req.body.message.receivers, res => { return res.email}).toString,
+            from: req.user.email,
             subject: req.body.message.subject,
-            text: req.body.message.body
+            text: req.body.message.text
         };
 
-        let smtpTransport = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.email,
-                pass: process.env.emailPass
-            }
-        });
+        // let smtpTransport = nodemailer.createTransport({
+        //     host: 'smtp.gmail.com',
+        //     port: 465,
+        //     secure: true,
+        //     auth: {
+        //         user: process.env.email,
+        //         pass: process.env.emailPass
+        //     }
+        // });
         
         let message = new Message({
-            body : req.body.message.body,
+            text : req.body.message.text,
             subject : req.body.message.subject,
-            sender : req.body.sender.id,
-            receiver : req.body.receiver.id
+            sender : req.user.id,
+            receivers : req.body.message.receivers
         });
 
-        message.save();
-
-        smtpTransport.sendMail(mailOptions, function(err) {
-            if (err) throw new Error(err);
-            res.status(200);
-            res.json({
-                'message': 'An e-mail has been sent to ' + req.body.receiver.email + ' with further instructions.'
-            });
+        res.status(200);
+        res.json({
+           'res' :  mailOptions
         });
+
+        // message.save();
+        //
+        // smtpTransport.sendMail(mailOptions, function(err) {
+        //     if (err) throw new Error(err);
+        //     res.status(200);
+        //     res.json({
+        //         'message': 'An e-mail has been sent to ' + req.body.receiver.email + ' with further instructions.'
+        //     });
+        // });
     }
 
     createUserData(user) {
@@ -56,7 +60,7 @@ class UserController {
         }
 
         function filterData(user) {
-            return _.pick(user, 'name', 'email')
+            return _.pick(user, 'name', 'email', 'id')
         }
     }
 }

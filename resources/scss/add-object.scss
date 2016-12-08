@@ -1,0 +1,32 @@
+.add-object {
+  position: relative;
+  display: inline-block;
+
+  .add-btn {
+    display: inline-block;
+    padding: 5px;
+    width: 29px;
+    border-radius: 3px;
+  }
+
+  .list {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    max-height: 100px;
+    overflow: auto;
+    background: #ffffff;
+    z-index: 2;
+    border: 1px solid #000000;
+  }
+
+  .list .item {
+    padding: 5px;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .list .item:hover {
+    background: #e6eaea;
+  }
+}

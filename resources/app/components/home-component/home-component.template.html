@@ -1,17 +1,35 @@
-home page
+<nav class="app-navigation">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item">
+                   Hello, {{$ctrl.user.name}}
+                </div>
+            </div>
+            <div class="col-xs-6 -al-r">
+                <button class="item push -btn-reset" ng-click="$ctrl.logout()">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-4">
-            <section ng-repeat="user in $ctrl.usersList">
-                <div class="row">
+        <div class="col-xs-3 user-list">
+            <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn">
+                Compose message
+            </a>
+            <div class="row item" ng-repeat="user in $ctrl.usersList">
+                <a class="-a-reset email" ui-sref="send-message({receiver: user})">
                     <div class="col-xs-12">
-                        {{user.email}}
+                        {{user.name}}
                     </div>
-                </div>
-            </section>
+                </a>
+            </div>
         </div>
-        <div class="col-xs-8">
-            {{$ctrl.user}}
+        <div class="col-xs-9">
+            <ui-view></ui-view>
         </div>
     </div>
 </div>

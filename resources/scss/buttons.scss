@@ -1,0 +1,33 @@
+.app-button {
+  @extend .push;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+}
+
+.app-grey-btn {
+  padding: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid #a7abab;
+  background: #ccd0d0;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.app-blue-btn {
+  @extend .app-grey-btn;
+  border: 1px solid #6767c6;
+  background: #9a9afd;
+  color: #ffffff;
+}
+
+.push {
+  transition: transform .2s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

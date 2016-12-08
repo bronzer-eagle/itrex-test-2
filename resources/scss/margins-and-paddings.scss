@@ -1,0 +1,178 @@
+$max-margin: 200;
+$max-padding: 200;
+
+@mixin margin-top-list {
+  $i: -100;
+
+  @while $i <= $max-margin {
+    .-mg-top-#{$i} {
+      margin-top: $i + px;       //-mg-top-20 ::: margin-top: 20px
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin margin-bottom-list {
+  $i: -100;
+
+  @while $i <= $max-margin {
+    .-mg-bottom-#{$i} {
+      margin-bottom: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin margin-left-list {
+  $i: -100;
+
+  @while $i <= $max-margin {
+    .-mg-left-#{$i} {
+      margin-left: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin margin-right-list {
+  $i: -100;
+
+  @while $i <= $max-margin {
+    .-mg-right-#{$i} {
+      margin-right: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin margin-list {
+  $i: -100;
+
+  @while $i <= $max-margin {
+    .-mg-#{$i} {
+      margin: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+/////////PADDING//////////
+
+@mixin padding-top-list {
+  $i: 0;
+
+  @while $i <= $max-padding {
+    .-pd-top-#{$i} {
+      padding-top: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin padding-bottom-list {
+  $i: 0;
+
+  @while $i <= $max-padding {
+    .-pd-bottom-#{$i} {
+      padding-bottom: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin padding-left-list {
+  $i: 0;
+
+  @while $i <= $max-padding {
+    .-pd-left-#{$i} {
+      padding-left: $i + px;
+    }
+    @if $i < 10 {
+      $i: $i + 1;
+    } @else {
+      $i: $i + 5;
+    }
+  }
+}
+
+@mixin padding-right-list {
+  $i: 0;
+
+  @while $i <= $max-padding {
+    .-pd-right-#{$i} {
+      padding-right: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+@mixin padding-list {
+  $i: 0;
+
+  @while $i <= $max-padding {
+    .-pd-#{$i} {
+      padding: $i + px;
+    }
+    $i: $i + 5;
+  }
+}
+
+.-mg-auto {
+  margin: 0 auto !important;
+}
+
+.-no-padding {
+  padding: 0 !important;
+}
+
+.smart-padding {
+
+  @media screen and (min-width: 1200px) {
+    &:nth-child(3n + 1) {
+      padding-left: 0;
+      padding-right: 10px;
+    }
+
+    &:nth-child(3n + 2) {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    &:nth-child(3n + 3) {
+      padding-left: 10px;
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (min-width: 991px) and (max-width: 1199px) {
+    padding-bottom: 10px;
+
+    &:nth-child(odd) {
+      padding-left: 0;
+      padding-right: 10px;
+    }
+
+    &:nth-child(even) {
+      padding-left: 10px;
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (min-width: 320px) {
+    padding: 0 0 20px;
+  }
+}
+
+@include margin-top-list;
+@include margin-bottom-list;
+@include margin-left-list;
+@include margin-right-list;
+@include margin-list;
+
+@include padding-top-list;
+@include padding-bottom-list;
+@include padding-left-list;
+@include padding-right-list;
+@include padding-list;
+
+

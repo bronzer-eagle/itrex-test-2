@@ -3,7 +3,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-    $urlRouterProvider.otherwise('landing');
+    $urlRouterProvider.otherwise('login');
 
     $stateProvider
 
@@ -36,6 +36,15 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             parent      : 'base',
             url         : 'home',
             component   : 'homeComponent'
+        })
+
+        .state('send-message', {
+            parent      : 'home',
+            url         : '/send-message',
+            component   : 'messengerComponent',
+            params      : {
+                receiver: null
+            }
         })
 }
 
