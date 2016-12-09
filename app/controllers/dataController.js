@@ -11,38 +11,55 @@ class DataController {
 
     }
 
-    getSentMessages(user, pagination, callback) {
-        Message.find({sender     : user._id}, (err, messages) => {
-            let result = this.paginate(pagination, messages);
+    getReceivedMessages(user, pagination, callback) {
+        let options ={
+            limit: pagination.start + pagination.count,
+            skip: pagination.start
+        };
+
+        let query = {receivers: {$elemMatch: user.email}};
+
+        let count = Message.find(query);
+
+        Message.find(query, options, (err, messages) => {
+            pagination = this.paginate(pagination, count);
+
+            let result = {
+                pagination,
+                messages
+            };
 
             callback(result)
         })
     }
 
-    paginate(pagination, arr) {
-        if (arr.length) {
-            let end = pagination.start + pagination.count;
+    getSentMessages(user, pagination, callback) {
+        let options ={
+            limit: pagination.start + pagination.count,
+            skip: pagination.start
+        };
 
-            if (end >= arr.length) {
-                end = arr.length;
-                pagination.moreAvailable = false
-            }
+        let query = {sender: user._id};
 
-            arr              = arr.slice(pagination.start, end);
+        let count = Message.find(query);
 
-            pagination.start = end;
+        Message.find(query, options, (err, messages) => {
+            pagination = this.paginate(pagination, count);
 
-            return {
+            let result = {
                 pagination,
-                arr
-            }
-        } else {
-            pagination.moreAvailable = false;
-            return {
-                pagination,
-                arr: []
-            }
-        }
+                messages
+            };
+
+            callback(result)
+        })
+    }
+
+    paginate(pagination, count) {
+        pagination.start = pagination.start + pagination.count;
+        pagination.moreAvailable  = pagination.start < count;
+
+        return pagination;
     }
 }
 

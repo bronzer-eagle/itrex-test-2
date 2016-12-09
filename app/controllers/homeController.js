@@ -42,10 +42,7 @@ class HomeController {
         if (pagination) {
             dataController.getSentMessages(req.user, pagination, (result)=>{
                 res.status(200);
-                res.json({
-                    'pagination': result.pagination,
-                    'messages': result.arr
-                })
+                res.json(result)
             })
         } else {
             res.status(400);

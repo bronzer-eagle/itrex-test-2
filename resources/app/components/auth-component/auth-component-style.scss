@@ -1,0 +1,35 @@
+.auth-box {
+  height: 100vh;
+  position: relative;
+
+  .auth-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    width: 50%;
+  }
+
+  .auth-label {
+    display: block;
+    font-size: 2rem;
+    margin: 10px 0;
+  }
+
+  .auth-input {
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #000;
+    width: 100%;
+  }
+
+  .auth-submit {
+    display: block;
+    margin: 20px auto;
+    width: 50%;
+    max-width: 250px;
+  }
+}

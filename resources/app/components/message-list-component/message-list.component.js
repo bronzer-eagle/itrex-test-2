@@ -29,7 +29,7 @@ class MessageListController {
             count: 5,
             moreAvailable: true
         }).then(res=> {
-            this.res = res.messages;
+            this.res = res;
         })
     }
 

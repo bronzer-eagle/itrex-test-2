@@ -1,9 +1,28 @@
-<form name="signInForm" ng-submit="$ctrl.signUp()">
-    <label for="name">Name</label>
-    <input id="name" type="text" ng-model="$ctrl.signUpData.name">
-    <label for="email">Login</label>
-    <input id="email" type="email" ng-model="$ctrl.signUpData.email">
-    <label for="password">Password</label>
-    <input id="password" type="password" ng-model="$ctrl.signUpData.password">
-    <button type="submit">Submit</button>
+<form name="$ctrl.signUpForm" ng-submit="$ctrl.signUp()" class="auth-form">
+    <div class="auth-input-box">
+        <label class="auth-label" for="name">Name</label>
+        <input class="auth-input" id="name" type="text"
+               required
+               ng-model="$ctrl.signUpData.name">
+    </div>
+    <div class="auth-input-box">
+        <label class="auth-label" for="email">Login</label>
+        <input class="auth-input" id="email" type="email"
+               required
+               ng-model="$ctrl.signUpData.email">
+    </div>
+    <div class="auth-input-box">
+        <label class="auth-label" for="password">Password</label>
+        <input class="auth-input" id="password" type="password"
+               required
+               ng-model="$ctrl.signUpData.password">
+    </div>
+    <button type="submit"
+            ng-disabled="$ctrl.signUpForm.$invalid"
+            class="app-blue-btn app-button auth-submit">
+        Sign Up
+    </button>
+    <div class="-al-c">
+        <a ui-sref="login">Already registred</a>
+    </div>
 </form>
