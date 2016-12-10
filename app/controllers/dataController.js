@@ -11,39 +11,20 @@ class DataController {
 
     }
 
-    getReceivedMessages(user, pagination, callback) {
+    getMessages(user, pagination, type, callback) {
         let options ={
             limit: pagination.start + pagination.count,
             skip: pagination.start
         };
 
-        let query = {receivers: {$elemMatch: user.email}};
+        let fields = {sender: 1, receivers: 1, text: 1, subject: 1};
+
+        let query = (type == 'received') ? {receivers: {$elemMatch: {$eq: user.email}}} : {sender: user.email};
 
         let count = Message.find(query);
 
-        Message.find(query, options, (err, messages) => {
-            pagination = this.paginate(pagination, count);
-
-            let result = {
-                pagination,
-                messages
-            };
-
-            callback(result)
-        })
-    }
-
-    getSentMessages(user, pagination, callback) {
-        let options ={
-            limit: pagination.start + pagination.count,
-            skip: pagination.start
-        };
-
-        let query = {sender: user._id};
-
-        let count = Message.find(query);
-
-        Message.find(query, options, (err, messages) => {
+        Message.find(query, fields, options, (err, messages) => {
+            console.log(err);
             pagination = this.paginate(pagination, count);
 
             let result = {

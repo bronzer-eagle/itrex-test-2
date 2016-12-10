@@ -10,6 +10,8 @@ class PaginationService {
     }
 
     getInfiniteData(options, pagination, callback) {
+        options.params.pagination = pagination.current;
+
         return this._http(options)
             .then(response => {
                 let responseData                    = response.data;

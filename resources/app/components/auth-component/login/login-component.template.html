@@ -1,14 +1,16 @@
 <form name="$ctrl.signInForm" ng-submit="$ctrl.signIn()" class="auth-form">
     <div class="auth-input-box">
-        <label class="auth-label" for="email">Login</label>
+        <label class="auth-label" for="email">Email</label>
         <input class="auth-input" id="email" type="email"
-               required
+               required name="email"
+               ng-class="{'invalid' : $ctrl.signInForm.email.$invalid}"
                ng-model="$ctrl.signInData.email">
     </div>
     <div class="auth-input-box">
         <label class="auth-label" for="password">Password</label>
         <input class="auth-input" id="password" type="password"
-               required
+               required name="password"
+               ng-class="{'invalid' : $ctrl.signInForm.password.$invalid}"
                ng-model="$ctrl.signInData.password">
     </div>
     <button type="submit"
@@ -17,6 +19,6 @@
         Sign In
     </button>
     <div class="-al-c">
-        <a ui-sref="register">Not registred yet?</a>
+        <a ui-sref="register">Not registered yet?</a>
     </div>
 </form>

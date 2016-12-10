@@ -1,12 +1,22 @@
 <nav class="app-navigation">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <div class="item">
                    Hello, {{$ctrl.user.name}}
                 </div>
             </div>
-            <div class="col-xs-6 -al-r">
+            <div class="col-xs-4">
+                <div class="item">
+                    <a class="-a-reset -uppercase" ui-sref="message-list">My messages</a>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="item">
+                    <a class="-a-reset -uppercase" ui-sref="message-list">settings</a>
+                </div>
+            </div>
+            <div class="col-xs-2 -al-r">
                 <button class="item push -btn-reset" ng-click="$ctrl.logout()">
                     LOGOUT
                 </button>

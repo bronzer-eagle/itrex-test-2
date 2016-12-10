@@ -9,6 +9,15 @@ class MessageListController {
         this.$stateParams   = $stateParams;
         this.messages        = {};
         this.paginationService  = paginationService;
+        this.pagination = {
+            default: {
+                start: 0,
+                count: 5,
+                moreAvailable: true
+            }
+        };
+        this.messageType = 'sent';
+        this.pagination.current = this.pagination.default;
 
         this.init();
     }
@@ -18,19 +27,17 @@ class MessageListController {
             url : this.utilService.apiPrefix('app/get-messages'),
             method: 'GET',
             params: {
-                pagination: {
-                    start: 0,
-                    count: 5,
-                    moreAvailable: true
-                }
+                messageStatus: this.messageType
             }
-        }, {
-            start: 0,
-            count: 5,
-            moreAvailable: true
-        }).then(res=> {
-            this.res = res;
+        }, this.pagination).then(res=> {
+            this.messages   = res.messages;
         })
+    }
+
+    changeMessageType(type) {
+        this.messageType = type;
+        this.pagination.current = this.pagination.default;
+        this.init();
     }
 
     _getHttpOptions(data) {

@@ -12,7 +12,7 @@ let     message          = new mongoose.Schema({
         required    : true
     },
     sender           : String,
-    receivers        : String
+    receivers        : Array
 });
 
 message.method.setMessage = function (message, sender, receiver) {

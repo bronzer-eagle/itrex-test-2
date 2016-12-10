@@ -41,6 +41,10 @@ module.exports              = {
     plugins                  : [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoErrorsPlugin(),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        }),
         new CopyWebpackPlugin([
                 {
                     from: path.join(process.cwd(), 'resources/libs'),

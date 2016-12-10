@@ -11,7 +11,7 @@ class UserController {
     }
 
     sendMessage(req, res) {
-        let receivers = _.map(req.body.message.receivers, res => { return res.email}).toString();
+        let receivers = _.map(req.body.message.receivers, res => { return res.email});
 
         let mailOptions = {
             to: receivers,
@@ -33,11 +33,9 @@ class UserController {
         let message = new Message({
             text : req.body.message.text,
             subject : req.body.message.subject,
-            sender : req.user._id,
+            sender : req.user.email,
             receivers : receivers
         });
-
-        console.log(message);
 
         message.save();
 
@@ -48,18 +46,6 @@ class UserController {
                 'message': 'An e-mail has been sent to ' + receivers + ' with further instructions.'
             });
         });
-    }
-
-    createUserData(user) {
-        if (_.isArray(user)) {
-            return _.map(user, filterData);
-        } else {
-            return filterData(user)
-        }
-
-        function filterData(user) {
-            return _.pick(user, 'name', 'email', 'id')
-        }
     }
 }
 

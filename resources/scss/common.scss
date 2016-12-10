@@ -22,3 +22,12 @@ button:disabled {
   border-radius: 0;
   padding: 5px;
 }
+
+.app-input,
+.auth-input {
+  transition: border 0.2s ease;
+
+  &.invalid {
+    border: 1px solid #980000;
+  }
+}

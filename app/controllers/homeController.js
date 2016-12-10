@@ -14,14 +14,12 @@ class HomeController {
     }
 
     sendData(req, res) {
-        let user = req.user;
+        let user    = req.user;
+        let fields = {name : 1, email : 1};
 
-        User.findOne({_id: user._id}, (err, user) => {
+        User.findOne({_id: user._id}, fields, (err, user) => {
             if (user) {
-                User.find({_id: {$ne : user._id}}, (err, usersList) => {
-                    user        = userController.createUserData(user);
-                    usersList   = userController.createUserData(usersList);
-
+                User.find({_id: {$ne : user._id}}, fields, (err, usersList) => {
                     res.status(200);
                     res.json({
                         user,
@@ -38,9 +36,10 @@ class HomeController {
 
     getMessages(req, res) {
         let pagination = JSON.parse(req.query.pagination);
+        let type  = req.query.messageType;
 
         if (pagination) {
-            dataController.getSentMessages(req.user, pagination, (result)=>{
+            dataController.getMessages(req.user, pagination, type, (result)=>{
                 res.status(200);
                 res.json(result)
             })

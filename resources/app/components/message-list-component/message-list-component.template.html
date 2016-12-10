@@ -1,2 +1,45 @@
-message list
-{{$ctrl.res}}
+<section class="-pd-15 message-list">
+    <div class="toolbar -pd-bottom-15">
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="btn-group" uib-dropdown>
+                    <button id="single-button" type="button" class="btn app-grey-btn"
+                            uib-dropdown-toggle>
+                        {{$ctrl.messageStatus}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.changeMessageType('sent')"
+                                    class="-btn-reset -w100">Sent</button>
+                        </li>
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.changeMessageType('received')"
+                                    class="-btn-reset -w100">Received</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-3"></div>
+            <div class="col-xs-3"></div>
+            <div class="col-xs-3"></div>
+        </div>
+    </div>
+    <uib-accordion  close-others="false">
+        <div uib-accordion-group ng-repeat="message in $ctrl.messages"
+             class="panel-default">
+            <uib-accordion-heading class="message-header">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <span class="receivers">{{message.receivers.toString()}}</span>
+                    </div>
+                    <div class="col-xs-6 -al-r">
+                        {{message.subject}}
+                    </div>
+                </div>
+            </uib-accordion-heading>
+            {{message.text}}
+        </div>
+    </uib-accordion>
+</section>
+
+
