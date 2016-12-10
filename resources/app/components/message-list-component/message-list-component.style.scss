@@ -6,4 +6,9 @@
     width: 100%;
     display: inline-block;
   }
+
+  .btn-group .dropdown-menu {
+    min-width: 0;
+    width: 100%;
+  }
 }

@@ -2,10 +2,10 @@
     <div class="toolbar -pd-bottom-15">
         <div class="row">
             <div class="col-xs-3">
-                <div class="btn-group" uib-dropdown>
-                    <button id="single-button" type="button" class="btn app-grey-btn"
+                <div class="btn-group -w100" uib-dropdown>
+                    <button id="single-button" type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
-                        {{$ctrl.messageStatus}} <span class="caret"></span>
+                        {{$ctrl.messageType}} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem">
@@ -30,7 +30,7 @@
             <uib-accordion-heading class="message-header">
                 <div class="row">
                     <div class="col-xs-6">
-                        <span class="receivers">{{message.receivers.toString()}}</span>
+                      <span class="receivers">{{$ctrl.setText()}} {{message.receivers.toString()}}</span>
                     </div>
                     <div class="col-xs-6 -al-r">
                         {{message.subject}}
@@ -40,6 +40,9 @@
             {{message.text}}
         </div>
     </uib-accordion>
+    <div ng-if="!$ctrl.messages.length" class="-fs-20 -al-c">
+        No results.
+    </div>
 </section>
 
 

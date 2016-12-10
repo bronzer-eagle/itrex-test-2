@@ -40,6 +40,10 @@ class MessageListController {
         this.init();
     }
 
+    setText() {
+        return this.messageType == 'sent' ? 'To: ' : 'From: '
+    }
+
     _getHttpOptions(data) {
         return {
             url : this.utilService.apiPrefix('app/user-data'),
