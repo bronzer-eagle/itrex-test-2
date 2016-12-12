@@ -37,12 +37,35 @@ class HomeController {
     getMessages(req, res) {
         let pagination = JSON.parse(req.query.pagination);
         let type  = req.query.messageType;
+        let sortByDate          = req.query.sortByDate;
 
         if (pagination) {
             dataController.getMessages(req.user, pagination, type, (result)=>{
                 res.status(200);
                 res.json(result)
             })
+        } else {
+            res.status(400);
+            res.json({
+                'err': 'no pagination'
+            })
+        }
+    }
+
+    searchInMessages(req, res) {
+        let pagination          = JSON.parse(req.query.pagination);
+        let searchName          = req.query.searchName;
+
+        if (pagination) {
+            User.findOne({name: searchName}, {email:1}, (err, user)=>{
+                if (user) {
+                    dataController.getMessagesByName(req.user, user.email, pagination, (result)=>{
+                        res.status(200);
+                        res.json(result)
+                    })
+                }
+            });
+
         } else {
             res.status(400);
             res.json({

@@ -27,7 +27,7 @@ class RestorePasswordFlow {
                 user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
                 user.save(function (err) {
-                    if (err) throw new Error(err);
+                    if (error) console.log(error);
                 });
 
                 let mailOptions = {
@@ -51,7 +51,7 @@ class RestorePasswordFlow {
                 });
 
                 smtpTransport.sendMail(mailOptions, function(err) {
-                    if (err) throw new Error(err);
+                    if (error) console.log(error);
                     res.status(200);
                     res.json({
                         'message': 'An e-mail has been sent to ' + user.email + ' with further instructions.'

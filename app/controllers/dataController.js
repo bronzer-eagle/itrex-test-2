@@ -24,7 +24,33 @@ class DataController {
         let count = Message.find(query);
 
         Message.find(query, fields, options, (err, messages) => {
-            console.log(err);
+            pagination = this.paginate(pagination, count);
+
+            let result = {
+                pagination,
+                messages
+            };
+
+            callback(result)
+        })
+    }
+
+    getMessagesByName(user, searchEmail, pagination, callback) {
+        let options ={
+            limit: pagination.start + pagination.count,
+            skip: pagination.start
+        };
+
+        let fields = {sender: 1, receivers: 1, text: 1, subject: 1};
+
+        let query = {
+            $or:[{sender: user.email, receivers: {$elemMatch: {$eq: searchEmail}}},
+                {receivers: {$elemMatch: {$eq: user.email}}, sender: searchEmail}]
+        };
+
+        let count = Message.find(query);
+
+        Message.find(query, fields, options, (err, messages) => {
             pagination = this.paginate(pagination, count);
 
             let result = {

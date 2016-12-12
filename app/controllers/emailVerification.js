@@ -18,8 +18,8 @@ class EmailVerification {
             transportOptions    : {
                 service         : 'Gmail',
                 auth            : {
-                    user        : 'bronzer2010@gmail.com', //TODO: make .env
-                    pass        : 'uS4foultY' //TODO: make .env
+                    user        : process.env.email, //TODO: make .env
+                    pass        : process.env.emailPass //TODO: make .env
                 }
             },
             verifyMailOptions   : {
@@ -30,11 +30,11 @@ class EmailVerification {
                 text            : 'Please confirm your account by clicking the following link: ${URL}'
             }
         }, (error) => {
-            if (error) throw new Error(error);
+            if (error) console.log(error);
         });
 
         nev.generateTempUserModel(User, function(err) {
-            if (err) throw new Error(err);
+            if (error) console.log(error);
         });
     }
 
@@ -70,14 +70,7 @@ class EmailVerification {
     }
 
     resendVerification(req, res) {
-        let user = new User({
-            name   : req.body.name,
-            email  : req.body.email
-        });
-
-        user.setPassword(req.body.password);
-
-        nev.resendVerificationEmail(user.email, function(err, userFound) {
+        nev.resendVerificationEmail(req.query.email, function(err, userFound) {
             if (err) {
                 return res.status(404).send('ERROR: resending verification email FAILED');
             }

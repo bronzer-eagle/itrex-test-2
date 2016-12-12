@@ -32,9 +32,14 @@ authRoutes.get('/logout', (req, res) => {
 
 authRoutes.get('/email-verification/:URL', function(req, res) {
     emailVerification.verify(req, res);
+    res.redirect(`${process.env.appHttp}info`);
+    res.status(200);
+    res.json({
+        msg: 'Confirmed'
+    })
 });
 
-authRoutes.post('/resend-verification', function(req, res) {
+authRoutes.get('/resend-verification', function(req, res) {
     emailVerification.resendVerification(req, res);
 });
 
@@ -56,6 +61,7 @@ testRoutes.get('/temp-users', function (req, res) {
 
 protectedRoutes.get('/user-data', homeController.sendData.bind(homeController));
 protectedRoutes.get('/get-messages', homeController.getMessages.bind(homeController));
+protectedRoutes.get('/search-messages', homeController.searchInMessages.bind(homeController));
 
 protectedRoutes.post('/send-message', userController.sendMessage.bind(userController));
 

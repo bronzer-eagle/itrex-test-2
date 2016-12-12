@@ -1,0 +1,6 @@
+<section ng-if="$ctrl.type == 'email-verification'">
+    <div uib-alert class="alert-success">{{$ctrl.message}}</div>
+    <button class="app-blue-btn" ng-click="$ctrl.resendVerificationEmail()">
+        Resend
+    </button>
+</section>

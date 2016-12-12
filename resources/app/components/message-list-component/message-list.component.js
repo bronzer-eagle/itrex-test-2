@@ -17,6 +17,8 @@ class MessageListController {
             }
         };
         this.messageType = 'sent';
+        this.sortByDate = 'ASC';
+        this.sortByName = null;
         this.pagination.current = this.pagination.default;
 
         this.init();
@@ -27,7 +29,9 @@ class MessageListController {
             url : this.utilService.apiPrefix('app/get-messages'),
             method: 'GET',
             params: {
-                messageStatus: this.messageType
+                messageType: this.messageType,
+                sortByDate: this.sortByDate,
+                sortByName: this.sortByName
             }
         }, this.pagination).then(res=> {
             this.messages   = res.messages;
@@ -40,8 +44,31 @@ class MessageListController {
         this.init();
     }
 
-    setText() {
-        return this.messageType == 'sent' ? 'To: ' : 'From: '
+    searchInMessages() {
+        this.pagination.current = this.pagination.default;
+
+        this.paginationService.getInfiniteData({
+            url : this.utilService.apiPrefix('app/search-messages'),
+            method: 'GET',
+            params: {
+                searchName: this.searchName
+            }
+        }, this.pagination).then(res=> {
+            this.messages   = res.messages;
+        })
+    }
+
+    setText(message) {
+        return this.messageType == 'sent' ? `To: ${message.receivers.toString()}` : `From: ${message.sender}`;
+    }
+
+    sortBy(sort) {
+        let sortName = sort.split('|')[0];
+
+        this[`sortBy${sortName}`] = sort.split('|')[1];
+        this.pagination.current = this.pagination.default;
+
+        this.init();
     }
 
     _getHttpOptions(data) {

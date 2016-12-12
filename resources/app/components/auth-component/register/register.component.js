@@ -6,17 +6,25 @@ class RegisterController {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
+        this.inFlight       = false;
     }
 
     signUp() {
+        this.inFlight = true;
+
         this.$http(this._getHttpOptions(this.signUpData))
             .then(res => {
-                console.log(res);
+                this.$state.go('info', {
+                    msg: res.data.msg,
+                    type: 'email-verification',
+                    email: this.signUpData.email
+                });
             })
             .catch(err => {
                 throw new Error(err); //TODO: set processError service
             })
             .finally(() => {
+            this.inFlight = false;
                 console.log('Request to server');
             })
     }

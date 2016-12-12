@@ -53,7 +53,7 @@ app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + process.env.serverPort + '/api');
 });
 
-app.listen(process.env.serverPort, () => {
+app.listen(process.env.serverPort || 8080, () => {
     console.log(`App listening on port: ${process.env.serverPort}`);
 });
 

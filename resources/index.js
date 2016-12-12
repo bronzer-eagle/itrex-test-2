@@ -24,6 +24,7 @@ import registerComponent   from './app/components/auth-component/register/regist
 import homeComponent        from './app/components/home-component/home.component';
 import messengerComponent   from './app/components/messenger-component/messenger.component';
 import MessageListComponent   from './app/components/message-list-component/message-list.component';
+import InfoComponent        from './app/components/info-component/info.component';
 
 /**
  * SERVICES
@@ -68,6 +69,7 @@ angular.module('app', [
     .component('homeComponent', homeComponent)
     .component('messengerComponent', messengerComponent)
     .component('messageListComponent', MessageListComponent)
+    .component('infoComponent', InfoComponent)
 
     .service('utilService', UtilService)
     .service('paginationService', paginationService)

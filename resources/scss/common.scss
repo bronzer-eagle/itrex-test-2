@@ -81,3 +81,13 @@ button:disabled {
     transform: translateY(-50%);
   }
 }
+
+.search-box {
+  .search-btn {
+    width: 40%;
+  }
+
+  .search-input {
+    width: 50%;
+  }
+}

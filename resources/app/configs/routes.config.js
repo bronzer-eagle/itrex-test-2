@@ -32,11 +32,28 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             template: require('../base/base.template.html')
         })
 
+        .state('info', {
+            parent      : 'base',
+            url         : 'info',
+            component   : 'infoComponent',
+            params      : {
+                type    : '',
+                msg     : '',
+                email   : ''
+            },
+            data        : {
+                requiresLogin: false
+            }
+        })
+
         .state('home', {
             parent      : 'base',
             redirectTo  : 'message-list',
             url         : 'home',
-            component   : 'homeComponent'
+            component   : 'homeComponent',
+            data: {
+                requiresLogin: true
+            }
         })
 
         .state('send-message', {

@@ -40,7 +40,7 @@ class UserController {
         message.save();
 
         smtpTransport.sendMail(mailOptions, function(err) {
-            if (err) throw new Error(err);
+            if (error) console.log(error);
             res.status(200);
             res.json({
                 'message': 'An e-mail has been sent to ' + receivers + ' with further instructions.'
