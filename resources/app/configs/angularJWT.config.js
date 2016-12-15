@@ -8,7 +8,7 @@ function angularJWTConfig($httpProvider, jwtOptionsProvider) {
         unauthenticatedRedirector: ['$state', function($state) {
             $state.go('login');
         }],
-        whiteListedDomains: ['localhost']
+        whiteListedDomains: ['localhost', '192.168.0.89']
     });
 
     $httpProvider.interceptors.push('jwtInterceptor');

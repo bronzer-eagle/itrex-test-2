@@ -6,7 +6,7 @@ import _ from 'underscore';
 class PaginationService {
     /** @ngInject */
     constructor($http) {
-        this._http              = $http;
+        this._http = $http;
     }
 
     getInfiniteData(options, pagination, callback) {
@@ -19,7 +19,6 @@ class PaginationService {
                 pagination.current                  = responseData.pagination;
 
                 return responseData;
-
             }, error => {
                 console.log(error);
             })
@@ -28,6 +27,16 @@ class PaginationService {
                     callback()
                 }
             })
+    }
+
+    getPagination() {
+        return {
+            current             : {
+                start           : 0,
+                count           : 20,
+                moreAvailable   : true
+            }
+        }
     }
 }
 

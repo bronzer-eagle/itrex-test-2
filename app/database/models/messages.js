@@ -11,8 +11,10 @@ let     message          = new mongoose.Schema({
         type        : String,
         required    : true
     },
-    sender           : String,
-    receivers        : Array
+    sender           : { type: String, ref: 'User' },
+    receivers        : Array,
+    date             : { type: Date, default: Date.now },
+    attachment      : String
 });
 
 message.method.setMessage = function (message, sender, receiver) {

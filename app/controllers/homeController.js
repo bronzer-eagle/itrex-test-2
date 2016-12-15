@@ -18,6 +18,11 @@ class HomeController {
         let fields = {name : 1, email : 1};
 
         User.findOne({_id: user._id}, fields, (err, user) => {
+            if (err) {
+                res.status(500);
+                res.json(err);
+            }
+
             if (user) {
                 User.find({_id: {$ne : user._id}}, fields, (err, usersList) => {
                     res.status(200);
@@ -27,49 +32,30 @@ class HomeController {
                     });
                 });
             } else {
-                res.status(500);
-                res.json({ err: 'Oops!' });
-                cb('error');
+                res.status(404);
+                res.json({ err: 'No such a user' });
             }
         });
     }
 
     getMessages(req, res) {
-        let pagination = JSON.parse(req.query.pagination);
-        let type  = req.query.messageType;
-        let sortByDate          = req.query.sortByDate;
-
-        if (pagination) {
-            dataController.getMessages(req.user, pagination, type, (result)=>{
-                res.status(200);
-                res.json(result)
-            })
-        } else {
-            res.status(400);
-            res.json({
-                'err': 'no pagination'
-            })
-        }
-    }
-
-    searchInMessages(req, res) {
         let pagination          = JSON.parse(req.query.pagination);
-        let searchName          = req.query.searchName;
+        let filters             = JSON.parse(req.query.options);
 
         if (pagination) {
-            User.findOne({name: searchName}, {email:1}, (err, user)=>{
-                if (user) {
-                    dataController.getMessagesByName(req.user, user.email, pagination, (result)=>{
-                        res.status(200);
-                        res.json(result)
-                    })
+            dataController.getMessages(req.user, filters, pagination, (result) => {
+                if (result.err) {
+                    res.status(500);
+                    res.json(result);
+                } else {
+                    res.status(200);
+                    res.json(result);
                 }
-            });
-
+            })
         } else {
-            res.status(400);
+            res.status(404);
             res.json({
-                'err': 'no pagination'
+                'error': 'No pagination!'
             })
         }
     }

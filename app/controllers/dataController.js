@@ -7,59 +7,81 @@ let _               = require('underscore'),
     User            = mongoose.model('User');
 
 class DataController {
-    constructor() {
+    constructor() {}
 
-    }
-
-    getMessages(user, pagination, type, callback) {
-        let options ={
-            limit: pagination.start + pagination.count,
-            skip: pagination.start
-        };
-
-        let fields = {sender: 1, receivers: 1, text: 1, subject: 1};
-
-        let query = (type == 'received') ? {receivers: {$elemMatch: {$eq: user.email}}} : {sender: user.email};
-
-        let count = Message.find(query);
-
-        Message.find(query, fields, options, (err, messages) => {
-            pagination = this.paginate(pagination, count);
-
-            let result = {
-                pagination,
-                messages
+    getMessages(user, filters, pagination, callback) {
+        let query, count, searchByName, populateConf,
+            sortByDate      = {},
+            fields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1},
+            options         = {
+                limit       : pagination.start + pagination.count,
+                skip        : pagination.start
             };
 
-            callback(result)
-        })
-    }
+        if (filters.sortByDate) {
+            sortByDate.sort = {'date': filters.sortByDate.toLowerCase()};
+        }
 
-    getMessagesByName(user, searchEmail, pagination, callback) {
-        let options ={
-            limit: pagination.start + pagination.count,
-            skip: pagination.start
+        switch (filters.messageType) {
+            case 'received':
+                query   = {receivers: {$elemMatch: {$eq: user.email}}};
+                break;
+            case 'sent':
+                query   = {sender: user._id};
+                break;
+            case 'blacklisted':
+                query   = {};
+                break;
+            case 'all':
+            default:
+                query   = {$or : [{receivers: {$elemMatch: {$eq: user.email}}}, {sender: user._id}]};
+                break;
+        }
+
+        count           = Message.find(query);
+        searchByName    = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {};
+        populateConf    = {
+            path: 'sender',
+            match: searchByName,
+            select: '_id name email',
+            options: options
         };
 
-        let fields = {sender: 1, receivers: 1, text: 1, subject: 1};
+        Message
+            .find(query, fields, sortByDate)
+            .populate(populateConf)
+            .exec((err, messages) => {
+                if (err) {
+                    callback({
+                        error: err
+                    });
+                    return;
+                }
 
-        let query = {
-            $or:[{sender: user.email, receivers: {$elemMatch: {$eq: searchEmail}}},
-                {receivers: {$elemMatch: {$eq: user.email}}, sender: searchEmail}]
-        };
+                if (!messages) {
+                    callback(null);
+                    return;
+                }
 
-        let count = Message.find(query);
+                messages = _.filter(messages, (item) => {return item.sender}); //TODO: find problem with query in populate
 
-        Message.find(query, fields, options, (err, messages) => {
-            pagination = this.paginate(pagination, count);
+                if (filters.sortByName) {
+                    messages = _.sortBy(messages, item => { return item.sender.name});
 
-            let result = {
-                pagination,
-                messages
-            };
+                    if (filters.sortByName == 'DESC') {
+                        messages = messages.reverse();
+                    }
+                }
 
-            callback(result)
-        })
+                pagination = this.paginate(pagination, count);
+
+                let result = {
+                    pagination,
+                    messages
+                };
+
+                callback(result);
+            })
     }
 
     paginate(pagination, count) {

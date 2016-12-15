@@ -9,6 +9,7 @@ import 'angular-touch';
 import 'angular-ui-bootstrap'
 import 'angular-ui-router';
 import 'angular-jwt';
+import 'ng-file-upload';
 
 /**
  * COMPONENTS
@@ -54,7 +55,8 @@ import './index.scss';
 angular.module('app', [
     'ui.router',
     'angular-jwt',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngFileUpload'
 ])
     .config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);

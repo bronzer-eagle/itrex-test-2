@@ -16,15 +16,23 @@
                             <button ng-click="$ctrl.changeMessageType('received')"
                                     class="-btn-reset -w100">Received</button>
                         </li>
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.changeMessageType('all')"
+                                    class="-btn-reset -w100">All</button>
+                        </li>
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.changeMessageType('blacklisted')"
+                                    class="-btn-reset -w100">Blacklisted</button>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="col-xs-5 search-box">
                 <input type="search"
-                       ng-model="$ctrl.searchName"
+                       ng-model="$ctrl.searchByName"
                        placeholder="Search by name..."
                        class="app-input search-input">
-                <button ng-click="$ctrl.searchInMessages()"
+                <button ng-click="$ctrl.getMessages(true)"
                         class="app-grey-btn -btn-reset -in-b search-btn">
                     Search
                 </button>
@@ -37,18 +45,33 @@
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem">
-                            <button ng-click="$ctrl.sortBy('Date|ASC')"
+                            <button ng-click="$ctrl.sortBy('Date|DESC')"
                                     class="-btn-reset -w100">New</button>
                         </li>
                         <li role="menuitem">
-                            <button ng-click="$ctrl.sortBy('Date|DESC')"
+                            <button ng-click="$ctrl.sortBy('Date|ASC')"
                                     class="-btn-reset -w100">Old</button>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="col-xs-2">
-
+                <div class="btn-group -w100" uib-dropdown>
+                    <button type="button" class="app-grey-btn -w100 -uppercase"
+                            uib-dropdown-toggle>
+                        Name <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.sortBy('Name|ASC')"
+                                    class="-btn-reset -w100">A-Z</button>
+                        </li>
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.sortBy('Name|DESC')"
+                                    class="-btn-reset -w100">Z-A</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -66,6 +89,7 @@
                 </div>
             </uib-accordion-heading>
             {{message.text}}
+            <img ng-src="{{message.attachment}}" alt="">
         </div>
     </uib-accordion>
     <div ng-if="!$ctrl.messages.length" class="-fs-20 -al-c">

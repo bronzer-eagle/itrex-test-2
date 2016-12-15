@@ -3,6 +3,8 @@
 let _           = require('underscore'),
     mongoose    = require('mongoose'),
     Message     = mongoose.model('Message'),
+
+    path        = require('path');
     nodemailer  = require('nodemailer');
 
 class UserController {
@@ -11,6 +13,12 @@ class UserController {
     }
 
     sendMessage(req, res) {
+        if (req.files) {
+            let file = req.files.file;
+            console.log(file);
+            var pathToFile = file.path;
+        }
+
         let receivers = _.map(req.body.message.receivers, res => { return res.email});
 
         let mailOptions = {
@@ -33,14 +41,18 @@ class UserController {
         let message = new Message({
             text : req.body.message.text,
             subject : req.body.message.subject,
-            sender : req.user.email,
-            receivers : receivers
+            sender : req.user._id,
+            receivers : receivers,
+            attachment: pathToFile
         });
 
         message.save();
 
         smtpTransport.sendMail(mailOptions, function(err) {
-            if (error) console.log(error);
+            if (err) {
+                console.log(err);
+                return;
+            }
             res.status(200);
             res.json({
                 'message': 'An e-mail has been sent to ' + receivers + ' with further instructions.'

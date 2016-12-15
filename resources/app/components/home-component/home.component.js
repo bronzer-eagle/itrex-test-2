@@ -13,7 +13,6 @@ class HomeController {
 
     init() {
         this.getData();
-        //this.getMessages();
     }
 
     getData() {
@@ -21,23 +20,6 @@ class HomeController {
             .then(res => {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
-            })
-    }
-
-    getMessages() {
-        this.$http({
-            url : this.utilService.apiPrefix('app/get-messages'),
-            method: 'GET',
-            params: {
-                pagination: {
-                    start: 0,
-                    count: 5,
-                    moreAvailable: true
-                }
-            }
-        })
-            .then(res => {
-                console.log(res);
             })
     }
 

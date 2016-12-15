@@ -33,7 +33,7 @@ class EmailVerification {
             if (error) console.log(error);
         });
 
-        nev.generateTempUserModel(User, function(err) {
+        nev.generateTempUserModel(User, function(error) {
             if (error) console.log(error);
         });
     }

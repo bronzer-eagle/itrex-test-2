@@ -10,6 +10,8 @@ let express                     = require(`express`),
     [authRoutes, testRoutes, protectedRoutes, adminRoutes]    = require('./app/routes'),
     jwt                         = require('express-jwt'),
     app                         = express(),
+    fileUpload                  = require('express-fileupload'),
+
     adminController             = require('./app/controllers/adminController');
     ;
 
@@ -43,6 +45,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(passport.initialize());
+//app.use(fileUpload());
+// app.use();
 
 app.use('/auth', authRoutes);
 app.use('/test', testRoutes);
@@ -53,8 +57,8 @@ app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + process.env.serverPort + '/api');
 });
 
-app.listen(process.env.serverPort || 8080, () => {
-    console.log(`App listening on port: ${process.env.serverPort}`);
+app.listen(process.env.PORT || 8080, () => {
+    console.log(`App listening on port: ${process.env.PORT}`);
 });
 
 function authorizationCheck(req, res, next) {

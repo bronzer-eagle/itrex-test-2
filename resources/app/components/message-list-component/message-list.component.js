@@ -3,79 +3,74 @@ import './message-list-component.style.scss'
 
 class MessageListController {
     /** @ngInject */
-    constructor($http, utilService, $stateParams, paginationService) {
-        this.utilService    = utilService;
-        this.$http          = $http;
-        this.$stateParams   = $stateParams;
-        this.messages        = {};
+    constructor($http, utilService, $stateParams, paginationService, $timeout) {
+        this.utilService        = utilService;
+        this.$http              = $http;
+        this.$timeout           = $timeout;
+        this.$stateParams       = $stateParams;
         this.paginationService  = paginationService;
-        this.pagination = {
-            default: {
-                start: 0,
-                count: 5,
-                moreAvailable: true
-            }
-        };
-        this.messageType = 'sent';
-        this.sortByDate = 'ASC';
-        this.sortByName = null;
-        this.pagination.current = this.pagination.default;
-
-        this.init();
+        this.pagination         = paginationService.getPagination();
+        this.$onInit            = this.init;
     }
 
     init() {
+        this.messages           = {};
+        this.messageType        = 'all';
+        this.sortByDate         = 'ASC';
+        this.sortByName         = null;
+        this.searchByName       = null;
+
+        this.getMessages();
+    }
+
+    getMessages(resetFlag) {
+        if (resetFlag) this.pagination = this.paginationService.getPagination();
+
+        if (!this.pagination.current.moreAvailable) return;
+
+        let options = {
+            messageType: this.messageType,
+            sortByDate: this.sortByDate,
+            sortByName: this.sortByName,
+            searchByName: this.searchByName
+        };
+
         this.paginationService.getInfiniteData({
             url : this.utilService.apiPrefix('app/get-messages'),
             method: 'GET',
             params: {
-                messageType: this.messageType,
-                sortByDate: this.sortByDate,
-                sortByName: this.sortByName
+                options
             }
-        }, this.pagination).then(res=> {
+        }, this.pagination).then(res => {
+                                                                                    console.log(res);
             this.messages   = res.messages;
         })
     }
 
     changeMessageType(type) {
         this.messageType = type;
-        this.pagination.current = this.pagination.default;
-        this.init();
-    }
-
-    searchInMessages() {
-        this.pagination.current = this.pagination.default;
-
-        this.paginationService.getInfiniteData({
-            url : this.utilService.apiPrefix('app/search-messages'),
-            method: 'GET',
-            params: {
-                searchName: this.searchName
-            }
-        }, this.pagination).then(res=> {
-            this.messages   = res.messages;
-        })
+        this.getMessages(true);
     }
 
     setText(message) {
-        return this.messageType == 'sent' ? `To: ${message.receivers.toString()}` : `From: ${message.sender}`;
+        let userEmail = this.home.user.email;
+
+        return message.sender.email == userEmail ? `To: ${message.receivers.toString()}` : `From: ${message.sender.email}`;
     }
 
     sortBy(sort) {
-        let sortName = sort.split('|')[0];
+        let sortName;
+        let type = sort.split('|')[1];
 
-        this[`sortBy${sortName}`] = sort.split('|')[1];
-        this.pagination.current = this.pagination.default;
-
-        this.init();
-    }
-
-    _getHttpOptions(data) {
-        return {
-            url : this.utilService.apiPrefix('app/user-data'),
-            method: 'GET'
+        if (type != 'null') {
+            sortName = sort.split('|')[0];
+        } else {
+            type = null;
         }
+
+        this[`sortBy${sortName}`] = type;
+
+        this.getMessages(true);
     }
 }
 

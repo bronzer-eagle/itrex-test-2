@@ -3,9 +3,10 @@ import './messenger-component.style.scss'
 
 class MessengerController {
     /** @ngInject */
-    constructor($http, utilService, $stateParams) {
+    constructor($http, utilService, $stateParams, Upload) {
         this.utilService    = utilService;
         this.$http          = $http;
+        this.upload         = Upload;
         this.$stateParams   = $stateParams;
         this.message        = {};
         this.message.receivers = [];
@@ -20,15 +21,26 @@ class MessengerController {
     }
 
     sendMessage() {
-        console.log(this.message);
-        this.$http({
+        this.upload.upload({
             url : this.utilService.apiPrefix('app/send-message'),
-            method: 'POST',
-            data: {message : this.message}
-        })
-            .then(res => {
-                console.log(res);
-            })
+            data: {file: this.file, message : this.message}
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
+
+        // this.$http({
+        //     url : this.utilService.apiPrefix('app/send-message'),
+        //     method: 'POST',
+        //     data: {message : this.message}
+        // })
+        //     .then(res => {
+        //         console.log(res);
+        //     })
     }
 
     _getHttpOptions(data) {

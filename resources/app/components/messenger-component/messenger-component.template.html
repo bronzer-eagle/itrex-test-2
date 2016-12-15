@@ -18,6 +18,12 @@
                 <label class="app-label" for="message">Message: </label>
                 <textarea class="text-box" name="message" id="message" ng-model="$ctrl.message.text" required></textarea>
             </div>
+            <div class="col-xs-12 -pd-bottom-10">
+                <div class="app-grey-btn" ngf-select ng-model="$ctrl.file" name="file"
+                     ngf-max-size="5MB">
+                    Select
+                </div>
+            </div>
         </div>
         <button
                 type="submit"
