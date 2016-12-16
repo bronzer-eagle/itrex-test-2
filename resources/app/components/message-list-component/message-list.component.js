@@ -54,8 +54,15 @@ class MessageListController {
 
     setText(message) {
         let userEmail = this.home.user.email;
+        let receivers = _.map(message.receivers, item => {return item.email});
 
-        return message.sender.email == userEmail ? `To: ${message.receivers.toString()}` : `From: ${message.sender.email}`;
+        if (message.sender.email == userEmail) {
+            return `To: ${receivers.toString()}`
+        } else {
+            message.status = _.findWhere(message.receivers, {email : userEmail}).is_read;
+
+            return `From: ${message.sender.email}`
+        }
     }
 
     sortBy(sort) {

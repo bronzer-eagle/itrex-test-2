@@ -14,14 +14,8 @@ let     message          = new mongoose.Schema({
     sender           : { type: String, ref: 'User' },
     receivers        : Array,
     date             : { type: Date, default: Date.now },
-    attachment      : String
+    attachment       : Object
 });
-
-message.method.setMessage = function (message, sender, receiver) {
-
-
-    this.save();
-};
 
 message.methods.checkId = function () {
 

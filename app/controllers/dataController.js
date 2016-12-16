@@ -24,7 +24,7 @@ class DataController {
 
         switch (filters.messageType) {
             case 'received':
-                query   = {receivers: {$elemMatch: {$eq: user.email}}};
+                query   = {receivers: {$elemMatch: {email: user.email}}};
                 break;
             case 'sent':
                 query   = {sender: user._id};
@@ -34,12 +34,12 @@ class DataController {
                 break;
             case 'all':
             default:
-                query   = {$or : [{receivers: {$elemMatch: {$eq: user.email}}}, {sender: user._id}]};
+                query   = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id}]};
                 break;
         }
 
         count           = Message.find(query);
-        searchByName    = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {};
+        searchByName    = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {}; //TODO: search by recipients
         populateConf    = {
             path: 'sender',
             match: searchByName,
