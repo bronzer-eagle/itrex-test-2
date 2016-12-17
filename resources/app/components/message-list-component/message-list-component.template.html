@@ -79,7 +79,7 @@
         <div uib-accordion-group ng-repeat="message in $ctrl.messages"
              class="panel-default">
             <uib-accordion-heading class="message-header">
-                <div class="row">
+                <div class="row" ng-click="$ctrl.readMessage(message)" ng-class="{'unread' : !message.status}">
                     <div class="col-xs-6">
                       <span class="receivers">{{$ctrl.setText(message)}}</span>
                     </div>

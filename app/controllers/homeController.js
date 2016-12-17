@@ -59,6 +59,22 @@ class HomeController {
             })
         }
     }
+
+    readMessage(req, res) {
+        let messageId = req.query.message_id;
+
+        console.log(messageId);
+
+        dataController.findMessage(messageId, req.user, (result) => {
+            if (result.err) {
+                res.status(500);
+                res.json(result);
+            } else {
+                res.status(200);
+                res.json(result);
+            }
+        })
+    }
 }
 
 module.exports = new HomeController();

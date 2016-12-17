@@ -31,7 +31,7 @@ class UserController {
             text                    : req.body.message.text
         };
 
-        if (req.files) {
+        if (req.files.file) {
             file                    = req.files.file;
 
             mailOptions.attachments = [{

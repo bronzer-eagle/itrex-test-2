@@ -84,6 +84,23 @@ class DataController {
             })
     }
 
+    findMessage(id, user, callback) {
+        Message.findById(id, (err, message) => {
+            if (err) {
+                callback({err: err});
+                return;
+            }
+
+            if (message) {
+                message.readMessage(user.email);
+
+                callback({
+                    status: true
+                });
+            }
+        })
+    }
+
     paginate(pagination, count) {
         pagination.start = pagination.start + pagination.count;
         pagination.moreAvailable  = pagination.start < count;

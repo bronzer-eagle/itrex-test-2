@@ -57,6 +57,7 @@ testRoutes.get('/temp-users', function (req, res) {
 
 protectedRoutes.get('/user-data', homeController.sendData.bind(homeController));
 protectedRoutes.get('/get-messages', homeController.getMessages.bind(homeController));
+protectedRoutes.get('/read-message', homeController.readMessage.bind(homeController));
 
 protectedRoutes.post('/send-message', multipart({uploadDir: './storage/tmp' }), userController.sendMessage.bind(userController));
 

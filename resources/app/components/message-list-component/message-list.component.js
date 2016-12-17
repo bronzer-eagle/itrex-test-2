@@ -57,6 +57,7 @@ class MessageListController {
         let receivers = _.map(message.receivers, item => {return item.email});
 
         if (message.sender.email == userEmail) {
+            message.status = true;
             return `To: ${receivers.toString()}`
         } else {
             message.status = _.findWhere(message.receivers, {email : userEmail}).is_read;
@@ -78,6 +79,22 @@ class MessageListController {
         this[`sortBy${sortName}`] = type;
 
         this.getMessages(true);
+    }
+
+    readMessage(message) {
+        message.status = true ;
+        this.$http({
+            url     : this.utilService.apiPrefix('app/read-message'),
+            method  : 'GET',
+            params: {
+                message_id: message._id
+            }
+        }).then(res => {
+            console.log(res);
+
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 
