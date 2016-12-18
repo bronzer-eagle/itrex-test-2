@@ -19,6 +19,7 @@ import 'ng-file-upload';
 import authComponent    from './app/components/auth-component/auth.component';
 import loginComponent   from './app/components/auth-component/login/login.component';
 import registerComponent   from './app/components/auth-component/register/register.component';
+import restoreComponent   from './app/components/auth-component/restore/restore.component';
 
 //**************HOME************
 
@@ -68,6 +69,7 @@ angular.module('app', [
     .component('authComponent', authComponent)
     .component('loginComponent', loginComponent)
     .component('registerComponent', registerComponent)
+    .component('restoreComponent', restoreComponent)
 
     .component('homeComponent', homeComponent)
     .component('messengerComponent', messengerComponent)

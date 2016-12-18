@@ -23,12 +23,17 @@ button:disabled {
   padding: 5px;
 }
 
+.app-input.app-grey-input {
+  border-radius: 5px;
+  border: 1px solid #a7abab !important;
+}
+
 .app-input,
 .auth-input {
   transition: border 0.2s ease;
 
-  &.invalid {
-    border: 1px solid #980000;
+  &.ng-invalid:not(.ng-pristine) {
+    border: 1px solid #980000 !important;
   }
 }
 
@@ -38,7 +43,7 @@ button:disabled {
 
   .input{
     width: 100%;
-    height: 45px;
+    height: 34px;
     padding: 5px;
     border: 0;
   }
@@ -61,7 +66,7 @@ button:disabled {
 
   .icon.-left, .input-link.-left {
     position: absolute;
-    left: 12px;
+    left: 5px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -76,7 +81,7 @@ button:disabled {
 
   .icon.-right, .input-link.-right {
     position: absolute;
-    right: 12px;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
   }

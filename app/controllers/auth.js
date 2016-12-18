@@ -4,17 +4,15 @@ let _                   = require('underscore'),
     User                = mongoose.model('User'),
     validator           = require('../helpers/validator.js'),
     emailVerification   = require('./emailVerification'),
-    restorePass         = require('./restorePassword');
+    restorePass         = require('./restorePasswordController');
 
 class AuthFlow {
     constructor() {}
 
     register(req, res) {
-        let user, flag;
+        let user;
 
-        flag = AuthFlow.validate(req, res, 'registration');
-
-        if (!flag) return;
+        if (!AuthFlow.validate(req, res, 'registration')) return;
 
         user = new User({
             name   : req.body.name,
@@ -27,36 +25,21 @@ class AuthFlow {
     };
 
     login(req, res) {
-        let token, flag;
-
-        flag = AuthFlow.validate(req, res, 'login');
-
-        if (!flag) return;
+        if (!AuthFlow.validate(req, res, 'login')) return;
 
         passport.authenticate('local', function(err, user, info){
-
             if (err) {
                 res.status(404).json(err);
                 return;
             }
 
-            if(user) {
-                token = user.generateJwt();
-                res.status(200);
-                res.json({
-                    "token" : token
-                });
+            if (user) {
+                res.status(200).json({'token' : user.generateJwt()});
             } else {
                 res.status(401).json(info);
             }
-
         })(req, res);
     };
-
-    restorePassword(req, res) {
-        //TODO: set password restore function
-        restorePass.sendLink(req, res);
-    }
 
     static validate(req, res, type) {
         let arr     = validator.validate(req.body, type),
@@ -78,8 +61,7 @@ class AuthFlow {
     }
 
     static sendJSONresponse(res, status, content) {
-        res.status(status);
-        res.json(content);
+        res.status(status).json(content);
     };
 }
 

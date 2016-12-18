@@ -1,0 +1,24 @@
+<form name="$ctrl.restorePasswordForm" ng-submit="$ctrl.changePassword()" class="auth-form"
+      ng-show="!$ctrl.inFlight">
+    <h2 class="-mg-top-0 -al-c">Restore Password</h2>
+    <div class="auth-input-box">
+        <label class="auth-label" for="new_password">New Password</label>
+        <input class="app-input app-grey-input auth-input" id="new_password" type="password"
+               required name="new_password"
+               ng-model="$ctrl.restore.newPassword">
+    </div>
+    <div class="auth-input-box">
+        <label class="auth-label" for="confirm_password">Confirm Password</label>
+        <input class="app-input app-grey-input auth-input" id="confirm_password" type="password"
+               required name="confirm_password" ng-change="$ctrl.checkPassword()"
+               ng-model="$ctrl.restore.confirmPassword">
+    </div>
+    <button type="submit"
+            ng-disabled="$ctrl.restorePasswordForm.$invalid"
+            class="app-blue-btn auth-submit app-button">
+        Restore
+    </button>
+</form>
+<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+    <div class="loader"></div>
+</div>

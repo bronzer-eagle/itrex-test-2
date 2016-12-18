@@ -17,15 +17,16 @@ class RegisterController {
                 this.$state.go('info', {
                     msg: res.data.msg,
                     type: 'email-verification',
-                    email: this.signUpData.email
+                    options : {
+                        email: this.signUpData.email
+                    }
                 });
             })
             .catch(err => {
                 throw new Error(err); //TODO: set processError service
             })
             .finally(() => {
-            this.inFlight = false;
-                console.log('Request to server');
+                this.inFlight = false;
             })
     }
 

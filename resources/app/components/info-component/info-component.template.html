@@ -4,3 +4,10 @@
         Resend
     </button>
 </section>
+
+<section ng-if="$ctrl.type == 'restore'" class="-al-c">
+    <div uib-alert class="alert alert-info -al-l" ng-class="{'alert-success': $ctrl.options.success}">
+        {{$ctrl.message}}
+    </div>
+    <a ui-sref="login" class="-a-reset app-blue-btn" ng-if="$ctrl.options.success">Sign in with new password!</a>
+</section>

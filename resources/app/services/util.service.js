@@ -9,6 +9,12 @@ class UtilService {
     apiPrefix(url) {
         return `http://localhost:8080/${url}`;
     }
+
+    regExp() {
+        return {
+
+        }
+    }
 }
 
 export default UtilService;

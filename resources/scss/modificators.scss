@@ -32,6 +32,10 @@
   text-align: right;
 }
 
+.-al-l {
+  text-align: left;
+}
+
 .-uppercase {
   text-transform: uppercase;
 }
@@ -45,7 +49,7 @@
 }
 
 .-in-b {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .-centered {

@@ -15,6 +15,7 @@ class InfoController {
     init() {
         this.message = this.$stateParams.msg;
         this.type = this.$stateParams.type;
+        this.options = this.$stateParams.options;
     }
 
     resendVerificationEmail() {
@@ -22,7 +23,7 @@ class InfoController {
             url: this.utilService.apiPrefix('auth/resend-verification'),
             method: 'GET',
             params: {
-                email: this.$stateParams.email
+                email: this.$stateParams.options.email
             }
         }).then(res => {
             this.message = res.data.msg;

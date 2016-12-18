@@ -1,17 +1,22 @@
-<form name="$ctrl.signInForm" ng-submit="$ctrl.signIn()" class="auth-form">
+<form name="$ctrl.signInForm" ng-submit="$ctrl.signIn()" class="auth-form"
+      ng-show="!$ctrl.inFlight && !$ctrl.forgotPassword">
+    <h2 class="-mg-top-0 -al-c">Sign In</h2>
     <div class="auth-input-box">
         <label class="auth-label" for="email">Email</label>
-        <input class="auth-input" id="email" type="email"
+        <input class="app-input app-grey-input auth-input" id="email" type="email"
                required name="email"
-               ng-class="{'invalid' : $ctrl.signInForm.email.$invalid}"
                ng-model="$ctrl.signInData.email">
     </div>
     <div class="auth-input-box">
         <label class="auth-label" for="password">Password</label>
-        <input class="auth-input" id="password" type="password"
-               required name="password"
-               ng-class="{'invalid' : $ctrl.signInForm.password.$invalid}"
-               ng-model="$ctrl.signInData.password">
+        <div class="icon-input -right -large-r">
+            <input class="input app-input app-grey-input auth-input" id="password" type="password"
+                   required name="password"
+                   ng-model="$ctrl.signInData.password">
+            <button type="button" class="-btn-reset input-link -right" ng-click="$ctrl.forgotPassword = true">
+                Forgot?
+            </button>
+        </div>
     </div>
     <button type="submit"
             ng-disabled="$ctrl.signInForm.$invalid"
@@ -22,3 +27,28 @@
         <a ui-sref="register">Not registered yet?</a>
     </div>
 </form>
+<form name="$ctrl.restorePassForm" ng-submit="$ctrl.restorePassword()" class="auth-form"
+      ng-show="!$ctrl.inFlight && $ctrl.forgotPassword">
+    <h2 class="-mg-top-0 -al-c">Restore Password</h2>
+    <div class="auth-input-box">
+        <label class="auth-label" for="email_for_restore">Enter your Email</label>
+        <input class="app-input app-grey-input auth-input" id="email_for_restore" type="email"
+               required name="email"
+               ng-model="$ctrl.emailForRestore">
+    </div>
+    <section class="-al-c -pd-10">
+        <button type="submit"
+                ng-disabled="$ctrl.restorePassForm.$invalid"
+                class="app-blue-btn app-button -pd-left-15 -pd-right-15 -in-b -mg-right-20">
+            Restore
+        </button>
+        <button type="button"
+                ng-click="$ctrl.forgotPassword = false"
+                class="app-grey-btn app-button -in-b">
+            Cancel
+        </button>
+    </section>
+</form>
+<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+    <div class="loader"></div>
+</div>

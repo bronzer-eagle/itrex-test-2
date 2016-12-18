@@ -29,6 +29,30 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             component   : 'registerComponent'
         })
 
+        .state('email-verification', {
+            parent      : 'auth',
+            url         : '/email-verification',
+            controller  : function ($location, $http, utilService) {
+                this.token = $location.search().token;
+                $http({
+                    url: utilService.apiPrefix('auth/email-confirmation'),
+                    method: 'POST',
+                    data: {
+                        token: this.token
+                    }
+                }).then(res=>{
+                    console.log(res);
+                })
+            },
+            template    : `<ui-view></ui-view>`
+        })
+
+        .state('restore-password', {
+            parent      : 'auth',
+            url         : '/restore-password',
+            component   : 'restoreComponent',
+        })
+
     /**
      * USER PAGE STATES
      */
@@ -46,7 +70,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             params      : {
                 type    : '',
                 msg     : '',
-                email   : ''
+                options : ''
             },
             data        : {
                 requiresLogin: false

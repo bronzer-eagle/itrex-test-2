@@ -1,21 +1,22 @@
 <form name="$ctrl.signUpForm" ng-submit="$ctrl.signUp()" class="auth-form" ng-show="!$ctrl.inFlight">
+    <h2 class="-mg-top-0 -al-c">Sign Up</h2>
     <div class="auth-input-box">
         <label class="auth-label" for="name">Name</label>
-        <input class="auth-input" id="name" type="text"
+        <input class="app-input app-grey-input auth-input" id="name" type="text"
                required name="name"
                ng-class="{'invalid' : $ctrl.signUpForm.name.$invalid}"
                ng-model="$ctrl.signUpData.name">
     </div>
     <div class="auth-input-box">
         <label class="auth-label" for="email">Email</label>
-        <input class="auth-input" id="email" type="email"
+        <input class="app-input app-grey-input auth-input" id="email" type="email"
                required name="email"
                ng-class="{'invalid' : $ctrl.signUpForm.email.$invalid}"
                ng-model="$ctrl.signUpData.email">
     </div>
     <div class="auth-input-box">
         <label class="auth-label" for="password">Password</label>
-        <input class="auth-input" id="password" type="password"
+        <input class="app-input app-grey-input auth-input" id="password" type="password"
                required name="password"
                ng-class="{'invalid' : $ctrl.signUpForm.password.$invalid}"
                ng-model="$ctrl.signUpData.password">

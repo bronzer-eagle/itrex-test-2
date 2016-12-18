@@ -10,26 +10,20 @@ let express                 = require('express'),
     userController          = require(`./controllers/userController`),
     homeController          = require(`./controllers/homeController`),
 
-    restorePass             = require('./controllers/restorePassword');
+    restorePass             = require('./controllers/restorePasswordController');
 
 //auth flow
 authRoutes.post('/register', auth.register.bind(auth));
 authRoutes.post('/login', auth.login.bind(auth));
-authRoutes.post('/restore-password', auth.restorePassword.bind(auth));
-authRoutes.get('/restore-password/:token', (req, res) => {
-    restorePass.checkUser(req, res);
-});
-authRoutes.post('/restore-password/:token', (req, res) => {
-    restorePass.restore(req, res);
-});
+authRoutes.post('/forgot-password', restorePass.sendLink.bind(restorePass));
+authRoutes.post('/restore-user-password', restorePass.restore.bind(restorePass));
+
 authRoutes.get('/logout', (req, res) => {
     req.logout();
     res.status(200);
     res.json({});
 });
-authRoutes.get('/email-verification/:URL', function(req, res) {
-    emailVerification.verify(req, res);
-});
+authRoutes.post('/email-confirmation', emailVerification.verify.bind(emailVerification));
 
 authRoutes.get('/resend-verification', function(req, res) {
     emailVerification.resendVerification(req, res);

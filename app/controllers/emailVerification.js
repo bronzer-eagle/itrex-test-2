@@ -10,7 +10,7 @@ class EmailVerification {
 
     init() {
         nev.configure({
-            verificationURL     : `http://localhost:8080/auth/email-verification/\${URL}`, //TODO: make .env
+            verificationURL     : `${process.env.appHttp}auth/email-verification?token=\${URL}`,
             persistentUserModel : User,
             tempUserCollection  : 'tempusers',
             shouldSendConfirmation: false,
@@ -18,8 +18,8 @@ class EmailVerification {
             transportOptions    : {
                 service         : 'Gmail',
                 auth            : {
-                    user        : process.env.email, //TODO: make .env
-                    pass        : process.env.emailPass //TODO: make .env
+                    user        : process.env.email,
+                    pass        : process.env.emailPass
                 }
             },
             verifyMailOptions   : {
@@ -88,24 +88,18 @@ class EmailVerification {
     }
 
     verify(req, res) {
-        let url = req.params.URL;
+        let token = req.body.token;
 
-        nev.confirmTempUser(url, function(err, user) {
+        nev.confirmTempUser(token, function(err, user) {
             if (user) {
                 adminController.checkAdmin(user, ()=>{
+                    res.status(200);
                     res.json({
                         msg: 'CONFIRMED!'
                     });
                 });
-                // res.redirect(`${process.env.appHttp}info`);
-                // res.status(200);
-                // res.json({
-                //     msg: 'Confirmed'
-                // })
                 nev.sendConfirmationEmail(user.email, function(err) {
                     if (err) return res.status(404).send('ERROR: sending confirmation email FAILED');
-
-
                 });
             } else {
                 return res.status(404).send('ERROR: confirming temp user FAILED');

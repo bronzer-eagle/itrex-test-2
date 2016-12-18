@@ -1,0 +1,56 @@
+<section class="-pd-top-15 -pd-bottom-20">
+    <form name="$ctrl.passwordForm" ng-submit="$ctrl.changePassword()">
+        <h2 class="-mg-top-0">Change Password</h2>
+        <label for="old_password">Old password</label>
+        <div class="icon-input">
+            <input class="app-input app-grey-input input" id="old_password" type="password"
+                   required name="old_password"
+                   ng-model="$ctrl.password.old">
+        </div>
+        <label for="new_password">New password</label>
+        <div class="icon-input">
+            <input class="app-input app-grey-input input" id="new_password" type="password"
+                   required name="old_password"
+                   ng-model="$ctrl.password.new">
+        </div>
+        <label for="confirm_password">Confirm password</label>
+        <div class="icon-input">
+            <input class="app-input app-grey-input input" id="confirm_password" type="password"
+                   required name="confirm_password" ng-change="$ctrl.checkPassword()"
+                   ng-model="$ctrl.password.confirm">
+        </div>
+        <button type="submit"
+                ng-disabled="$ctrl.passwordForm.$invalid"
+                class="app-grey-btn">
+            Save
+        </button>
+    </form>
+    <form name="$ctrl.nameForm" ng-submit="$ctrl.changeName()">
+        <h2>Change Name</h2>
+        <label for="name">Name</label>
+        <div class="icon-input">
+            <input class="app-input app-grey-input input" id="name" type="text"
+                   required name="name"
+                   ng-model="$ctrl.name">
+        </div>
+        <button type="submit"
+                ng-disabled="$ctrl.nameForm.$invalid"
+                class="app-grey-btn">
+            Save
+        </button>
+    </form>
+    <form name="$ctrl.emailForm" ng-submit="$ctrl.changeEmail()">
+        <h2>Change Email</h2>
+        <label for="email">Email</label>
+        <div class="icon-input">
+            <input class="app-input app-grey-input input" id="email" type="email"
+                   required name="email"
+                   ng-model="$ctrl.email">
+        </div>
+        <button type="submit"
+                ng-disabled="$ctrl.emailForm.$invalid"
+                class="app-grey-btn">
+            Save
+        </button>
+    </form>
+</section>

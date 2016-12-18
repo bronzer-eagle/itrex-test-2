@@ -1,14 +1,15 @@
-import _ from 'underscore';
-
 class LoginController {
     /** @ngInject */
     constructor($http, $state, utilService) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
+        this.inFlight       = false;
     }
 
     signIn() {
+        this.inFlight = true;
+
         this.$http(this._getHttpOptions(this.signInData))
             .then(res => {
                 let token = res.data.token;
@@ -18,11 +19,37 @@ class LoginController {
                 console.log(res);
             })
             .catch(err => {
-                throw new Error(err); //TODO: set processError service
+                this.auth.showError(err);
             })
             .finally(() => {
-                console.log('Request to server');
+                this.inFlight = false;
             })
+    }
+
+    restorePassword() {
+        this.inFlight = true;
+
+        this.$http({
+            url: this.utilService.apiPrefix('auth/forgot-password'),
+            method: 'POST',
+            skipAuthorization: true,
+            data: {
+                email: this.emailForRestore
+            }
+        })
+            .then(res => {
+                this.$state.go('info', {
+                    msg: res.data.message,
+                    type: 'restore',
+                });
+            })
+            .catch(err => {
+                this.auth.showError(err);
+            })
+            .finally(() => {
+                this.inFlight = false;
+            })
+
     }
 
     processToken(token) {
@@ -43,7 +70,10 @@ class LoginController {
 
 const LoginComponent = {
     template        : require('./login-component.template.html'),
-    controller      : LoginController
+    controller      : LoginController,
+    require         : {
+        auth        : '^authComponent'
+    }
 };
 
 export default LoginComponent;

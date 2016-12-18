@@ -16,7 +16,7 @@ let     userSchema          = new mongoose.Schema({
             hash            : String,
             salt            : String,
             resetPasswordToken : String,
-            resetPasswordExpires : String
+            resetPasswordExpires : Number
         });
 
 userSchema.methods.setPassword = function (password, save) {
