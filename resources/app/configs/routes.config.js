@@ -7,6 +7,10 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $stateProvider
 
+    /**
+     * AUTH FLOW
+     */
+
         .state('auth', {
             url         : '/auth',
             abstract    : true,
@@ -25,6 +29,9 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             component   : 'registerComponent'
         })
 
+    /**
+     * USER PAGE STATES
+     */
 
         .state('base', {
             url     : '/',
@@ -69,6 +76,12 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             parent      : 'home',
             url         : '/message-list',
             component   : 'messageListComponent',
+        })
+
+        .state('settings', {
+            parent      : 'home',
+            url         : '/settings',
+            component   : 'settingsComponent',
         })
 }
 

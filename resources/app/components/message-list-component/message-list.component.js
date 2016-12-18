@@ -16,7 +16,7 @@ class MessageListController {
     init() {
         this.messages           = {};
         this.messageType        = 'all';
-        this.sortByDate         = 'ASC';
+        this.sortByDate         = 'DESC';
         this.sortByName         = null;
         this.searchByName       = null;
 
@@ -82,16 +82,19 @@ class MessageListController {
     }
 
     readMessage(message) {
-        message.status = true ;
+        if (message.status) return;
+
+        let userEmail = this.home.user.email;
+
         this.$http({
             url     : this.utilService.apiPrefix('app/read-message'),
             method  : 'GET',
             params: {
                 message_id: message._id
             }
-        }).then(res => {
-            console.log(res);
-
+        }).then(() => {
+            let obj = _.findWhere(message.receivers, {email : userEmail});
+            obj.is_read = true;
         }).catch(err => {
             console.log(err);
         });

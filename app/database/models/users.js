@@ -41,6 +41,8 @@ userSchema.methods.validPassword = function (password) {
 userSchema.methods.setAdmin = function () {
     this.admin = true;
 
+    this.markModified('admin');
+
     this.save();
 };
 

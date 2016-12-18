@@ -15,7 +15,7 @@ class HomeController {
 
     sendData(req, res) {
         let user    = req.user;
-        let fields = {name : 1, email : 1};
+        let fields = {name : 1, email : 1, admin : 1};
 
         User.findOne({_id: user._id}, fields, (err, user) => {
             if (err) {
@@ -63,15 +63,14 @@ class HomeController {
     readMessage(req, res) {
         let messageId = req.query.message_id;
 
-        console.log(messageId);
-
-        dataController.findMessage(messageId, req.user, (result) => {
-            if (result.err) {
+        dataController.findMessage(messageId, (err, message) => {
+            if (err) {
                 res.status(500);
-                res.json(result);
+                res.json(err);
             } else {
+                message.readMessage(req.user.email);
                 res.status(200);
-                res.json(result);
+                res.json({});
             }
         })
     }

@@ -1,45 +1,44 @@
-<nav class="app-navigation">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-3">
-                <div class="item">
-                   Hello, {{$ctrl.user.name}}
-                </div>
-            </div>
-            <div class="col-xs-4">
-                <div class="item">
-                    <a class="-a-reset -uppercase" ui-sref="message-list">My messages</a>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="item">
-                    <a class="-a-reset -uppercase" ui-sref="message-list">settings</a>
-                </div>
-            </div>
-            <div class="col-xs-2 -al-r">
-                <button class="item push -btn-reset" ng-click="$ctrl.logout()">
-                    LOGOUT
-                </button>
-            </div>
+<nav class="app-navigation row">
+    <div class="col-xs-3">
+        <div class="item">
+           Hello, {{$ctrl.user.name}}
         </div>
+    </div>
+    <div class="col-xs-3">
+        <div class="item">
+            <a class="-a-reset -uppercase" ui-sref="message-list">messages</a>
+        </div>
+    </div>
+    <div class="col-xs-2" ng-if="$ctrl.user.admin">
+        <div class="item">
+            <a class="-a-reset -uppercase" ui-sref="message-list">admin</a>
+        </div>
+    </div>
+    <div class="col-xs-{{$ctrl.column}} -al-c">
+        <div class="item">
+            <a class="-a-reset -uppercase" ui-sref="settings">settings</a>
+        </div>
+    </div>
+    <div class="col-xs-{{$ctrl.column}} -al-r">
+        <button class="item push -btn-reset -uppercase" ng-click="$ctrl.logout()">
+            logout
+        </button>
     </div>
 </nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-3 user-list">
-            <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn">
-                Compose message
+<section class="row">
+    <div class="col-xs-3 user-list">
+        <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn">
+            Compose message
+        </a>
+        <div class="row item" ng-repeat="user in $ctrl.usersList">
+            <a class="-a-reset email" ui-sref="send-message({receiver: user})">
+                <div class="col-xs-12">
+                    {{user.name}}
+                </div>
             </a>
-            <div class="row item" ng-repeat="user in $ctrl.usersList">
-                <a class="-a-reset email" ui-sref="send-message({receiver: user})">
-                    <div class="col-xs-12">
-                        {{user.name}}
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xs-9">
-            <ui-view></ui-view>
         </div>
     </div>
-</div>
+    <div class="col-xs-9">
+        <ui-view></ui-view>
+    </div>
+</section>

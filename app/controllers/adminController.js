@@ -7,13 +7,13 @@ class AdminController {
 
     }
 
-    checkAdmin(user) {
+    checkAdmin(user, callback) {
         User.findOne({admin: true}, function (err, admin) {
-            console.log(admin);
-
             if (!admin) {
                 user.setAdmin();
             }
+
+            callback();
         });
     }
 

@@ -3,10 +3,11 @@ import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService, $state) {
+    constructor($http, utilService, $state, $timeout) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
+        this.$timeout       = $timeout;
 
         this.init();
     }
@@ -20,6 +21,7 @@ class HomeController {
             .then(res => {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
+                this.showAdminPanel();
             })
     }
 
@@ -32,7 +34,12 @@ class HomeController {
                 localStorage.removeItem('token');
                 this.$state.go('login')
             })
+    }
 
+    showAdminPanel() {
+        this.$timeout(()=> {
+            this.column = this.user.admin ? '2' : '3';
+        })
     }
 
     _getHttpOptions(data) {

@@ -92,15 +92,20 @@ class EmailVerification {
 
         nev.confirmTempUser(url, function(err, user) {
             if (user) {
-                nev.sendConfirmationEmail(user.email, function(err, info) {
+                adminController.checkAdmin(user, ()=>{
+                    res.json({
+                        msg: 'CONFIRMED!'
+                    });
+                });
+                // res.redirect(`${process.env.appHttp}info`);
+                // res.status(200);
+                // res.json({
+                //     msg: 'Confirmed'
+                // })
+                nev.sendConfirmationEmail(user.email, function(err) {
                     if (err) return res.status(404).send('ERROR: sending confirmation email FAILED');
 
-                    adminController.checkAdmin(user);
 
-                    res.json({
-                        msg: 'CONFIRMED!',
-                        info: info
-                    });
                 });
             } else {
                 return res.status(404).send('ERROR: confirming temp user FAILED');

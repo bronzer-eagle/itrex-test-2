@@ -10,7 +10,7 @@ class DataController {
     constructor() {}
 
     getMessages(user, filters, pagination, callback) {
-        let query, count, searchByName, populateConf,
+        let query, count, searchBySenderName, populateConf,
             sortByDate      = {},
             fields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1},
             options         = {
@@ -38,11 +38,11 @@ class DataController {
                 break;
         }
 
-        count           = Message.find(query);
-        searchByName    = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {}; //TODO: search by recipients
-        populateConf    = {
+        count                   = Message.find(query);
+        searchBySenderName      = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {}; //TODO: search by recipients
+        populateConf            = {
             path: 'sender',
-            match: searchByName,
+            match: searchBySenderName,
             select: '_id name email',
             options: options
         };
@@ -84,19 +84,15 @@ class DataController {
             })
     }
 
-    findMessage(id, user, callback) {
+    findMessage(id, callback) {
         Message.findById(id, (err, message) => {
             if (err) {
-                callback({err: err});
+                callback(err, null);
                 return;
             }
 
             if (message) {
-                message.readMessage(user.email);
-
-                callback({
-                    status: true
-                });
+                callback(null, message);
             }
         })
     }

@@ -29,12 +29,8 @@ authRoutes.get('/logout', (req, res) => {
 });
 authRoutes.get('/email-verification/:URL', function(req, res) {
     emailVerification.verify(req, res);
-    res.redirect(`${process.env.appHttp}info`);
-    res.status(200);
-    res.json({
-        msg: 'Confirmed'
-    })
 });
+
 authRoutes.get('/resend-verification', function(req, res) {
     emailVerification.resendVerification(req, res);
 });
