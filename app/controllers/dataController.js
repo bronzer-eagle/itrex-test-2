@@ -22,6 +22,7 @@ class DataController {
                 select      : '_id name email'
             },
             callbackMessage = (error, messages) => {
+                console.log(messages);
                 if (error)     { callback({error}); return; }
 
                 if (!messages) { callback(null);    return; }
@@ -71,16 +72,16 @@ class DataController {
             switch (filters.messageType) {
                 case 'received':
                     query               = {receivers: {$elemMatch: {email: user.email}}};
-                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
+                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
                     break;
                 case 'sent':
-                    query               = {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`}}}};
+                    query               = {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}}}};
                     break;
                 case 'blacklisted':
                 case 'all':
                 default:
                     query               = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`}}}}]};
-                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
+                    //populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
                     break;
             }
 
