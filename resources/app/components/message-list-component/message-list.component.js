@@ -19,6 +19,7 @@ class MessageListController {
         this.sortByDate         = 'DESC';
         this.sortByName         = null;
         this.searchByName       = null;
+        this.sortByNameValue    = 'Name';
 
         this.getMessages();
     }
@@ -42,7 +43,6 @@ class MessageListController {
                 options
             }
         }, this.pagination).then(res => {
-                                                                                    console.log(res);
             this.messages   = res.messages;
         })
     }

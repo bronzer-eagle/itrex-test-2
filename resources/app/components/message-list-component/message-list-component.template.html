@@ -41,7 +41,7 @@
                 <div class="btn-group -w100" uib-dropdown>
                     <button type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
-                        Date <span class="caret"></span>
+                        {{$ctrl.sortByDate == 'DESC' ? 'New' : 'Old'}} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem">
@@ -59,15 +59,19 @@
                 <div class="btn-group -w100" uib-dropdown>
                     <button type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
-                        Name <span class="caret"></span>
+                        {{$ctrl.sortByNameValue}} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem">
-                            <button ng-click="$ctrl.sortBy('Name|ASC')"
+                            <button ng-click="$ctrl.sortBy('null'); $ctrl.sortByNameValue = 'Name'"
+                                    class="-btn-reset -w100">No filter</button>
+                        </li>
+                        <li role="menuitem">
+                            <button ng-click="$ctrl.sortBy('Name|ASC'); $ctrl.sortByNameValue = 'A-Z'"
                                     class="-btn-reset -w100">A-Z</button>
                         </li>
                         <li role="menuitem">
-                            <button ng-click="$ctrl.sortBy('Name|DESC')"
+                            <button ng-click="$ctrl.sortBy('Name|DESC'); $ctrl.sortByNameValue = 'Z-A'"
                                     class="-btn-reset -w100">Z-A</button>
                         </li>
                     </ul>

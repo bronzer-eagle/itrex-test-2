@@ -10,78 +10,86 @@ class DataController {
     constructor() {}
 
     getMessages(user, filters, pagination, callback) {
-        let query, count, searchBySenderName, populateConf,
+        let query, count, searchByName,
             sortByDate      = {},
             fields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1},
             options         = {
                 limit       : pagination.start + pagination.count,
                 skip        : pagination.start
-            };
+            },
+            populateConf    = {
+                path        : 'sender',
+                select      : '_id name email'
+            },
+            callbackMessage = (error, messages) => {
+                if (error)     { callback({error}); return; }
 
-        if (filters.sortByDate) {
-            sortByDate.sort = {'date': filters.sortByDate.toLowerCase()};
-        }
+                if (!messages) { callback(null);    return; }
 
-        switch (filters.messageType) {
-            case 'received':
-                query   = {receivers: {$elemMatch: {email: user.email}}};
-                break;
-            case 'sent':
-                query   = {sender: user._id};
-                break;
-            case 'blacklisted':
-                query   = {};
-                break;
-            case 'all':
-            default:
-                query   = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id}]};
-                break;
-        }
-
-        count                   = Message.find(query);
-        searchBySenderName      = filters.searchByName ? {name: {$regex : `.*${filters.searchByName}.*`}} : {}; //TODO: search by recipients
-        populateConf            = {
-            path: 'sender',
-            match: searchBySenderName,
-            select: '_id name email',
-            options: options
-        };
-
-        Message
-            .find(query, fields, sortByDate)
-            .populate(populateConf)
-            .exec((err, messages) => {
-                if (err) {
-                    callback({
-                        error: err
-                    });
-                    return;
+                if (filters.searchByName){
+                    messages    = _.filter(messages, (item) => {return item.sender});
                 }
-
-                if (!messages) {
-                    callback(null);
-                    return;
-                }
-
-                messages = _.filter(messages, (item) => {return item.sender}); //TODO: find problem with query in populate
 
                 if (filters.sortByName) {
-                    messages = _.sortBy(messages, item => { return item.sender.name});
+                    messages    = _.sortBy(messages, item => { return item.sender.name});
 
-                    if (filters.sortByName == 'DESC') {
-                        messages = messages.reverse();
-                    }
+                    messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
                 }
 
-                pagination = this.paginate(pagination, count);
+                pagination      = this.paginate(pagination, count);
 
-                let result = {
+                let result      = {
                     pagination,
                     messages
                 };
 
                 callback(result);
-            })
+            };
+
+        if (!filters.searchByName) {
+            sortByDate.sort = options.sort = (filters.sortByDate) ? {'date': filters.sortByDate.toLowerCase()} : {};
+
+            switch (filters.messageType) {
+                case 'received':
+                    query   = {receivers: {$elemMatch: {email: user.email}}};
+                    break;
+                case 'sent':
+                    query   = {sender: user._id};
+                    break;
+                case 'blacklisted':
+                case 'all':
+                default:
+                    query   = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id}]};
+                    break;
+            }
+
+            count           = Message.count(query);
+
+            Message.find(query, fields, options).populate(populateConf).exec(callbackMessage)
+
+        } else {
+            switch (filters.messageType) {
+                case 'received':
+                    query               = {receivers: {$elemMatch: {email: user.email}}};
+                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
+                    break;
+                case 'sent':
+                    query               = {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`}}}};
+                    break;
+                case 'blacklisted':
+                case 'all':
+                default:
+                    query               = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`}}}}]};
+                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
+                    break;
+            }
+
+            count                       = Message.count(query);
+            populateConf.options        = options;
+
+            Message.find(query, fields, sortByDate).populate(populateConf).exec(callbackMessage)
+        }
+
     }
 
     findMessage(id, callback) {

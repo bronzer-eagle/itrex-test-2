@@ -42,7 +42,7 @@ class UserController {
             }]
         }
 
-        receivers                   = _.map(receivers, res => {return {email: res, is_read: false}});
+        receivers                   = _.map(req.body.message.receivers, res => {return {name: res.name, email: res.email, is_read: false}});
 
         message = Message({
             text                    : req.body.message.text,
