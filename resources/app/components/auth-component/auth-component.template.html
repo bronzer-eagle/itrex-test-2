@@ -1,3 +1,6 @@
 <section class="auth-box">
-<ui-view></ui-view>
+<ui-view ng-show="!$ctrl.inFlight"></ui-view>
+<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+    <div class="loader"></div>
+</div>
 </section>

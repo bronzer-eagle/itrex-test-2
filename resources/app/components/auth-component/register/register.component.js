@@ -2,20 +2,20 @@ import _ from 'underscore';
 
 class RegisterController {
     /** @ngInject */
-    constructor($http, $state, utilService) {
+    constructor($http, $state, utilService, alertService) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
-        this.inFlight       = false;
+        this.alertService   = alertService;
     }
 
     signUp() {
-        this.inFlight = true;
+        this.auth.inFlight = true;
 
         this.$http(this._getHttpOptions(this.signUpData))
             .then(res => {
                 this.$state.go('info', {
-                    msg: res.data.msg,
+                    message: res.data.message,
                     type: 'email-verification',
                     options : {
                         email: this.signUpData.email
@@ -23,10 +23,10 @@ class RegisterController {
                 });
             })
             .catch(err => {
-                throw new Error(err); //TODO: set processError service
+                this.alertService.showError(err);
             })
             .finally(() => {
-                this.inFlight = false;
+                this.auth.inFlight = false;
             })
     }
 
@@ -41,7 +41,10 @@ class RegisterController {
 
 const RegisterComponent = {
     template        : require('./register-component.template.html'),
-    controller      : RegisterController
+    controller      : RegisterController,
+    require         : {
+        auth        : '^authComponent'
+    }
 };
 
 export default RegisterComponent;

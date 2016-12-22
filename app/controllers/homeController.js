@@ -68,7 +68,7 @@ class HomeController {
                 res.status(500);
                 res.json(err);
             } else {
-                message.readMessage(req.user.email);
+                message.readMessage(req.user._id);
                 res.status(200);
                 res.json({});
             }

@@ -7,6 +7,7 @@ module.exports              = {
     entry                   : path.join(process.cwd(), `/resources/index.js`),
     output                  : {
         path                : publicPath,
+        publicPath          : process.env.apiHttp,
         filename            : 'index.js'
     },
     module                  : {
@@ -34,7 +35,9 @@ module.exports              = {
             {
                 test         : /.html$/,
                 loaders      : ['html']
-            }
+            },
+            { test: /\.jpg$/, loader: "url-loader?mimetype=image/jpg" },
+            { test: /\.png$/, loader: "url-loader?mimetype=image/png" }
         ]
     },
     resolveLoader            : { root: path.join(process.cwd(), 'node_modules') },
@@ -49,6 +52,10 @@ module.exports              = {
                 {
                     from: path.join(process.cwd(), 'resources/libs'),
                     to  : path.join(process.cwd(), 'public/libs')
+                },
+                {
+                    from: path.join(process.cwd(), 'resources/img'),
+                    to  : path.join(process.cwd(), 'public/img')
                 }
         ])
     ],

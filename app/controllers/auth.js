@@ -3,8 +3,7 @@ let _                   = require('underscore'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User'),
     validator           = require('../helpers/validator.js'),
-    emailVerification   = require('./emailVerification'),
-    restorePass         = require('./restorePasswordController');
+    emailVerification   = require('./emailVerification');
 
 class AuthFlow {
     constructor() {}
@@ -28,6 +27,7 @@ class AuthFlow {
         if (!AuthFlow.validate(req, res, 'login')) return;
 
         passport.authenticate('local', function(err, user, info){
+            console.log(err);
             if (err) {
                 res.status(404).json(err);
                 return;

@@ -44,7 +44,7 @@ class EmailVerification {
 
             if (userExists) {
                 return res.json({
-                    msg: 'You have already signed up and confirmed your account. Did you forget your password?'
+                    message: 'You have already signed up and confirmed your account. Did you forget your password?'
                 });
             }
 
@@ -56,14 +56,14 @@ class EmailVerification {
                         return res.status(404).send('ERROR: sending verification email FAILED');
                     }
                     res.json({
-                        msg: 'An email has been sent to you. Please check it to verify your account.',
+                        message: 'An email has been sent to you. Please check it to verify your account.',
                         info: info
                     });
                 });
 
             } else {
                 res.json({
-                    msg: 'You have already signed up. Please check your email to verify your account.'
+                    message: 'You have already signed up. Please check your email to verify your account.'
                 });
             }
         });
@@ -72,16 +72,18 @@ class EmailVerification {
     resendVerification(req, res) {
         nev.resendVerificationEmail(req.query.email, function(err, userFound) {
             if (err) {
-                return res.status(404).send('ERROR: resending verification email FAILED');
+                return res.status(404).send({
+                    message: 'ERROR: resending verification email FAILED'
+                });
             }
 
             if (userFound) {
                 res.json({
-                    msg: 'An email has been sent to you, yet again. Please check it to verify your account.'
+                    message: 'An email has been sent to you, yet again. Please check it to verify your account.'
                 });
             } else {
                 res.json({
-                    msg: 'Your verification code has expired. Please sign up again.'
+                    message: 'Your verification code has expired. Please sign up again.'
                 });
             }
         });
@@ -95,14 +97,18 @@ class EmailVerification {
                 adminController.checkAdmin(user, ()=>{
                     res.status(200);
                     res.json({
-                        msg: 'CONFIRMED!'
+                        message: 'CONFIRMED!'
                     });
                 });
                 nev.sendConfirmationEmail(user.email, function(err) {
-                    if (err) return res.status(404).send('ERROR: sending confirmation email FAILED');
+                    if (err) return res.status(404).send({
+                        message : 'ERROR: sending confirmation email FAILED'
+                    });
                 });
             } else {
-                return res.status(404).send('ERROR: confirming temp user FAILED');
+                return res.status(404).send({
+                    message: 'ERROR: confirming temp user FAILED'
+                });
             }
         });
     }

@@ -9,7 +9,7 @@ let _               = require('underscore'),
 class DataController {
     constructor() {}
 
-    getMessages(user, filters, pagination, callback) {
+    getMessages(user, filters, pagination, callback) { //TODO: refactor this!!!
         let query, count, searchByName,
             sortByDate      = {},
             fields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1},
@@ -17,8 +17,12 @@ class DataController {
                 limit       : pagination.start + pagination.count,
                 skip        : pagination.start
             },
-            populateConf    = {
+            populateSenderConf    = {
                 path        : 'sender',
+                select      : '_id name email'
+            },
+            populateReceiverConf    = {
+                path        : 'receivers.receiver',
                 select      : '_id name email'
             },
             callbackMessage = (error, messages) => {
@@ -29,10 +33,13 @@ class DataController {
 
                 if (filters.searchByName){
                     messages    = _.filter(messages, (item) => {return item.sender});
+                    messages    = _.filter(messages, (item) => {return item.receivers[0].receiver});
                 }
 
                 if (filters.sortByName) {
-                    messages    = _.sortBy(messages, item => { return item.sender.name});
+                    messages    = _.sortBy(messages, item => {
+                        return item.sender.name.toLowerCase()
+                    });
 
                     messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
                 }
@@ -52,7 +59,7 @@ class DataController {
 
             switch (filters.messageType) {
                 case 'received':
-                    query   = {receivers: {$elemMatch: {email: user.email}}};
+                    query   = {receivers: {$elemMatch: {receiver: user._id}}};
                     break;
                 case 'sent':
                     query   = {sender: user._id};
@@ -60,37 +67,72 @@ class DataController {
                 case 'blacklisted':
                 case 'all':
                 default:
-                    query   = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id}]};
+                    query   = {$or : [{receivers: {$elemMatch: {receiver: user._id}}}, {sender: user._id}]};
                     break;
             }
 
             count           = Message.count(query);
 
-            Message.find(query, fields, options).populate(populateConf).exec(callbackMessage)
+            Message.find(query, fields, options)
+                .populate(populateSenderConf)
+                .populate(populateReceiverConf)
+                .exec(callbackMessage)
 
         } else {
             switch (filters.messageType) {
                 case 'received':
-                    query               = {receivers: {$elemMatch: {email: user.email}}};
-                    populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    query                       = {receivers: {$elemMatch: {receiver: user._id}}};
+                    populateSenderConf.match    = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    populateSenderConf.options  = options;
                     break;
                 case 'sent':
-                    query               = {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}}}};
+                    query                           = {sender: user._id};
+                    populateReceiverConf.match      = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    populateReceiverConf.options    = options;
                     break;
                 case 'blacklisted':
                 case 'all':
                 default:
-                    query               = {$or : [{receivers: {$elemMatch: {email: user.email}}}, {sender: user._id, receivers: {$elemMatch: {name: {$regex : `.*${filters.searchByName}.*`}}}}]};
-                    //populateConf.match  = {name: {$regex : `.*${filters.searchByName}.*`}};
+                    populateSenderConf.match        = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}}; //Set or
+                    populateReceiverConf.match      = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    populateReceiverConf.options    = options;
                     break;
             }
 
-            count                       = Message.count(query);
-            populateConf.options        = options;
+            if (query) {
+                count                       = Message.count(query);
 
-            Message.find(query, fields, sortByDate).populate(populateConf).exec(callbackMessage)
+                Message
+                    .find(query, fields, sortByDate)
+                    .populate(populateSenderConf)
+                    .populate(populateReceiverConf)
+                    .exec(callbackMessage);
+
+            } else {
+
+                Message
+                    .find({receivers: {$elemMatch: {receiver: user._id}}}, fields, sortByDate)
+                    .populate(populateSenderConf)
+                    .populate({
+                        path        : 'receivers.receiver',
+                        select      : '_id name email'
+                    })
+                    .then(messagesFirstList => {
+                        Message
+                            .find({sender: user._id}, fields, sortByDate)
+                            .populate(populateReceiverConf)
+                            .populate({
+                                path        : 'sender',
+                                select      : '_id name email'
+                            })
+                            .exec((err, messagesSecondList) => {
+                                messagesSecondList.push(...messagesFirstList);
+                                callbackMessage(err, messagesSecondList);
+                            })
+                    })
+
+            }
         }
-
     }
 
     findMessage(id, callback) {

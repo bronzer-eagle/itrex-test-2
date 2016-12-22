@@ -1,14 +1,14 @@
 class LoginController {
     /** @ngInject */
-    constructor($http, $state, utilService) {
+    constructor($http, $state, utilService, alertService) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
-        this.inFlight       = false;
+        this.alertService   = alertService;
     }
 
     signIn() {
-        this.inFlight = true;
+        this.auth.inFlight = false;
 
         this.$http(this._getHttpOptions(this.signInData))
             .then(res => {
@@ -19,15 +19,15 @@ class LoginController {
                 console.log(res);
             })
             .catch(err => {
-                this.auth.showError(err);
+                this.alertService.showError(err);
             })
             .finally(() => {
-                this.inFlight = false;
+                this.auth.inFlight = false;
             })
     }
 
     restorePassword() {
-        this.inFlight = true;
+        this.auth.inFlight = true;
 
         this.$http({
             url: this.utilService.apiPrefix('auth/forgot-password'),
@@ -44,10 +44,10 @@ class LoginController {
                 });
             })
             .catch(err => {
-                this.auth.showError(err);
+                this.alertService.showError(err);
             })
             .finally(() => {
-                this.inFlight = false;
+                this.auth.inFlight = false;
             })
 
     }

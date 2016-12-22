@@ -1,4 +1,4 @@
-<form name="$ctrl.signUpForm" ng-submit="$ctrl.signUp()" class="auth-form" ng-show="!$ctrl.inFlight">
+<form name="$ctrl.signUpForm" ng-submit="$ctrl.signUp()" class="auth-form">
     <h2 class="-mg-top-0 -al-c">Sign Up</h2>
     <div class="auth-input-box">
         <label class="auth-label" for="name">Name</label>
@@ -30,6 +30,3 @@
         <a ui-sref="login">Already registered</a>
     </div>
 </form>
-<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
-    <div class="loader"></div>
-</div>

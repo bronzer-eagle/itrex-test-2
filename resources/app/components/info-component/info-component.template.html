@@ -1,13 +1,27 @@
-<section ng-if="$ctrl.type == 'email-verification'">
-    <div uib-alert class="alert-success">{{$ctrl.message}}</div>
-    <button class="app-blue-btn" ng-click="$ctrl.resendVerificationEmail()">
-        Resend
-    </button>
-</section>
+<section class="h100vh">
+    <div ng-show="!$ctrl.inFlight" class="-centered -w50">
+        <section ng-if="$ctrl.type == 'email-verification'">
+            <div uib-alert class="alert-success -fs-20">{{$ctrl.message}}</div>
+            <button class="app-blue-btn app-button -mg-auto" ng-click="$ctrl.resendVerificationEmail()">
+                Resend
+            </button>
+        </section>
 
-<section ng-if="$ctrl.type == 'restore'" class="-al-c">
-    <div uib-alert class="alert alert-info -al-l" ng-class="{'alert-success': $ctrl.options.success}">
-        {{$ctrl.message}}
+        <section ng-if="$ctrl.type == 'success'">
+            <div uib-alert class="alert-success -fs-20">{{$ctrl.message}}</div>
+            <button class="app-blue-btn app-button -mg-auto" ng-click="$ctrl.options.signInBtn()">
+                Sign in!
+            </button>
+        </section>
+
+        <section ng-if="$ctrl.type == 'restore'" class="-al-c">
+            <div uib-alert class="alert alert-info -al-l -fs-20" ng-class="{'alert-success': $ctrl.options.success}">
+                {{$ctrl.message}}
+            </div>
+            <a ui-sref="login" class="-a-reset app-blue-btn app-button -mg-auto" ng-if="$ctrl.options.success">Sign in with new password!</a>
+        </section>
     </div>
-    <a ui-sref="login" class="-a-reset app-blue-btn" ng-if="$ctrl.options.success">Sign in with new password!</a>
+    <div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+        <div class="loader"></div>
+    </div>
 </section>

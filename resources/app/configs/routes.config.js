@@ -32,7 +32,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
         .state('email-verification', {
             parent      : 'auth',
             url         : '/email-verification',
-            controller  : function ($location, $http, utilService) {
+            controller  : function ($location, $http, utilService, $state) {
                 this.token = $location.search().token;
                 $http({
                     url: utilService.apiPrefix('auth/email-confirmation'),
@@ -41,6 +41,15 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
                         token: this.token
                     }
                 }).then(res=>{
+                    $state.go('info', {
+                        message: res.data.message,
+                        type: 'success',
+                        options: {
+                            signInBtn: function () {
+                                $state.go('login');
+                            }
+                        }
+                    });
                     console.log(res);
                 })
             },
@@ -69,7 +78,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             component   : 'infoComponent',
             params      : {
                 type    : '',
-                msg     : '',
+                message : '',
                 options : ''
             },
             data        : {

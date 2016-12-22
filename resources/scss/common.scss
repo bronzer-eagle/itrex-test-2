@@ -96,3 +96,15 @@ button:disabled {
     width: 50%;
   }
 }
+
+.img-container {
+  .-inbox {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.h100vh {
+  height: 100vh;
+  position: relative;
+}

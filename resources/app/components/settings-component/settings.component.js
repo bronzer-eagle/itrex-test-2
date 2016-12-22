@@ -2,8 +2,8 @@ import './settings-component.style.scss'
 
 class SettingsController{
     /** @ngInject */
-    constructor(UtilService, $http) {
-        this.utilService = UtilService;
+    constructor(utilService, $http) {
+        this.utilService = utilService;
         this.$http       = $http;
         this.password    = {};
     }
@@ -20,6 +20,16 @@ class SettingsController{
         if (this.password.confirm != this.password.new) {
             this.passwordForm.$invalid = true;
         }
+    }
+
+    changeName() {
+        this.$http({
+            url: this.utilService.apiPrefix('app/change-name'),
+            method: 'POST',
+            data: {
+                name : this.name
+            }
+        })
     }
 }
 

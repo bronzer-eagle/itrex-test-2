@@ -51,6 +51,11 @@ protectedRoutes.get('/read-message', homeController.readMessage.bind(homeControl
 
 protectedRoutes.post('/send-message', multipart({uploadDir: './storage/tmp' }), userController.sendMessage.bind(userController));
 
+protectedRoutes.post('/change-password', restorePass.setNewPassword.bind(restorePass));
+protectedRoutes.post('/change-name',    userController.changeName.bind(userController));
+protectedRoutes.post('/change-email',    userController.sendLinkforRestoreEmail.bind(userController));
+protectedRoutes.post('/set-new-email',    userController.changeEmail.bind(userController));
+
 
 
 //admin routes

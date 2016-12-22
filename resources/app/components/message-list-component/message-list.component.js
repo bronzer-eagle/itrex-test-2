@@ -54,15 +54,20 @@ class MessageListController {
 
     setText(message) {
         let userEmail = this.home.user.email;
-        let receivers = _.map(message.receivers, item => {return item.email});
 
-        if (message.sender.email == userEmail) {
-            message.status = true;
-            return `To: ${receivers.toString()}`
-        } else {
-            message.status = _.findWhere(message.receivers, {email : userEmail}).is_read;
+        if (userEmail) {
+            let receivers = _.map(message.receivers, item => {return item.receiver.email});
 
-            return `From: ${message.sender.email}`
+            if (message.sender.email == userEmail) {
+                message.status = true;
+                return `To: ${receivers.toString()}`
+            } else {
+                let receiver    = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
+
+                message.status  = receiver[0].is_read;
+
+                return `From: ${message.sender.email}`
+            }
         }
     }
 
@@ -93,8 +98,8 @@ class MessageListController {
                 message_id: message._id
             }
         }).then(() => {
-            let obj = _.findWhere(message.receivers, {email : userEmail});
-            obj.is_read = true;
+            let receiver        = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
+            receiver[0].is_read = true;
         }).catch(err => {
             console.log(err);
         });

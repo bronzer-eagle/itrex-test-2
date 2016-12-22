@@ -3,26 +3,11 @@ import _ from 'underscore';
 
 class AuthController {
     /** @ngInject */
-    constructor($http, utilService, $uibModal) {
+    constructor($http, utilService) {
         this.utilService            = utilService;
-        this.$uibModal              = $uibModal;
         this.$http                  = $http;
         this.error                  = {};
-    }
-
-    showError(err) {
-        this.error = err;
-        this.$uibModal.open({
-            controller      : function($uibModalInstance){
-                this.closePopup = function () {
-                    this.error  = {};
-                    $uibModalInstance.dismiss('cancel');
-                };
-                this.error      = err;
-            },
-            controllerAs    : '$ctrl',
-            template        : require('../../templates/error-popup.template.html')
-        })
+        this.inFlight               = false;
     }
 }
 

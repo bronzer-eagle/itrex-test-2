@@ -33,8 +33,9 @@ import settingsComponent    from './app/components/settings-component/settings.c
  * SERVICES
  */
 
-import UtilService              from './app/services/util.service'
-import paginationService      from './app/services/pagination.service'
+import UtilService              from './app/services/util.service';
+import paginationService      from './app/services/pagination.service';
+import alertService      from './app/services/alert.service'
 
 /**
  * CONFIGS
@@ -79,6 +80,7 @@ angular.module('app', [
 
     .service('utilService', UtilService)
     .service('paginationService', paginationService)
+    .service('alertService', alertService)
 
     .directive('addObject', addObjectDirective)
 

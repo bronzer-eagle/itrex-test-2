@@ -16,7 +16,10 @@ let     userSchema          = new mongoose.Schema({
             hash            : String,
             salt            : String,
             resetPasswordToken : String,
-            resetPasswordExpires : Number
+            resetPasswordExpires : Number,
+    changeEmailExpires : Number,
+            changeEmailToken    : String,
+    tempEmail    : String
         });
 
 userSchema.methods.setPassword = function (password, save) {
@@ -42,6 +45,22 @@ userSchema.methods.setAdmin = function () {
     this.admin = true;
 
     this.markModified('admin');
+
+    this.save();
+};
+
+userSchema.methods.changeName = function (name) {
+    this.name = name;
+
+    this.markModified('name');
+
+    this.save();
+};
+
+userSchema.methods.setNewEmail = function () {
+    this.email = this.tempEmail;
+
+    this.markModified('email');
 
     this.save();
 };

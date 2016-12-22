@@ -60,7 +60,9 @@ class RestorePasswordFlow {
     }
 
     restore(req, res) {
-        User.findOne({ resetPasswordToken: req.body.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        let query = { resetPasswordToken: req.body.token, resetPasswordExpires: { $gt: Date.now() } };
+
+        User.findOne(query, function(err, user) {
             if (!user) {
                 res.status(401);
                 res.json({'message': 'Password reset token is invalid or has expired.'});
@@ -73,7 +75,25 @@ class RestorePasswordFlow {
     }
 
     setNewPassword(req, res) {
+        let password = req.body;
 
+        User.findOne({_id: req.user._id}, function(err, user) {
+            if (!user) {
+                res.status(401);
+                res.json({'message': 'User not found!'});
+            } else {
+
+                if (user.validPassword(password.old)){
+                    user.setPassword(password.new, true);
+                    res.status(200);
+                    res.json({'message' : 'You have successfully changed your password'});
+                } else {
+                    res.status(404);
+                    res.json({'message': 'Old password is invalid!'});
+                }
+
+            }
+        });
     }
 }
 

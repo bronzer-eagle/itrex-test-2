@@ -1,0 +1,54 @@
+.app-alert {
+  * {
+    overflow: hidden;
+  }
+
+  .error-header,
+  .app-alert-message {
+    padding: 10px;
+    border-radius: 8px;
+    height: auto;
+    animation: appear-box 0.5s ease;
+  }
+
+  .error-header {
+    border: 2px solid #980000;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .app-alert-message {
+    background: #9d82e5;
+    color: #ffffff;
+  }
+
+  .app-alert-close-btn {
+    padding: 20px 0 0;
+  }
+}
+
+.text-appear {
+  animation: text-appear 0.5s ease;
+}
+
+@keyframes appear-box {
+  from {
+    padding: 0;
+    max-height: 0;
+  }
+
+  to {
+    padding: 10px;
+    max-height: 100px;
+  }
+}
+
+@keyframes text-appear {
+  from {
+    margin-left: -100%;
+  }
+
+  to {
+    margin-left: 0;
+  }
+}

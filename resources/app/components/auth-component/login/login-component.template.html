@@ -1,5 +1,5 @@
 <form name="$ctrl.signInForm" ng-submit="$ctrl.signIn()" class="auth-form"
-      ng-show="!$ctrl.inFlight && !$ctrl.forgotPassword">
+      ng-show="!$ctrl.forgotPassword">
     <h2 class="-mg-top-0 -al-c">Sign In</h2>
     <div class="auth-input-box">
         <label class="auth-label" for="email">Email</label>
@@ -28,7 +28,7 @@
     </div>
 </form>
 <form name="$ctrl.restorePassForm" ng-submit="$ctrl.restorePassword()" class="auth-form"
-      ng-show="!$ctrl.inFlight && $ctrl.forgotPassword">
+      ng-show="$ctrl.forgotPassword">
     <h2 class="-mg-top-0 -al-c">Restore Password</h2>
     <div class="auth-input-box">
         <label class="auth-label" for="email_for_restore">Enter your Email</label>
@@ -49,6 +49,3 @@
         </button>
     </section>
 </form>
-<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
-    <div class="loader"></div>
-</div>
