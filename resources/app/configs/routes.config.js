@@ -33,12 +33,15 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             parent      : 'auth',
             url         : '/email-verification',
             controller  : function ($location, $http, utilService, $state) {
-                this.token = $location.search().token;
+                let token       = $location.search().token;
+                let notNewUser  = $location.search().notNewUser;
+
                 $http({
                     url: utilService.apiPrefix('auth/email-confirmation'),
                     method: 'POST',
                     data: {
-                        token: this.token
+                        token: token,
+                        notNewUser: !!notNewUser
                     }
                 }).then(res=>{
                     $state.go('info', {
@@ -89,7 +92,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
         .state('home', {
             parent      : 'base',
             redirectTo  : 'message-list',
-            url         : 'home',
+            url         : 'home/',
             component   : 'homeComponent',
             data: {
                 requiresLogin: true
@@ -98,7 +101,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
         .state('send-message', {
             parent      : 'home',
-            url         : '/send-message',
+            url         : 'send-message',
             component   : 'messengerComponent',
             params      : {
                 receiver: null
@@ -107,14 +110,20 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
         .state('message-list', {
             parent      : 'home',
-            url         : '/message-list',
+            url         : 'message-list',
             component   : 'messageListComponent',
         })
 
         .state('settings', {
             parent      : 'home',
-            url         : '/settings',
+            url         : 'settings',
             component   : 'settingsComponent',
+        })
+
+        .state('admin', {
+            parent      : 'home',
+            url         : 'admin',
+            component   : 'adminComponent',
         })
 }
 

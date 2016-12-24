@@ -59,15 +59,18 @@ class DataController {
 
             switch (filters.messageType) {
                 case 'received':
-                    query   = {receivers: {$elemMatch: {receiver: user._id}}};
+                    query   = {receivers: {$elemMatch: {receiver: user._id}}, sender: {$ne: {$in: user.blacklist}}};
                     break;
                 case 'sent':
                     query   = {sender: user._id};
                     break;
                 case 'blacklisted':
+                    console.log(user.blacklist);
+                    query = {sender: {$in: user.blacklist}, receivers: {$elemMatch: {receiver: user._id}}};
+                    break;
                 case 'all':
                 default:
-                    query   = {$or : [{receivers: {$elemMatch: {receiver: user._id}}}, {sender: user._id}]};
+                    query   = {$or : [{receivers: {$elemMatch: {receiver: user._id}}, sender: {$ne: {$in: user.blacklist}}}, {sender: user._id}]};
                     break;
             }
 
@@ -82,7 +85,7 @@ class DataController {
             switch (filters.messageType) {
                 case 'received':
                     query                       = {receivers: {$elemMatch: {receiver: user._id}}};
-                    populateSenderConf.match    = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    populateSenderConf.match    = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}, _id: {$ne: {$in: user.blacklist}}};
                     populateSenderConf.options  = options;
                     break;
                 case 'sent':
@@ -91,6 +94,10 @@ class DataController {
                     populateReceiverConf.options    = options;
                     break;
                 case 'blacklisted':
+                    query = {sender: {$in: user.blacklist}, receivers: {$elemMatch: {receiver: user._id}}};
+                    populateSenderConf.match    = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
+                    populateSenderConf.options  = options;
+                    break;
                 case 'all':
                 default:
                     populateSenderConf.match        = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}}; //Set or

@@ -15,6 +15,7 @@ let     userSchema          = new mongoose.Schema({
             admin           : Boolean,
             hash            : String,
             salt            : String,
+            blacklist       : {type: Array, default: []},
             resetPasswordToken : String,
             resetPasswordExpires : Number,
     changeEmailExpires : Number,
@@ -45,6 +46,14 @@ userSchema.methods.setAdmin = function () {
     this.admin = true;
 
     this.markModified('admin');
+
+    this.save();
+};
+
+userSchema.methods.setBlacklist = function (bl) {
+    this.blacklist = bl;
+
+    this.markModified('blacklist');
 
     this.save();
 };

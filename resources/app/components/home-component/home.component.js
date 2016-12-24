@@ -21,6 +21,9 @@ class HomeController {
             .then(res => {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
+                this.user.blacklist = _.filter(this.usersList, item => {
+                    return this.user.blacklist.includes(item._id);
+                });
                 this.showAdminPanel();
             })
     }

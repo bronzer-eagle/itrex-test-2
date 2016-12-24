@@ -1,4 +1,4 @@
-function addObject() {
+function searchForItem() {
     return {
         restrict            : 'E',
         scope               : {
@@ -22,7 +22,7 @@ function addObject() {
                                             +
                                     </butoon>
                                     <div ng-if="$ctrl.addMode">
-                                        <form>
+                                        <form>                                      
                                             <input
                                                 class="app-input"
                                                 type="text" 
@@ -47,4 +47,4 @@ function addObject() {
     }
 }
 
-export default addObject;
+export default searchForItem;

@@ -39,12 +39,12 @@ class UserController {
                 user.save();
 
                 let mailOptions = {
-                    to: user.email,
+                    to: req.body.newEmail,
                     from: 'emailreset@demo.com',
                     subject: 'Node.js email Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    process.env.appHttp + 'app/change-email?token=' + token + '\n\n' +
+                    process.env.appHttp + 'auth/email-verification?token=' + token + '&notNewUser=true\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
                 };
 
@@ -138,6 +138,19 @@ class UserController {
                 res.json({'message' : 'You have successfully changed your name'});
             }
         });
+    }
+
+    setBlacklist(req, res) {
+        let blacklist = _.map(req.body.blacklist, item => item._id);
+
+        User.findById(req.user._id, (err, user) => {
+            if (user) {
+                user.setBlacklist(blacklist);
+                res.status(200).json({
+                    message : 'Blacklist was updated'
+                })
+            }
+        })
     }
 }
 

@@ -26,7 +26,7 @@ class RestoreController {
             }})
             .then(res => {
                 this.$state.go('info', {
-                    msg: res.data.message,
+                    message: res.data.message,
                     type: 'restore',
                     options: {
                         success: true

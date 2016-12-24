@@ -4,9 +4,9 @@
             <div class="col-xs-12 -pd-bottom-10">
                 <label class="app-label">Receiver: </label>
                 <span ng-repeat="receiver in $ctrl.message.receivers">
-                {{receiver.name}}
-            </span>
-                <add-object list="$ctrl.message.receivers" resource="$ctrl.home.usersList"></add-object>
+                    {{receiver.name}}
+                </span>
+                <search-for-item list="$ctrl.message.receivers" resource="$ctrl.home.usersList"></search-for-item>
             </div>
             <div class="col-xs-12 -pd-bottom-10">
                 <label class="app-label" for="subject">Subject: </label>

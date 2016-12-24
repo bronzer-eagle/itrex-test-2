@@ -23,7 +23,13 @@ authRoutes.get('/logout', (req, res) => {
     res.status(200);
     res.json({});
 });
-authRoutes.post('/email-confirmation', emailVerification.verify.bind(emailVerification));
+authRoutes.post('/email-confirmation', (req, res) => {
+    if (req.body.notNewUser) {
+        userController.changeEmail(req, res);
+    } else {
+        emailVerification.verify(req, res);
+    }
+});
 
 authRoutes.get('/resend-verification', function(req, res) {
     emailVerification.resendVerification(req, res);
@@ -54,8 +60,7 @@ protectedRoutes.post('/send-message', multipart({uploadDir: './storage/tmp' }), 
 protectedRoutes.post('/change-password', restorePass.setNewPassword.bind(restorePass));
 protectedRoutes.post('/change-name',    userController.changeName.bind(userController));
 protectedRoutes.post('/change-email',    userController.sendLinkforRestoreEmail.bind(userController));
-protectedRoutes.post('/set-new-email',    userController.changeEmail.bind(userController));
-
+protectedRoutes.post('/set-blacklist',    userController.setBlacklist.bind(userController));
 
 
 //admin routes

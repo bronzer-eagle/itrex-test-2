@@ -28,6 +28,7 @@ import messengerComponent   from './app/components/messenger-component/messenger
 import messageListComponent from './app/components/message-list-component/message-list.component';
 import infoComponent        from './app/components/info-component/info.component';
 import settingsComponent    from './app/components/settings-component/settings.component';
+import adminComponent       from './app/components/admin-component/admin.component';
 
 /**
  * SERVICES
@@ -47,7 +48,8 @@ import angularJWTConfig from './app/configs/angularJWT.config';
  * DIRECTIVES
  */
 
-import addObjectDirective from './app/directives/addObject.directive';
+import searchForItem from './app/directives/searchForItem.directive';
+import dragAndDropTable from './app/directives/dragAndDropTable.directive';
 
 /**
  * OTHER
@@ -61,9 +63,7 @@ angular.module('app', [
     'ui.bootstrap',
     'ngFileUpload'
 ])
-    .config(['$qProvider', function ($qProvider) {
-        $qProvider.errorOnUnhandledRejections(false);
-    }])
+    .config(['$qProvider', $qProvider => {$qProvider.errorOnUnhandledRejections(false);}])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', routesConfig])
     .config(['$httpProvider', 'jwtOptionsProvider', angularJWTConfig])
 
@@ -77,12 +77,14 @@ angular.module('app', [
     .component('messageListComponent', messageListComponent)
     .component('infoComponent', infoComponent)
     .component('settingsComponent', settingsComponent)
+    .component('adminComponent', adminComponent)
 
     .service('utilService', UtilService)
     .service('paginationService', paginationService)
     .service('alertService', alertService)
 
-    .directive('addObject', addObjectDirective)
+    .directive('searchForItem', searchForItem)
+    .directive('dragAndDropTable', dragAndDropTable)
 
     .run(function(authManager) {
         authManager.redirectWhenUnauthenticated();

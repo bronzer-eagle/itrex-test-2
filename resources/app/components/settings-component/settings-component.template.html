@@ -53,4 +53,16 @@
             Save
         </button>
     </form>
+    <form name="$ctrl.blackListForm" ng-submit="$ctrl.setBlacklist()">
+        <h2>Blacklist</h2>
+        <span ng-repeat="user in $ctrl.home.user.blacklist">
+                    {{user.name}}
+                </span>
+        <search-for-item list="$ctrl.home.user.blacklist" resource="$ctrl.home.usersList"></search-for-item>
+        <button type="submit"
+                ng-disabled="!$ctrl.home.user.blacklist.length"
+                class="app-grey-btn">
+            Save
+        </button>
+    </form>
 </section>

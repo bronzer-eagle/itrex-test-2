@@ -15,7 +15,7 @@ class HomeController {
 
     sendData(req, res) {
         let user    = req.user;
-        let fields = {name : 1, email : 1, admin : 1};
+        let fields = {name : 1, email : 1, admin : 1, blacklist: 1};
 
         User.findOne({_id: user._id}, fields, (err, user) => {
             if (err) {
@@ -43,13 +43,17 @@ class HomeController {
         let filters             = JSON.parse(req.query.options);
 
         if (pagination) {
-            dataController.getMessages(req.user, filters, pagination, (result) => {
-                if (result.err) {
-                    res.status(500);
-                    res.json(result);
-                } else {
-                    res.status(200);
-                    res.json(result);
+            User.findById(req.user._id, (err, user) => {
+                if (user) {
+                    dataController.getMessages(user, filters, pagination, (result) => {
+                        if (result.err) {
+                            res.status(500);
+                            res.json(result);
+                        } else {
+                            res.status(200);
+                            res.json(result);
+                        }
+                    })
                 }
             })
         } else {
