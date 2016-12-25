@@ -17,10 +17,27 @@ class AdminController {
         });
     }
 
-    isAdmin(user, res, callback) {
-        User.findOne({email: user.email, admin: true}, function (err, user) {
+    isAdmin(id, res, callback) {
+        User.findById({_id: id, admin: true}, function (err, user) {
             if (user) {
                 callback();
+            } else {
+                res.status(401);
+                res.json({
+                    'error' : 'not admin'
+                })
+            }
+        })
+    }
+
+    setWatchAsMe(req, res) {
+        User.findById(req.user._id, function (err, user) {
+            if (user) {
+                user.setWatchAsMe(req.body.watchAsMeArr);
+                res.status(200);
+                res.json({
+                    'message' : 'set watch as me'
+                })
             } else {
                 res.status(401);
                 res.json({

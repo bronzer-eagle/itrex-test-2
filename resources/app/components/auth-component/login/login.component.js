@@ -15,8 +15,6 @@ class LoginController {
                 let token = res.data.token;
 
                 if (token) this.processToken(token);
-
-                console.log(res);
             })
             .catch(err => {
                 this.alertService.showError(err);
@@ -39,7 +37,7 @@ class LoginController {
         })
             .then(res => {
                 this.$state.go('info', {
-                    msg: res.data.message,
+                    message: res.data.message,
                     type: 'restore',
                 });
             })

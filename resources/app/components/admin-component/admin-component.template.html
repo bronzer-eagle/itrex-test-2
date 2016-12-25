@@ -1,11 +1,16 @@
 <section class="-pd-top-15 -pd-bottom-20">
-    <uib-tabset>
-        <uib-tab heading="Watch as me">
+    <div uib-tabset>
+        <div uib-tab heading="Watch as me">
             <h2>Watch as me</h2>
-            <drag-and-drop-table keys-to-show="['name', 'email']" list-from="$ctrl.home.usersList" list-to="$ctrl.watchAsMeArr"></drag-and-drop-table>
-        </uib-tab>
-        <uib-tab heading="Set admin">
+            <drag-and-drop-table
+                    keys-to-show="['name', 'email']"
+                    list-from="$ctrl.usersList"
+                    list-to="$ctrl.watchAsMeArr">
+            </drag-and-drop-table>
+            <button class="app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
+        </div>
+        <div uib-tab heading="Set admin">
             <h2>Set another admin</h2>
-        </uib-tab>
-    </uib-tabset>
+        </div>
+    </div>
 </section>

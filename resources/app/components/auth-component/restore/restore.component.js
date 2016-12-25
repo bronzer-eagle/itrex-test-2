@@ -25,6 +25,7 @@ class RestoreController {
                 token    : this.token
             }})
             .then(res => {
+                console.log(res);
                 this.$state.go('info', {
                     message: res.data.message,
                     type: 'restore',

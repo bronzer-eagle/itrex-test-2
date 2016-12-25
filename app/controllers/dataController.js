@@ -59,13 +59,12 @@ class DataController {
 
             switch (filters.messageType) {
                 case 'received':
-                    query   = {receivers: {$elemMatch: {receiver: user._id}}, sender: {$ne: {$in: user.blacklist}}};
+                    query   = {receivers: {$elemMatch: {$or: [{receiver: user._id}, {receiver: {$in: user.watchAsMe}}]}}, sender: {$ne: {$in: user.blacklist}}};
                     break;
                 case 'sent':
-                    query   = {sender: user._id};
+                    query   = {$or: [{sender: user._id}, {sender: {$in: user.watchAsMe}}]};
                     break;
                 case 'blacklisted':
-                    console.log(user.blacklist);
                     query = {sender: {$in: user.blacklist}, receivers: {$elemMatch: {receiver: user._id}}};
                     break;
                 case 'all':

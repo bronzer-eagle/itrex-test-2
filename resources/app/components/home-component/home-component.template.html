@@ -39,6 +39,6 @@
         </div>
     </div>
     <div class="col-xs-9">
-        <ui-view></ui-view>
+        <ui-view ng-if="!$ctrl.inFlight"></ui-view>
     </div>
 </section>

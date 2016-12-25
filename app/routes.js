@@ -9,6 +9,7 @@ let express                 = require('express'),
     multipart               = require('connect-multiparty'),
     userController          = require(`./controllers/userController`),
     homeController          = require(`./controllers/homeController`),
+    adminController          = require(`./controllers/adminController`),
 
     restorePass             = require('./controllers/restorePasswordController');
 
@@ -62,8 +63,7 @@ protectedRoutes.post('/change-name',    userController.changeName.bind(userContr
 protectedRoutes.post('/change-email',    userController.sendLinkforRestoreEmail.bind(userController));
 protectedRoutes.post('/set-blacklist',    userController.setBlacklist.bind(userController));
 
-
-//admin routes
+adminRoutes.post('/set-watch-as-me', adminController.setWatchAsMe.bind(adminController));
 
 adminRoutes.get('/admin-data', function (req, res) {
     res.status(200);

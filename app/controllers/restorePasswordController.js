@@ -29,10 +29,7 @@ class RestorePasswordFlow {
                 });
 
             } else {
-                user.resetPasswordToken     = token;
-                user.resetPasswordExpires   = Date.now() + 3600000;
-
-                user.save();
+                user.setRestorePasswordData(token);
 
                 let mailOptions = {
                     to: user.email,

@@ -15,7 +15,7 @@ class HomeController {
 
     sendData(req, res) {
         let user    = req.user;
-        let fields = {name : 1, email : 1, admin : 1, blacklist: 1};
+        let fields = {name : 1, email : 1, admin : 1, blacklist: 1, watchAsMe: 1};
 
         User.findOne({_id: user._id}, fields, (err, user) => {
             if (err) {
@@ -24,7 +24,9 @@ class HomeController {
             }
 
             if (user) {
-                User.find({_id: {$ne : user._id}}, fields, (err, usersList) => {
+                if (!user.admin) delete user.watchAsMe;
+
+                User.find({_id: {$ne : user._id}}, {name : 1, email : 1}, (err, usersList) => {
                     res.status(200);
                     res.json({
                         user,

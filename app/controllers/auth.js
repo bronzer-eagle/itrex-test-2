@@ -27,7 +27,7 @@ class AuthFlow {
         if (!AuthFlow.validate(req, res, 'login')) return;
 
         passport.authenticate('local', function(err, user, info){
-            console.log(err);
+            console.log(user);
             if (err) {
                 res.status(404).json(err);
                 return;

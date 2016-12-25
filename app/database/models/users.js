@@ -18,13 +18,16 @@ let     userSchema          = new mongoose.Schema({
             blacklist       : {type: Array, default: []},
             resetPasswordToken : String,
             resetPasswordExpires : Number,
-    changeEmailExpires : Number,
+            changeEmailExpires : Number,
             changeEmailToken    : String,
-    tempEmail    : String
+            tempEmail        : String,
+            watchAsMe        : Array
         });
 
 userSchema.methods.setPassword = function (password, save) {
     password = String(password);
+
+    console.log(password);
 
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
@@ -36,6 +39,8 @@ userSchema.methods.setPassword = function (password, save) {
 
 userSchema.methods.validPassword = function (password) {
     password = String(password);
+
+    console.log(password);
 
     let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 
@@ -58,6 +63,16 @@ userSchema.methods.setBlacklist = function (bl) {
     this.save();
 };
 
+userSchema.methods.setRestorePasswordData = function (token) {
+    this.resetPasswordToken     = token;
+    this.resetPasswordExpires   = Date.now() + 3600000;
+
+    this.markModified('resetPasswordToken');
+    this.markModified('resetPasswordExpires');
+
+    this.save();
+};
+
 userSchema.methods.changeName = function (name) {
     this.name = name;
 
@@ -74,6 +89,14 @@ userSchema.methods.setNewEmail = function () {
     this.save();
 };
 
+userSchema.methods.setWatchAsMe = function (list) {
+    this.watchAsMe = list;
+
+    this.markModified('watchAsMe');
+
+    this.save();
+};
+
 userSchema.methods.generateJwt = function() {
     let expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);
@@ -83,6 +106,7 @@ userSchema.methods.generateJwt = function() {
         email   : this.email,
         name    : this.name,
         exp     : parseInt(expiry.getTime() / 1000),
+        permissions: this.admin ? ['admin'] : ['user']
     }, process.env.JWTSecret);
 };
 

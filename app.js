@@ -8,6 +8,7 @@ let
     favicon                     = require('serve-favicon'),
     morgan                      = require('morgan'),
     passport                    = require('passport'),
+    guard                       = require('express-jwt-permissions')(),
     [
         authRoutes,
         testRoutes,
@@ -47,7 +48,17 @@ app.use(passport.initialize());
 app.use('/auth', authRoutes);
 app.use('/test', testRoutes);
 app.use('/app', jwtCheck, protectedRoutes);
-app.use('/admin', jwtCheck, adminCheck, adminRoutes);
+app.use('/admin', [jwtCheck, (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method != 'OPTIONS') {
+        next()
+    } else {
+        res.sendStatus(200);
+    }
+}, guard.check('admin')],  adminRoutes);
 
 app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + process.env.serverPort + '/api');
@@ -56,15 +67,3 @@ app.get('/', function(req, res) {
 app.listen(process.env.PORT || 8080, () => {
     console.log(`App listening on port: ${process.env.PORT}`);
 });
-
-function adminCheck(req, res, next) {
-    if (!req.user) {
-        return res.status(403).json({
-            message: 'No permission!'
-        });
-    } else {
-        adminController.isAdmin(req.user, res, function () {
-            next();
-        });
-    }
-}

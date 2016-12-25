@@ -12,6 +12,8 @@ passport.use(new LocalStrategy(
     (username, password, done) => {
         User.findOne({ email: username })
             .exec((err, user) => {
+                console.log('passport');
+                console.log(user);
                 if (err) return done(err);
 
                 if (!user) {
@@ -29,6 +31,7 @@ passport.use(new LocalStrategy(
                         }
                     });
                 } else {
+                    console.log(user.validPassword(password));
                     if (!user.validPassword(password)) {
                         return done(null, false, {
                             message: 'Email or password is wrong'

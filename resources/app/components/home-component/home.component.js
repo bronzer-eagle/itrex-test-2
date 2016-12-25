@@ -3,13 +3,20 @@ import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService, $state, $timeout) {
+    constructor($http, utilService, $state, $timeout, jwtHelper) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
         this.$timeout       = $timeout;
+        this.inFlight       = false;
+
+        let token = localStorage.getItem('token');
+        let tokenPayload = jwtHelper.decodeToken(token);
+
+        console.log(tokenPayload);
 
         this.init();
+
     }
 
     init() {
@@ -17,6 +24,7 @@ class HomeController {
     }
 
     getData() {
+        this.inFlight = true;
         this.$http(this._getHttpOptions())
             .then(res => {
                 this.user     = res.data.user;
@@ -25,6 +33,7 @@ class HomeController {
                     return this.user.blacklist.includes(item._id);
                 });
                 this.showAdminPanel();
+                this.inFlight       = false;
             })
     }
 
