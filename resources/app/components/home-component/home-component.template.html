@@ -1,44 +1,75 @@
 <nav class="app-navigation row">
     <div class="col-xs-3">
         <div class="item">
-           Hello, {{$ctrl.user.name}}
+           <span class="hidden-xs">Hello,</span> {{$ctrl.user.name}}
         </div>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-{{$ctrl.col}}">
         <div class="item">
-            <a class="-a-reset -uppercase" ui-sref="message-list">messages</a>
+            <a class="-a-reset -uppercase" ui-sref="message-list">
+                <span class="hidden-xs">messages</span>
+                <span class="visible-xs-inline glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
-    <div class="col-xs-2" ng-if="$ctrl.user.admin">
+    <div class="col-xs-2 -al-c" ng-if="$ctrl.user.admin">
         <div class="item">
-            <a class="-a-reset -uppercase" ui-sref="admin">admin</a>
+            <a class="-a-reset -uppercase" ui-sref="admin">
+                <span class="hidden-xs">admin</span>
+                <span class="visible-xs-inline glyphicon glyphicon-lock" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
-    <div class="col-xs-{{$ctrl.column}} -al-c">
+    <div class="col-xs-1" ng-if="$ctrl.user.admin"></div>
+    <div class="col-xs-{{$ctrl.col}} -al-c">
         <div class="item">
-            <a class="-a-reset -uppercase" ui-sref="settings">settings</a>
+            <a class="-a-reset -uppercase" ui-sref="settings">
+                <span class="hidden-xs">settings</span>
+                <span class="visible-xs-inline glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
-    <div class="col-xs-{{$ctrl.column}} -al-r">
+    <div class="col-xs-{{$ctrl.col}} -al-r">
         <button class="item push -btn-reset -uppercase" ng-click="$ctrl.logout()">
-            logout
+            <span class="hidden-xs">logout</span>
+            <span class="visible-xs-inline glyphicon glyphicon-log-out" aria-hidden="true"></span>
         </button>
     </div>
 </nav>
 <section class="row">
-    <div class="col-xs-3 user-list">
-        <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn">
-            Compose message
-        </a>
-        <div class="row item" ng-repeat="user in $ctrl.usersList">
-            <a class="-a-reset email" ui-sref="send-message({receiver: user})">
-                <div class="col-xs-12">
-                    {{user.name}}
+    <div class="col-xs-3 user-list" ng-class="{'active' : $ctrl.activeLeftSide}">
+        <div class="-relative full-height">
+            <section class="hide-when-not-active">
+                <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn -mg-bottom-15">
+                    Compose message
+                </a>
+                <h3 class="title -al-c -uppercase -bold ">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> user list
+                </h3>
+                <div class="row item" ng-repeat="user in $ctrl.usersList">
+                    <a class="-a-reset email show-by-hover" ui-sref="send-message({receiver: user})">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-9">{{user.name}}</div>
+                                <div class="col-xs-3 -al-r">
+                                    <span class="glyphicon glyphicon-pencil -fs-15 item inline" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
+            </section>
+            <button class="-btn-reset -centered visible-xs carret" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <section class="hide-when-not-active outblock full-height" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
+            </section>
         </div>
     </div>
-    <div class="col-xs-9">
+    <div class="home-container full-height col-xs-12 col-sm-9 -pd-15">
         <ui-view ng-if="!$ctrl.inFlight"></ui-view>
+        <div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+            <div class="loader"></div>
+        </div>
     </div>
 </section>

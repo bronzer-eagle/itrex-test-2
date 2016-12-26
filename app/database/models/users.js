@@ -15,7 +15,7 @@ let     userSchema          = new mongoose.Schema({
             admin           : Boolean,
             hash            : String,
             salt            : String,
-            blacklist       : {type: Array, default: []},
+            blacklist       : Array,
             resetPasswordToken : String,
             resetPasswordExpires : Number,
             changeEmailExpires : Number,

@@ -89,11 +89,13 @@ button:disabled {
 
 .search-box {
   .search-btn {
-    width: 40%;
+    width: auto;
+    height: 33px;
+    padding: 0 15px;
   }
 
   .search-input {
-    width: 50%;
+    width: 70%;
   }
 }
 
@@ -106,5 +108,13 @@ button:disabled {
 
 .h100vh {
   height: 100vh;
+  position: relative;
+}
+
+.full-height {
+  min-height: calc(100vh - 50px);
+}
+
+.-relative {
   position: relative;
 }

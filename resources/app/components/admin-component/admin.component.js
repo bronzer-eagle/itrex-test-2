@@ -18,7 +18,6 @@ class AdminController {
     }
 
     setWatchAsMe() {
-        console.log(this.watchAsMeArr);
         this.$http({
             url: this.utilService.apiPrefix('admin/set-watch-as-me'),
             method: 'POST',
@@ -28,7 +27,7 @@ class AdminController {
             }
         })
             .then(res => {
-                console.log(res);
+                this.home.user.watchAsMe = _.map(this.watchAsMeArr, item => item._id);
             })
     }
 

@@ -3,20 +3,13 @@ import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService, $state, $timeout, jwtHelper) {
+    constructor($http, utilService, $state, $timeout) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
         this.$timeout       = $timeout;
         this.inFlight       = false;
-
-        let token = localStorage.getItem('token');
-        let tokenPayload = jwtHelper.decodeToken(token);
-
-        console.log(tokenPayload);
-
-        this.init();
-
+        this.$onInit        = this.init;
     }
 
     init() {
@@ -29,10 +22,13 @@ class HomeController {
             .then(res => {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
-                this.user.blacklist = _.filter(this.usersList, item => {
-                    return this.user.blacklist.includes(item._id);
-                });
+                this.user.blacklist = _.filter(this.usersList, item => this.user.blacklist.includes(item._id));
                 this.showAdminPanel();
+            })
+            .catch(error => {
+
+            })
+            .finally(() => {
                 this.inFlight       = false;
             })
     }
@@ -50,7 +46,7 @@ class HomeController {
 
     showAdminPanel() {
         this.$timeout(()=> {
-            this.column = this.user.admin ? '2' : '3';
+            this.col = this.user.admin ? '2' : '3';
         })
     }
 
@@ -60,6 +56,13 @@ class HomeController {
             method: 'GET'
         }
     }
+
+    // _parseToken() {
+    //     let token = localStorage.getItem('token');
+    //     let tokenPayload = jwtHelper.decodeToken(token);
+    //
+    //     console.log(tokenPayload);
+    // }
 }
 
 const HomeComponent = {
