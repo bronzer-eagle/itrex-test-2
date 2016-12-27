@@ -3,18 +3,24 @@ import _ from 'underscore';
 
 class AdminController {
     /** @ngInject */
-    constructor(utilService, $http, $timeout) {
+    constructor(utilService, $http, $timeout, $state) {
         this.utilService = utilService;
         this.$http       = $http;
         this.$timeout    = $timeout;
         this.password    = {};
+        this.$state     = $state;
 
         this.$onInit = this.init;
     }
 
     init() {
-        this.watchAsMeArr = _.filter(this.home.usersList, item => this.home.user.watchAsMe.includes(item._id));
-        this.usersList    = _.filter(this.home.usersList, item => !this.home.user.watchAsMe.includes(item._id));
+
+    }
+
+    chooseUser(user) {
+        this.search      = '';
+        this.chosenUser  = user.name;
+        this.watchAsUser = user._id;
     }
 
     setWatchAsMe() {
@@ -22,13 +28,21 @@ class AdminController {
             url: this.utilService.apiPrefix('admin/set-watch-as-me'),
             method: 'POST',
             data: {
-                userId      : this.home.user._id,
-                watchAsMeArr: _.map(this.watchAsMeArr, item => item._id)
+                userId      : this.watchAsUser
             }
         })
             .then(res => {
-                this.home.user.watchAsMe = _.map(this.watchAsMeArr, item => item._id);
+                this.processJWT(res.data.token);
             })
+    }
+
+    processJWT(token) {
+        let adminToken = localStorage.getItem('token');
+
+        localStorage.setItem('adminToken', adminToken);
+        localStorage.setItem('token', token);
+
+        this.$state.go('home', {}, {reload: true});
     }
 
 

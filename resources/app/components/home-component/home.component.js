@@ -3,12 +3,14 @@ import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService, $state, $timeout) {
+    constructor($http, utilService, $state, $timeout, jwtHelper) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
         this.$timeout       = $timeout;
         this.inFlight       = false;
+        this.jwtHelper  = jwtHelper;
+
         this.$onInit        = this.init;
     }
 
@@ -23,6 +25,7 @@ class HomeController {
                 this.user     = res.data.user;
                 this.usersList = res.data.usersList;
                 this.user.blacklist = _.filter(this.usersList, item => this.user.blacklist.includes(item._id));
+                this.processJWT();
                 this.showAdminPanel();
             })
             .catch(error => {
@@ -31,6 +34,23 @@ class HomeController {
             .finally(() => {
                 this.inFlight       = false;
             })
+    }
+
+    processJWT() {
+        let token = localStorage.getItem('token');
+        let decodedToken = this.jwtHelper.decodeToken(token);
+
+        if (decodedToken.adminWatch){
+            this.user.adminWatch = true;
+        }
+    }
+
+    returnToAdmin() {
+        let adminToken = localStorage.getItem('adminToken');
+
+        localStorage.setItem('token', adminToken);
+
+        this.$state.go('home', {}, {reload: true});
     }
 
     logout() {

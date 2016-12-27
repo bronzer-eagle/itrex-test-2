@@ -20,8 +20,7 @@ let     userSchema          = new mongoose.Schema({
             resetPasswordExpires : Number,
             changeEmailExpires : Number,
             changeEmailToken    : String,
-            tempEmail        : String,
-            watchAsMe        : Array
+            tempEmail        : String
         });
 
 userSchema.methods.setPassword = function (password, save) {
@@ -89,25 +88,21 @@ userSchema.methods.setNewEmail = function () {
     this.save();
 };
 
-userSchema.methods.setWatchAsMe = function (list) {
-    this.watchAsMe = list;
-
-    this.markModified('watchAsMe');
-
-    this.save();
-};
-
-userSchema.methods.generateJwt = function() {
+userSchema.methods.generateJwt = function(addData = {}) {
     let expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);
 
-    return jwt.sign({
+    let options = {
         _id     : this._id,
         email   : this.email,
         name    : this.name,
         exp     : parseInt(expiry.getTime() / 1000),
         permissions: this.admin ? ['admin'] : ['user']
-    }, process.env.JWTSecret);
+    };
+
+    Object.assign(options, addData);
+
+    return jwt.sign(options, process.env.JWTSecret);
 };
 
 mongoose.model('User', userSchema);

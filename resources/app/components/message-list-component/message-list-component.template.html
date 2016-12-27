@@ -1,7 +1,7 @@
 <section class="message-list">
     <div class="toolbar -pd-bottom-15">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-xs-3 tool-button">
                 <div class="btn-group -w100" uib-dropdown>
                     <button type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
@@ -37,7 +37,7 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 tool-button date-sort">
                 <div class="btn-group -w100" uib-dropdown>
                     <button type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
@@ -55,7 +55,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 tool-button name-sort">
                 <div class="btn-group -w100" uib-dropdown>
                     <button type="button" class="app-grey-btn -w100 -uppercase"
                             uib-dropdown-toggle>
@@ -63,7 +63,7 @@
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem">
-                            <button ng-click="$ctrl.sortBy('null'); $ctrl.sortByNameValue = 'Name'"
+                            <button ng-click="$ctrl.sortBy('Name|null'); $ctrl.sortByNameValue = 'Name'"
                                     class="-btn-reset -w100">No filter</button>
                         </li>
                         <li role="menuitem">

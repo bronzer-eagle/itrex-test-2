@@ -47,49 +47,93 @@
   .email {
     font-size: 2rem;
   }
+
+  .outblock {
+    display: none;
+  }
+
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
   .home-container {
     padding-left: 50px !important;
   }
 
+  .home-container.active {
+    overflow-y: hidden;
+    min-height: 0;
+    height: calc(100vh - 50px);
+  }
+
   .user-list {
-      width: 20px;
-      padding: 0 5px;
-      position: fixed;
-      z-index: 2;
+    width: 20px;
+    padding: 0 5px;
+    position: fixed;
+    z-index: 2;
 
-      &.active {
-        float: none;
-        width: 50%;
-      }
-
-      .hide-when-not-active{
-        display: none;
-      }
-
-      &.active .hide-when-not-active{
-        display: block;
-      }
-
-      .carret {
-        transition: transform 0.2s ease;
-      }
-
-      &.active .carret {
-        transform: rotate(-180deg);
-        left: auto;
-        right: -15px;
-      }
-
-    .outblock {
-        width: 50%;
-        position: fixed;
-        left: 50%;
-        top: 50px;
-        background: rgba(0,0,0, 0.3);
-        cursor: pointer;
+    &.active {
+      float: none;
+      width: 50%;
     }
+
+    .-relative {
+      min-height: calc(100vh - 50px);
+    }
+
+    .hide-when-not-active {
+      display: none;
+    }
+
+    &.active .hide-when-not-active {
+      display: block;
+    }
+
+    .left-side-caret {
+      width: 20px;
+      height: 20px;
+      color: #a7abab;
+      transition: transform 0.5s ease;
+    }
+
+    &:not(.active) .left-side-caret:hover {
+      animation-name: pull;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease;
+    }
+
+    &.active .left-side-caret {
+      transform: rotate(-180deg);
+      left: auto;
+      right: -15px;
+    }
+
+    &.active .outblock {
+      width: 50%;
+      display: block;
+      position: fixed;
+      left: 50%;
+      top: 50px;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes pull {
+  0% {
+    transform: translate(-50%, -50%)
+  }
+  10% {
+    transform: translate(-30%, -50%)
+  }
+  20% {
+    transform: translate(-50%, -50%)
+  }
+  30% {
+    transform: translate(-30%, -50%)
+  }
+  100%{
+    transform: translate(-50%, -50%)
   }
 }

@@ -2,15 +2,30 @@
     <div uib-tabset>
         <div uib-tab heading="Watch as me">
             <h2>Watch as me</h2>
+            <section class="add-object">
+                <input class="app-input"
+                        type="text"
+                        ng-model="$ctrl.search"
+                        placeholder="Search...">
+                <div class="list" ng-if="$ctrl.search">
+                    <div class="item"
+                            ng-repeat="user in $ctrl.home.usersList | filter: $ctrl.search"
+                            ng-click="$ctrl.chooseUser(user)">
+                        {{user.name}}
+                    </div>
+                </div>
+            </section>
+            <br>
+            {{$ctrl.chosenUser}}
+            <button class="app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
+        </div>
+        <div uib-tab heading="Set admin">
+            <h2>Set another admin</h2>
             <drag-and-drop-table
                     keys-to-show="['name', 'email']"
                     list-from="$ctrl.usersList"
                     list-to="$ctrl.watchAsMeArr">
             </drag-and-drop-table>
-            <button class="app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
-        </div>
-        <div uib-tab heading="Set admin">
-            <h2>Set another admin</h2>
         </div>
     </div>
 </section>

@@ -40,14 +40,6 @@ class DataController {
                     messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
                 }
 
-                if (user.admin && user.watchAsMe.length) {
-                    messages    = _.map(messages, message => {
-                        if (user.watchAsMe.includes(message.sender._id)) {
-                            //message.
-                        }
-                    })
-                }
-
                 pagination      = this.paginate(pagination, count);
 
                 callback({pagination, messages});
@@ -58,12 +50,10 @@ class DataController {
             senderUser          = {sender: user._id},
             notInBlackList      = {$nin: user.blacklist},
             inBlackList         = {$in: user.blacklist},
-            receiverInWatchAsMe = {receiver: {$in: user.watchAsMe}},
-            senderInWatchAsMe   = {sender: {$in: user.watchAsMe}},
-            receivers           = {$elemMatch: {$or: [receiverUser, receiverInWatchAsMe]}},
+            receivers           = {$elemMatch: receiverUser},
             received            = {receivers: receivers, sender: notInBlackList},
-            sent                = {$or: [senderUser, senderInWatchAsMe]},
-            all                 = {$or : [received, senderUser, senderInWatchAsMe]};
+            blacklist           = {sender: inBlackList, receivers: receivers},
+            all                 = {$or : [received, senderUser]};
 
         sortByDate.sort = options.sort = (filters.sortByDate) ? {'date': filters.sortByDate.toLowerCase()} : {};
 
@@ -72,10 +62,10 @@ class DataController {
                 query   = received;
                 break;
             case 'sent':
-                query   = sent;
+                query   = senderUser;
                 break;
             case 'blacklisted':
-                query   = {sender: inBlackList, receivers: receivers}; //TODO: set "sender : inWatchAsMeUserBlacklist"
+                query   = blacklist;
                 break;
             case 'all':
             default:

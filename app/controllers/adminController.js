@@ -31,17 +31,19 @@ class AdminController {
     }
 
     setWatchAsMe(req, res) {
-        User.findById(req.user._id, function (err, user) {
+        User.findById(req.body.userId, function (err, user) {
             if (user) {
-                user.setWatchAsMe(req.body.watchAsMeArr);
+                let token = user.generateJwt({
+                    adminWatch : true
+                });
                 res.status(200);
                 res.json({
-                    'message' : 'set watch as me'
+                    token
                 })
             } else {
-                res.status(401);
+                res.status(500);
                 res.json({
-                    'error' : 'not admin'
+                    'error' : 'no user'
                 })
             }
         })

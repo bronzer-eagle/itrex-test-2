@@ -30,15 +30,19 @@
         </div>
     </div>
     <div class="col-xs-{{$ctrl.col}} -al-r">
-        <button class="item push -btn-reset -uppercase" ng-click="$ctrl.logout()">
+        <button class="item push -btn-reset -uppercase" ng-click="$ctrl.logout()" ng-if="!$ctrl.user.adminWatch">
             <span class="hidden-xs">logout</span>
             <span class="visible-xs-inline glyphicon glyphicon-log-out" aria-hidden="true"></span>
+        </button>
+        <button class="item push -btn-reset -uppercase" ng-click="$ctrl.returnToAdmin()" ng-if="$ctrl.user.adminWatch">
+            <span class="hidden-xs">Return to me</span>
+            <span class="visible-xs-inline glyphicon glyphicon-eye-close" aria-hidden="true"></span>
         </button>
     </div>
 </nav>
 <section class="row">
     <div class="col-xs-3 user-list" ng-class="{'active' : $ctrl.activeLeftSide}">
-        <div class="-relative full-height">
+        <div class="-relative">
             <section class="hide-when-not-active">
                 <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn -mg-bottom-15">
                     Compose message
@@ -59,14 +63,14 @@
                     </a>
                 </div>
             </section>
-            <button class="-btn-reset -centered visible-xs carret" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
+            <button class="-btn-reset -centered visible-xs left-side-caret" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
             <section class="hide-when-not-active outblock full-height" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
             </section>
         </div>
     </div>
-    <div class="home-container full-height col-xs-12 col-sm-9 -pd-15">
+    <div class="home-container full-height col-xs-12 col-sm-9 -pd-15" ng-class="{'active' : $ctrl.activeLeftSide}">
         <ui-view ng-if="!$ctrl.inFlight"></ui-view>
         <div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
             <div class="loader"></div>

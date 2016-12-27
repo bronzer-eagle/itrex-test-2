@@ -15,4 +15,61 @@
   .unread {
     font-weight: bold;
   }
+
+  .search-box {
+    .search-btn {
+      width: auto;
+      height: 33px;
+      padding: 0 15px;
+    }
+
+    .search-input {
+      width: 70%;
+    }
+  }
+
+  @media screen and (max-width: 634px) {
+    .toolbar {
+      height: 100px;
+      position: relative;
+    }
+
+    .tool-button {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 32%;
+      padding: 0;
+      z-index: 1;
+    }
+
+    .date-sort {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .name-sort {
+      left: auto;
+      right: 0;
+    }
+
+    .search-box {
+      width: 100%;
+      float: none;
+    }
+
+    .search-box .search-btn {
+      width: auto;
+      height: 33px;
+      padding: 0 15px;
+    }
+
+    .search-box .search-input {
+      width: calc(100% - 52px);
+    }
+
+    .dropdown-menu {
+      z-index: 4;
+    }
+  }
 }

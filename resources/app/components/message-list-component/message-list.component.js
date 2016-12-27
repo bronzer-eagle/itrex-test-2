@@ -75,9 +75,9 @@ class MessageListController {
         let sortName;
         let type = sort.split('|')[1];
 
-        if (type != 'null') {
-            sortName = sort.split('|')[0];
-        } else {
+        sortName = sort.split('|')[0];
+
+        if (type == 'null') {
             type = null;
         }
 
