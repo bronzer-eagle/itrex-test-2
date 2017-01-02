@@ -46,7 +46,8 @@ module.exports              = {
         new webpack.NoErrorsPlugin(),
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            moment: 'moment'
         }),
         new CopyWebpackPlugin([
                 {

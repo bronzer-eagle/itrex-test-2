@@ -10,6 +10,7 @@ import 'angular-ui-bootstrap'
 import 'angular-ui-router';
 import 'angular-jwt';
 import 'ng-file-upload';
+import ngInfiniteScroll from 'ng-infinite-scroll';
 
 /**
  * COMPONENTS
@@ -52,6 +53,12 @@ import searchForItem from './app/directives/searchForItem.directive';
 import dragAndDropTable from './app/directives/dragAndDropTable.directive';
 
 /**
+ * FILTERS
+ */
+
+import dateFilter from './app/filters/date.filter';
+
+/**
  * OTHER
  */
 
@@ -61,7 +68,8 @@ angular.module('app', [
     'ui.router',
     'angular-jwt',
     'ui.bootstrap',
-    'ngFileUpload'
+    'ngFileUpload',
+    ngInfiniteScroll
 ])
     .config(['$qProvider', $qProvider => {$qProvider.errorOnUnhandledRejections(false);}])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', routesConfig])
@@ -82,6 +90,8 @@ angular.module('app', [
     .service('utilService', UtilService)
     .service('paginationService', paginationService)
     .service('alertService', alertService)
+
+    .filter('dateFilter', dateFilter)
 
     .directive('searchForItem', searchForItem)
     .directive('dragAndDropTable', dragAndDropTable)

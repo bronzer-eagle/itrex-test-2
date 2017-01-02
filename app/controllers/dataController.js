@@ -7,32 +7,58 @@ let _               = require('underscore'),
     User            = mongoose.model('User');
 
 class DataController {
-    constructor() {}
+    constructor() {
+        this.messageFields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1, date: 1};
+    }
 
     getMessages(user, filters, pagination, callback) { //TODO: refactor this!!!
         let
-            query, count, searchByName,
-            sortByDate      = {},
-            fields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1},  //fields to return from db
+            query, searchByName, findByNameRegExp,
             options         = {
-                limit       : pagination.start + pagination.count,
+                limit       : pagination.count,
                 skip        : pagination.start
             },
             populateSenderConf    = {
                 path        : 'sender',
-                select      : '_id name email'
+                select      : '_id name email',
+                options     : {}
             },
             populateReceiverConf    = {
                 path        : 'receivers.receiver',
-                select      : '_id name email'
+                select      : '_id name email',
+                options     : {}
             },
-            callbackMessage = (error, messages) => {
+
+            /**
+             *  QUERIES TO DB
+             */
+
+            receiverUser        = {receiver: user._id},
+            senderUser          = {sender: user._id},
+            notInBlackList      = {$nin: user.blacklist},
+            inBlackList         = {$in: user.blacklist},
+            receivers           = {$elemMatch: receiverUser},
+            received            = {receivers: receivers, sender: notInBlackList},
+            blacklist           = {sender: inBlackList, receivers: receivers},
+            all                 = {$or : [received, senderUser]},
+
+            /**
+             * CALLBACK FUNCTION AFTER GETTING MESSAGES FROM DB
+             * @param error
+             * @param messages
+             * @param count
+             */
+
+            callbackMessage = (error, messages, count) => {
                 if (error)     { callback({error}); return; }
                 if (!messages) { callback(null);    return; }
 
                 if (filters.searchByName) {
-                    messages    = _.filter(messages, item => item.sender);
-                    messages    = _.filter(messages, item => item.receivers[0].receiver);
+                    messages    = _.filter(messages, item => item.sender && item.receivers[0].receiver);
+
+                    count       = messages.length;
+
+                    messages    = messages.splice(pagination.start, pagination.count);
                 }
 
                 if (filters.sortByName) {
@@ -45,17 +71,7 @@ class DataController {
                 callback({pagination, messages});
             };
 
-        let
-            receiverUser        = {receiver: user._id},
-            senderUser          = {sender: user._id},
-            notInBlackList      = {$nin: user.blacklist},
-            inBlackList         = {$in: user.blacklist},
-            receivers           = {$elemMatch: receiverUser},
-            received            = {receivers: receivers, sender: notInBlackList},
-            blacklist           = {sender: inBlackList, receivers: receivers},
-            all                 = {$or : [received, senderUser]};
-
-        sortByDate.sort = options.sort = (filters.sortByDate) ? {'date': filters.sortByDate.toLowerCase()} : {};
+        options.sort = (filters.sortByDate) ? {'date': filters.sortByDate.toLowerCase()} : {};
 
         switch (filters.messageType) {
             case 'received':
@@ -73,55 +89,43 @@ class DataController {
                 break;
         }
 
-        if (!filters.searchByName) {
+        Message.count(query, (err, count) => {
+            if (filters.searchByName) {
+                findByNameRegExp = {name: {$regex: `.*${filters.searchByName}.*`, $options: `i`}};
 
-            count       = Message.count(query);
+                switch (filters.messageType) {
+                    case 'received':
+                        populateSenderConf.match        = findByNameRegExp;
+                        break;
+                    case 'sent':
+                        populateReceiverConf.match      = findByNameRegExp;
+                        break;
+                    case 'blacklisted':
+                        populateSenderConf.match        = findByNameRegExp;
+                        break;
+                    case 'all':
+                    default:
+                        query                           = null;
+                        populateSenderConf.match        = findByNameRegExp;
+                        populateReceiverConf.match      = findByNameRegExp;
+                        break;
+                }
 
-            Message.find(query, fields, options)
-                .populate(populateSenderConf)
-                .populate(populateReceiverConf)
-                .exec(callbackMessage)
-
-        } else {
-
-            let
-                findByNameRegExp = {name: {$regex : `.*${filters.searchByName}.*`, $options: `i`}};
-
-            switch (filters.messageType) {
-                case 'received':
-                    populateSenderConf.match        = findByNameRegExp;
-                    populateSenderConf.options      = options;
-                    break;
-                case 'sent':
-                    populateReceiverConf.match      = findByNameRegExp;
-                    populateReceiverConf.options    = options;
-                    break;
-                case 'blacklisted':
-                    populateSenderConf.match        = findByNameRegExp;
-                    populateSenderConf.options      = options;
-                    break;
-                case 'all':
-                default:
-                    query                           = null;
-                    populateSenderConf.match        = findByNameRegExp;
-                    populateReceiverConf.match      = findByNameRegExp;
-                    populateReceiverConf.options    = options;
-                    break;
+                delete options.limit;
+                delete options.skip;
             }
 
             if (query) {
-                count                       = Message.count(query);
-
                 Message
-                    .find(query, fields, sortByDate)
+                    .find(query, this.messageFields, options)
                     .populate(populateSenderConf)
                     .populate(populateReceiverConf)
-                    .exec(callbackMessage);
-
+                    .exec((err, messages)=>{
+                        callbackMessage(err, messages, count);
+                    });
             } else {
-
                 Message
-                    .find(all, fields, sortByDate)
+                    .find(all, this.messageFields, options)
                     .populate(populateSenderConf)             //matching by sender population
                     .populate({
                         path        : 'receivers.receiver',
@@ -129,7 +133,7 @@ class DataController {
                     })
                     .then(messagesFirstList => {
                         Message
-                            .find(senderUser, fields, sortByDate)
+                            .find(senderUser, this.messageFields, options)
                             .populate(populateReceiverConf)   //matching by receiver population
                             .populate({
                                 path        : 'sender',
@@ -137,12 +141,11 @@ class DataController {
                             })
                             .exec((err, messagesSecondList) => {
                                 messagesSecondList.push(...messagesFirstList);
-                                callbackMessage(err, messagesSecondList);
+                                callbackMessage(err, messagesSecondList, count);
                             })
                     })
-
             }
-        }
+        });
     }
 
     findMessage(id, callback) {

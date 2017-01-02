@@ -108,7 +108,8 @@ class UserController {
             subject                 : req.body.message.subject,
             sender                  : req.user._id,
             receivers               : receivers,
-            attachment              : file
+            attachment              : file,
+            date                    : Date.now()
         });
 
         message.save();

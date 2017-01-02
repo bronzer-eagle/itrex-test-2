@@ -33,7 +33,7 @@ class PaginationService {
         return {
             current             : {
                 start           : 0,
-                count           : 20,
+                count           : 3,
                 moreAvailable   : true
             }
         }

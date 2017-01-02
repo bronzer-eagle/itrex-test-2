@@ -56,7 +56,7 @@ protectedRoutes.get('/user-data', homeController.sendData.bind(homeController));
 protectedRoutes.get('/get-messages', homeController.getMessages.bind(homeController));
 protectedRoutes.get('/read-message', homeController.readMessage.bind(homeController));
 
-protectedRoutes.post('/send-message', multipart({uploadDir: './storage/tmp' }), userController.sendMessage.bind(userController));
+protectedRoutes.post('/send-message', multipart({uploadDir: './storage' }), userController.sendMessage.bind(userController));
 
 protectedRoutes.post('/change-password', restorePass.setNewPassword.bind(restorePass));
 protectedRoutes.post('/change-name',    userController.changeName.bind(userController));

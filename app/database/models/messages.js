@@ -14,7 +14,7 @@ let     message          = new mongoose.Schema({
     },
     sender           : { type: String, ref: 'User' },
     receivers        : [{receiver: {ref: 'User', type: String}, is_read: Boolean}],
-    date             : { type: Date, default: Date.now },
+    date             : Date,
     attachment       : Object
 });
 

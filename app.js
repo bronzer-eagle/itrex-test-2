@@ -44,6 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(passport.initialize());
+app.use(express.static('./'));
 
 app.use('/auth', authRoutes);
 app.use('/test', testRoutes);

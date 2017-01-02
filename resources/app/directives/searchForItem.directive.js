@@ -7,9 +7,13 @@ function searchForItem() {
         },
         controller          : function ($scope) {
             let self = this;
+
+            this.ownResource.push(...$scope.resource);
+
             this.addMode = false;
             this.addToObject = function (obj) {
                 $scope.list.push(obj);
+                
                 self.addMode = false;
                 self.search = '';
             }
@@ -35,7 +39,7 @@ function searchForItem() {
                                             <div class="list" ng-if="$ctrl.search">
                                                 <div
                                                     class="item"
-                                                    ng-repeat="obj in resource | filter: $ctrl.search"
+                                                    ng-repeat="obj in $ctrl.ownResource | filter: $ctrl.search"
                                                     ng-click="$ctrl.addToObject(obj)">
                                                     {{obj.name}}
                                                 </div>

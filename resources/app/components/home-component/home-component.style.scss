@@ -1,9 +1,13 @@
 .white-color-shadow {
   color: #ffffff;
-  text-shadow: 1px 1px 1px #5252a4; //TODO: set variables
+  text-shadow: 1px 1px 1px #5252a4;
 }
 
 .app-navigation {
+  width: 100%;
+  position: fixed;
+  z-index: 2;
+
   &, .item {
     height: 50px;
     background: #6161c2;
@@ -17,14 +21,23 @@
   }
 }
 
+.home-container, .user-list {
+  margin-top: 50px;
+}
+
+.home-container {
+  padding-left: 26.5% !important;
+}
+
 .user-list {
+  width: 25%;
   padding: 15px;
   min-height: calc(100vh - 50px);
   height: auto;
   box-shadow: 2px 3px 5px 1px #ccd0d0;
   background: #ffffff;
-  //transition: width 0.2s ease;
-  //overflow-x: hidden;
+  position: fixed;
+  z-index: 2;
 
   .compose-msg-btn {
     font-size: 1.5rem;
@@ -54,22 +67,47 @@
 
 }
 
+.compose-message-btn {
+  display: none !important;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 2.5rem;
+  border-radius: 30px;
+  position: fixed;
+  z-index: 2;
+  bottom: 10px;
+  right: 10px;
+  background: #9d82e5;
+  color: #ffffff !important;
+  cursor: pointer;
+  box-shadow: 1px 1px 5px 2px #a7abab;
+
+  .glyphicon-pencil:before {
+    text-shadow: 1px 1px 2px #745cb4;
+  }
+}
+
 @media screen and (max-width: 767px) {
-  .home-container {
-    padding-left: 50px !important;
+  .compose-message-btn {
+    display: block !important;
   }
 
-  .home-container.active {
-    overflow-y: hidden;
-    min-height: 0;
-    height: calc(100vh - 50px);
+  .home-container {
+    padding-left: 50px !important;
+
+    &.active {
+      overflow-y: hidden;
+      min-height: 0;
+      height: calc(100vh - 50px);
+    }
   }
 
   .user-list {
     width: 20px;
     padding: 0 5px;
-    position: fixed;
-    z-index: 2;
+    transition: width 0.2s ease;
 
     &.active {
       float: none;
@@ -116,6 +154,7 @@
       top: 50px;
       background: rgba(0, 0, 0, 0.3);
       cursor: pointer;
+      animation: opacity-animate 1s ease;
     }
   }
 }
@@ -135,5 +174,14 @@
   }
   100%{
     transform: translate(-50%, -50%)
+  }
+}
+
+@keyframes opacity-animate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

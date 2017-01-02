@@ -3,29 +3,33 @@ import './message-list-component.style.scss'
 
 class MessageListController {
     /** @ngInject */
-    constructor($http, utilService, $stateParams, paginationService, $timeout) {
+    constructor($http, utilService, $stateParams, paginationService, $timeout, $sce, $rootScope) {
         this.utilService        = utilService;
         this.$http              = $http;
         this.$timeout           = $timeout;
         this.$stateParams       = $stateParams;
         this.paginationService  = paginationService;
         this.pagination         = paginationService.getPagination();
+        this.$sce               = $sce;
+        this.inFlight           = false;
+        this.$rootScope         = $rootScope;
         this.$onInit            = this.init;
     }
 
     init() {
-        this.messages           = {};
+        this.messages           = [];
         this.messageType        = 'all';
         this.sortByDate         = 'DESC';
         this.sortByName         = null;
         this.searchByName       = null;
         this.sortByNameValue    = 'Name';
-
-        this.getMessages();
     }
 
     getMessages(resetFlag) {
-        if (resetFlag) this.pagination = this.paginationService.getPagination();
+        if (resetFlag) {
+            this.messages   = [];
+            this.pagination = this.paginationService.getPagination();
+        }
 
         if (!this.pagination.current.moreAvailable) return;
 
@@ -36,15 +40,22 @@ class MessageListController {
             searchByName: this.searchByName
         };
 
+        this.inFlight = true;
+
         this.paginationService.getInfiniteData({
             url : this.utilService.apiPrefix('app/get-messages'),
             method: 'GET',
             params: {
                 options
             }
-        }, this.pagination).then(res => {
-            this.messages   = res.messages;
-        })
+        }, this.pagination)
+            .then(res => {
+                this.messages.push(...res.messages);
+                this.$rootScope.$emit('checkingScroll');
+            })
+            .finally(()=>{
+                this.inFlight = false;
+            })
     }
 
     changeMessageType(type) {
@@ -56,7 +67,7 @@ class MessageListController {
         let userEmail = this.home.user.email;
 
         if (userEmail) {
-            let receivers = _.map(message.receivers, item => {return item.receiver.email});
+            let receivers = _.map(message.receivers, item => {return item.receiver.name});
 
             if (message.sender.email == userEmail) {
                 message.status = true;
@@ -66,7 +77,7 @@ class MessageListController {
 
                 message.status  = receiver[0].is_read;
 
-                return `From: ${message.sender.email}`
+                return `From: ${message.sender.name}`
             }
         }
     }
@@ -103,6 +114,13 @@ class MessageListController {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    getMessageReceivers(receivers) {
+        let receiverArr = _.map(receivers, item => `${item.receiver.name} <span class="text-muted">${item.receiver.email}</span>`);
+        let receiverStr = this.$sce.trustAsHtml(receiverArr.join(', '));
+
+        return receiverStr;
     }
 }
 
