@@ -38,6 +38,5 @@ jspm_packages
 .idea/
 data/
 nano.save
-package.json
 public/
 .env
