@@ -7,20 +7,26 @@ function dragAndDropTable() {
             listTo  : '='
         },
         controller: function ($scope) {
-            this.col = Math.round(12 / $scope.keysToShow.length);
+            this.listFrom   = [];
+            this.col        = Math.round(12 / $scope.keysToShow.length);
+
+            this.listFrom.push(...$scope.listFrom);
 
             this.dragToAnotherList = (i, list) => {
-                let anotherList = list == 'From' ? 'To' : 'From';
+                let anotherList = `list${list == 'From' ? 'To' : 'From'}`,
+                    listName    = `list${list}`,
+                    listOne     = this[anotherList] ? this[anotherList] : $scope[anotherList],
+                    listTwo     = this[listName] ? this[listName] : $scope[listName];
 
-                $scope[`list${anotherList}`].push($scope[`list${list}`][i]);
-                $scope[`list${list}`].splice(i, 1);
+                listOne.push(listTwo[i]);
+                listTwo.splice(i, 1);
             }
         },
         controllerAs: '$ctrl',
         template: `
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="user-row row" ng-repeat="item in listFrom" ng-click="$ctrl.dragToAnotherList($index, 'From')">
+                    <div class="user-row row" ng-repeat="item in $ctrl.listFrom" ng-click="$ctrl.dragToAnotherList($index, 'From')">
                         <div class="col-xs-{{$ctrl.col}}" ng-repeat="key in keysToShow">
                            {{item[key]}}
                         </div>

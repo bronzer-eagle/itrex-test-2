@@ -33,13 +33,13 @@ class UserController {
 
             } else {
                 user.changeEmailToken     = token;
-                user.tempEmail            = req.body.newEmail;
+                user.tempEmail            = req.body.email;
                 user.changeEmailExpires   = Date.now() + 3600000;
 
                 user.save();
 
                 let mailOptions = {
-                    to: req.body.newEmail,
+                    to: req.body.email,
                     from: 'emailreset@demo.com',
                     subject: 'Node.js email Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -56,7 +56,7 @@ class UserController {
 
                     res.status(200);
                     res.json({
-                        'message': 'An e-mail has been sent to ' + user.email + ' with further instructions.'
+                        'message': 'An e-mail has been sent to ' + req.body.email + ' with further instructions.'
                     });
                 });
             }
@@ -87,7 +87,7 @@ class UserController {
             to                      : receivers,
             from                    : req.user.email,
             subject                 : req.body.message.subject,
-            text                    : req.body.message.text
+            html                    : req.body.message.text
         };
 
         if (req.files.file) {
@@ -141,7 +141,7 @@ class UserController {
         });
     }
 
-    setBlacklist(req, res) {
+    changeBlacklist(req, res) {
         let blacklist = _.map(req.body.blacklist, item => item._id);
 
         User.findById(req.user._id, (err, user) => {

@@ -3,11 +3,14 @@ import './messenger-component.style.scss'
 
 class MessengerController {
     /** @ngInject */
-    constructor($http, utilService, $stateParams, Upload) {
+    constructor($state, $http, utilService, $stateParams, Upload, alertService) {
         this.utilService        = utilService;
         this.$http              = $http;
         this.upload             = Upload;
         this.$stateParams       = $stateParams;
+        this.inFlight           = false;
+        this.$state             = $state;
+        this.alertService       = alertService;
         this.message            = {
             receivers           : []
         };
@@ -22,15 +25,20 @@ class MessengerController {
     }
 
     sendMessage() {
+        this.inFlight = true;
+
         this.upload.upload({
             url : this.utilService.apiPrefix('app/send-message'),
             data: {file: this.file, message : this.message}
-        }).then(function (resp) {
-            console.log(resp);
-        }, function (err) {
-            console.log('Error status: ' + err.status);
-            console.log(err)
-        });
+        }).then((resp) => {
+            this.alertService.showSuccess(resp, ()=>{
+                this.$state.go('home', {}, {reload: true});
+            })
+        }).catch((err) => {
+            this.alertService.showError(err);
+        }).finally(() => {
+            this.inFlight = true;
+        })
     }
 }
 

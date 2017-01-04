@@ -1,5 +1,5 @@
-<section>
-    <form name="$ctrl.passwordForm" ng-submit="$ctrl.changePassword()">
+<section ng-hide="$ctrl.inFlight">
+    <form name="$ctrl.passwordForm" ng-submit="$ctrl.changeData('password')">
         <h2 class="-mg-top-0">Change Password</h2>
         <label for="old_password">Old password</label>
         <div class="icon-input">
@@ -25,7 +25,7 @@
             Save
         </button>
     </form>
-    <form name="$ctrl.nameForm" ng-submit="$ctrl.changeName()">
+    <form name="$ctrl.nameForm" ng-submit="$ctrl.changeData('name')">
         <h2>Change Name</h2>
         <label for="name">Name</label>
         <div class="icon-input">
@@ -39,7 +39,7 @@
             Save
         </button>
     </form>
-    <form name="$ctrl.emailForm" ng-submit="$ctrl.changeEmail()">
+    <form name="$ctrl.emailForm" ng-submit="$ctrl.changeData('email')">
         <h2>Change Email</h2>
         <label for="email">Email</label>
         <div class="icon-input">
@@ -53,12 +53,9 @@
             Save
         </button>
     </form>
-    <form name="$ctrl.blackListForm" ng-submit="$ctrl.setBlacklist()">
+    <form name="$ctrl.blackListForm" ng-submit="$ctrl.changeData('blacklist')" class="-pd-bottom-50">
         <h2>Blacklist</h2>
-        <span ng-repeat="user in $ctrl.home.user.blacklist">
-                    {{user.name}}
-                </span>
-        <search-for-item list="$ctrl.home.user.blacklist" resource="$ctrl.home.usersList"></search-for-item>
+        <search-for-item key-to-display="name" list="$ctrl.blacklist" resource="$ctrl.home.usersList"></search-for-item>
         <button type="submit"
                 ng-disabled="!$ctrl.home.user.blacklist.length"
                 class="app-grey-btn">
@@ -66,3 +63,6 @@
         </button>
     </form>
 </section>
+<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+    <div class="loader"></div>
+</div>

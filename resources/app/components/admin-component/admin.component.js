@@ -9,6 +9,8 @@ class AdminController {
         this.$timeout    = $timeout;
         this.password    = {};
         this.$state     = $state;
+        this.chosenUser = {};
+        this.newAdmins  = [];
 
         this.$onInit = this.init;
     }
@@ -17,22 +19,29 @@ class AdminController {
 
     }
 
-    chooseUser(user) {
-        this.search      = '';
-        this.chosenUser  = user.name;
-        this.watchAsUser = user._id;
-    }
-
     setWatchAsMe() {
         this.$http({
             url: this.utilService.apiPrefix('admin/set-watch-as-me'),
             method: 'POST',
             data: {
-                userId      : this.watchAsUser
+                userId      : this.chosenUser._id
+            }
+        })
+        .then(res => {
+            this.processJWT(res.data.token);
+        })
+    }
+
+    setNewAdmins() { //TODO
+        this.$http({
+            url: this.utilService.apiPrefix('admin/set-watch-as-me'),
+            method: 'POST',
+            data: {
+                userId      : this.chosenUser._id
             }
         })
             .then(res => {
-                this.processJWT(res.data.token);
+                console.log(res);
             })
     }
 

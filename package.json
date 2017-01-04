@@ -27,6 +27,7 @@
     "angular-animate": "^1.6.0-rc.2",
     "angular-jwt": "^0.1.8",
     "angular-touch": "^1.6.0-rc.2",
+    "angular-trix": "^1.0.2",
     "angular-ui-bootstrap": "^2.3.0",
     "angular-ui-router": "^1.0.0-beta.3",
     "async": "^2.1.4",
@@ -59,6 +60,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.3.2",
+    "trix": "^0.10.0",
     "underscore": "^1.8.3",
     "webpack": "2.1.0-beta.20",
     "webpack-dev-server": "^1.16.2"

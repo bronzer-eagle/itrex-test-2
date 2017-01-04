@@ -125,9 +125,7 @@
                 <div class="panel-heading -bold text-capitalize">
                     {{message.subject}}
                 </div>
-                <div class="panel-body">
-                    {{message.text}}
-                </div>
+                <div class="panel-body" ng-bind-html="$ctrl.bindHtml(message.text)"></div>
             </div>
             <div class="message-info panel panel-default" ng-if="message.attachment">
                 <div class="panel-heading -bold">

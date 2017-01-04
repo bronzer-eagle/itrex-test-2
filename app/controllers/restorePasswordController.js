@@ -74,7 +74,7 @@ class RestorePasswordFlow {
     setNewPassword(req, res) {
         let password;
 
-        password = req.body;
+        password = req.body.password;
 
         User.findOne({_id: req.user._id}, function(err, user) {
             if (!user) {

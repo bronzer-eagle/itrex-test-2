@@ -1,12 +1,9 @@
-<section class="messenger">
+<section class="messenger" ng-hide="$ctrl.inFlight">
     <form ng-submit="$ctrl.sendMessage()" name="$ctrl.messengerForm">
         <div class="row">
             <div class="col-xs-12 -pd-bottom-10">
                 <label class="app-label">Receiver: </label>
-                <span ng-repeat="receiver in $ctrl.message.receivers">
-                    {{receiver.name}}
-                </span>
-                <search-for-item list="$ctrl.message.receivers" resource="$ctrl.home.usersList"></search-for-item>
+                <search-for-item key-to-display="name" list="$ctrl.message.receivers" resource="$ctrl.home.usersList"></search-for-item>
             </div>
             <div class="col-xs-12 -pd-bottom-10">
                 <label class="app-label" for="subject">Subject: </label>
@@ -15,21 +12,41 @@
                        ng-model="$ctrl.message.subject" class="app-input">
             </div>
             <div class="col-xs-12 -pd-bottom-10">
-                <label class="app-label" for="message">Message: </label>
-                <textarea class="text-box" name="message" id="message" ng-model="$ctrl.message.text" required></textarea>
+                <label class="app-label">Message: </label>
+                <trix-editor angular-trix ng-model="$ctrl.message.text"></trix-editor>
             </div>
             <div class="col-xs-12 -pd-bottom-10">
-                <div class="app-grey-btn" ngf-select ng-model="$ctrl.file" name="file"
-                     ngf-max-size="5MB">
-                    Select
+                <label class="app-label">Attachments: </label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="app-blue-btn -mg-bottom-10" ngf-select ng-model="$ctrl.file" name="file"
+                             ngf-max-size="5MB">
+                            Select file
+                        </div>
+                        <div class="app-grey-btn" ng-click="$ctrl.file = null" ng-if="$ctrl.file">
+                            Delete file <span class="glyphicon glyphicon-trash"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 -al-c">
+                        <div class="img-container -mg-bottom-10">
+                            <img ngf-thumbnail="$ctrl.file" ng-if="$ctrl.file && $ctrl.file.type.indexOf('image') >= -1" class="-inbox">
+                        </div>
+                        <span class="glyphicon glyphicon-file file-icon text-primary -fs-50 -mg-right-10 -va-m"
+                              ng-if="$ctrl.file && $ctrl.file.type.indexOf('image') == -1"
+                              aria-hidden="true"></span>
+                        <span class="-va-m">{{$ctrl.file.name}}</span>
+                    </div>
                 </div>
             </div>
         </div>
         <button
                 type="submit"
                 class="app-blue-btn"
-                ng-disabled="$ctrl.messengerForm.$invalid || !$ctrl.message.receivers[0]">
+                ng-disabled="$ctrl.messengerForm.$invalid || !$ctrl.message.receivers[0] || !$ctrl.message.text">
             Send message
         </button>
     </form>
 </section>
+<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
+    <div class="loader"></div>
+</div>

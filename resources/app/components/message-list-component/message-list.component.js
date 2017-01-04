@@ -116,6 +116,10 @@ class MessageListController {
         });
     }
 
+    bindHtml(text) {
+        return this.$sce.trustAsHtml(text);
+    }
+
     getMessageReceivers(receivers) {
         let receiverArr = _.map(receivers, item => `${item.receiver.name} <span class="text-muted">${item.receiver.email}</span>`);
         let receiverStr = this.$sce.trustAsHtml(receiverArr.join(', '));

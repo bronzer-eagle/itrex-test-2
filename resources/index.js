@@ -10,6 +10,8 @@ import 'angular-ui-bootstrap'
 import 'angular-ui-router';
 import 'angular-jwt';
 import 'ng-file-upload';
+import 'trix';
+import 'angular-trix';
 import ngInfiniteScroll from 'ng-infinite-scroll';
 
 /**
@@ -69,6 +71,7 @@ angular.module('app', [
     'angular-jwt',
     'ui.bootstrap',
     'ngFileUpload',
+    'angularTrix',
     ngInfiniteScroll
 ])
     .config(['$qProvider', $qProvider => {$qProvider.errorOnUnhandledRejections(false);}])

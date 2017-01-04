@@ -61,7 +61,7 @@ protectedRoutes.post('/send-message', multipart({uploadDir: './storage' }), user
 protectedRoutes.post('/change-password', restorePass.setNewPassword.bind(restorePass));
 protectedRoutes.post('/change-name',    userController.changeName.bind(userController));
 protectedRoutes.post('/change-email',    userController.sendLinkforRestoreEmail.bind(userController));
-protectedRoutes.post('/set-blacklist',    userController.setBlacklist.bind(userController));
+protectedRoutes.post('/change-blacklist',    userController.changeBlacklist.bind(userController));
 
 adminRoutes.post('/set-watch-as-me', adminController.setWatchAsMe.bind(adminController));
 

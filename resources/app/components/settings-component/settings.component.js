@@ -3,24 +3,39 @@ import _ from 'underscore';
 
 class SettingsController{
     /** @ngInject */
-    constructor(utilService, $http, $timeout) {
+    constructor(utilService, $http, $timeout, alertService, $state) {
         this.utilService = utilService;
         this.$http       = $http;
         this.$timeout    = $timeout;
         this.password    = {};
+        this.inFlight    = false;
+        this.alertService = alertService;
+        this.$state             = $state;
 
-        this.init();
+        this.$onInit     = this.init;
     }
 
     init() {
-
+        this.blacklist = this.home.user.blacklist;
     }
 
-    changePassword() {
+    changeData(type) {
+        this.inFlight = true;
+
         this.$http({
-            url: this.utilService.apiPrefix('app/change-password'),
+            url: this.utilService.apiPrefix(`app/change-${type}`),
             method: 'POST',
-            data: this.password
+            data: {
+                [type]: this[`${type}`]
+            }
+        }).then((resp) => {
+            this.alertService.showSuccess(resp, () => {
+                this.$state.go('home', {}, {reload: true});
+            })
+        }).catch((err) => {
+            this.alertService.showError(err);
+        }).finally(() => {
+            this.inFlight = false;
         })
     }
 
@@ -28,36 +43,6 @@ class SettingsController{
         if (this.password.confirm != this.password.new) {
             this.passwordForm.$invalid = true;
         }
-    }
-
-    changeName() {
-        this.$http({
-            url: this.utilService.apiPrefix('app/change-name'),
-            method: 'POST',
-            data: {
-                name : this.name
-            }
-        })
-    }
-
-    changeEmail() {
-        this.$http({
-            url: this.utilService.apiPrefix('app/change-email'),
-            method: 'POST',
-            data: {
-                newEmail : this.email
-            }
-        })
-    }
-
-    setBlacklist() {
-        this.$http({
-            url: this.utilService.apiPrefix('app/set-blacklist'),
-            method: 'POST',
-            data: {
-                blacklist : this.home.user.blacklist
-            }
-        })
     }
 }
 

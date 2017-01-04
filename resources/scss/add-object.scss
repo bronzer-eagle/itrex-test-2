@@ -1,12 +1,17 @@
 .add-object {
   position: relative;
   display: inline-block;
+  width: auto;
 
   .add-btn {
     display: inline-block;
     padding: 5px;
     width: 29px;
     border-radius: 3px;
+  }
+
+  .add-box {
+    display: inline-block;
   }
 
   .list {
@@ -28,5 +33,19 @@
 
   .list .item:hover {
     background: #e6eaea;
+  }
+
+  .display-list {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .remove-btn{
+    @extend .app-button;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    color: #5252a4;
+    cursor: pointer;
   }
 }

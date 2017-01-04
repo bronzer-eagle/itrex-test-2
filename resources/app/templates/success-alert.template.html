@@ -1,0 +1,16 @@
+<section class="app-alert -pd-15">
+    <h2 class="success-header">
+        <span class="text-appear">Success Operation</span>
+    </h2>
+    <div class="img-container -w50 -mg-auto -pd-10">
+        <img src="../../img/robot-msg-success.png" alt="Success image" class="-inbox">
+    </div>
+    <p class="app-alert-message -pd-top-15 -pd-bottom-15 -fs-20">
+       <span class="text-appear">
+           <span class="-bold">Message: </span>{{$ctrl.info.data.message}}
+       </span>
+    </p>
+    <div class="-al-c app-alert-close-btn">
+        <button ng-click="$ctrl.closePopup()" class="app-button app-blue-btn -w50 -mg-auto">OK</button>
+    </div>
+</section>
