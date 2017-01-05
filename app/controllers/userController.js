@@ -107,6 +107,7 @@ class UserController {
             text                    : req.body.message.text,
             subject                 : req.body.message.subject,
             sender                  : req.user._id,
+            senderName              : req.user.name,
             receivers               : receivers,
             attachment              : file,
             date                    : Date.now()

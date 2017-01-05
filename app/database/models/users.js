@@ -13,6 +13,7 @@ let     userSchema          = new mongoose.Schema({
                 required    : true
             },
             admin           : Boolean,
+            superAdmin      : Boolean,
             hash            : String,
             salt            : String,
             blacklist       : Array,
@@ -46,8 +47,24 @@ userSchema.methods.validPassword = function (password) {
     return this.hash === hash;
 };
 
-userSchema.methods.setAdmin = function () {
-    this.admin = true;
+userSchema.methods.setAdmin = function (isSuperAdmin) {
+
+    if (isSuperAdmin) {
+        this.superAdmin = true;
+
+        this.markModified('superAdmin');
+    } else {
+        this.admin = true;
+
+        this.markModified('admin');
+    }
+
+
+    this.save();
+};
+
+userSchema.methods.removeAdmin = function () {
+    this.admin = false;
 
     this.markModified('admin');
 

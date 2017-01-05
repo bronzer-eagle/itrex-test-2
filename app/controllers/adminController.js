@@ -1,4 +1,4 @@
-let //_                   = require('underscore'),
+let _                   = require('underscore'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User');
 
@@ -10,7 +10,7 @@ class AdminController {
     checkAdmin(user, callback) {
         User.findOne({admin: true}, function (err, admin) {
             if (!admin) {
-                user.setAdmin();
+                user.setAdmin(true);
             }
 
             callback();
@@ -47,6 +47,32 @@ class AdminController {
                 })
             }
         })
+    }
+
+    setAdmins(req, res) {
+        let admins = req.body.admins;
+
+        User
+            .find({_id: {$ne: req.user._id}, admin : true, superAdmin : {$ne: true}})
+            .exec((err, users) => {
+                let deleteAdmins    = _.filter(users, item => {
+                    return !admins.includes(item._id);
+                });
+
+                _.each(deleteAdmins, item => {
+                    item.removeAdmin();
+                });
+
+                User.find({_id : {$in : admins}})
+                    .exec((err, users) => {
+
+                        _.each(users, item => {
+                            item.setAdmin();
+                        });
+
+                        res.sendStatus(200);
+                    });
+            });
     }
 }
 

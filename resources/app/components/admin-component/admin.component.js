@@ -10,13 +10,13 @@ class AdminController {
         this.password    = {};
         this.$state     = $state;
         this.chosenUser = {};
-        this.newAdmins  = [];
 
         this.$onInit = this.init;
     }
 
     init() {
-
+        this.newAdmins  = _.filter(this.home.usersList, item => item.admin);
+        this.usersList  = _.filter(this.home.usersList, item => !item.admin);
     }
 
     setWatchAsMe() {
@@ -32,12 +32,12 @@ class AdminController {
         })
     }
 
-    setNewAdmins() { //TODO
+    setNewAdmins() {
         this.$http({
-            url: this.utilService.apiPrefix('admin/set-watch-as-me'),
+            url: this.utilService.apiPrefix('admin/set-admins'),
             method: 'POST',
             data: {
-                userId      : this.chosenUser._id
+                admins      : _.map(this.newAdmins, item => item._id)
             }
         })
             .then(res => {

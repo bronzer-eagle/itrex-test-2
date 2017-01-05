@@ -16,7 +16,8 @@ class DataController {
             query, searchByName, findByNameRegExp,
             options         = {
                 limit       : pagination.count,
-                skip        : pagination.start
+                skip        : pagination.start,
+                sort        : {}
             },
             populateSenderConf    = {
                 path        : 'sender',
@@ -61,17 +62,23 @@ class DataController {
                     messages    = messages.splice(pagination.start, pagination.count);
                 }
 
-                if (filters.sortByName) {
-                    messages    = _.sortBy(messages, item => item.sender.name.toLowerCase());
-                    messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
-                }
+                // if (filters.sortByName) {
+                //     messages    = _.sortBy(messages, item => item.sender.name.toLowerCase());
+                //     messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
+                // }
 
                 pagination      = this.paginate(pagination, count);
 
                 callback({pagination, messages});
             };
 
-        options.sort = (filters.sortByDate) ? {'date': filters.sortByDate.toLowerCase()} : {};
+        options.sort.date       = filters.sortByDate.toLowerCase() || 'desc';
+
+        if (filters.sortByName) {
+            options.sort.senderName = filters.sortByName.toLowerCase();
+
+            delete options.sort.date;
+        }
 
         switch (filters.messageType) {
             case 'received':

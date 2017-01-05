@@ -73,13 +73,6 @@
   font-weight: bold;
 }
 
-.show-by-hover {
-
-  .item {
-    display: none;
-  }
-
-  &:hover .item.inline {
-    display: inline;
-  }
+.-relative {
+  position: relative;
 }

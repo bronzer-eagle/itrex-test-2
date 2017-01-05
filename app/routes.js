@@ -64,6 +64,7 @@ protectedRoutes.post('/change-email',    userController.sendLinkforRestoreEmail.
 protectedRoutes.post('/change-blacklist',    userController.changeBlacklist.bind(userController));
 
 adminRoutes.post('/set-watch-as-me', adminController.setWatchAsMe.bind(adminController));
+adminRoutes.post('/set-admins', adminController.setAdmins.bind(adminController));
 
 adminRoutes.get('/admin-data', function (req, res) {
     res.status(200);

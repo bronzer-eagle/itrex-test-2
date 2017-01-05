@@ -3,8 +3,8 @@
         <div uib-tab heading="Watch as me">
             <section class="-pd-15">
                 <h2>Find user to watch</h2>
-                <search-for-item unique="true" key-to-display="name" list="$ctrl.chosenUser" resource="$ctrl.home.usersList"></search-for-item>
-                <button class="app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
+                <search-for-item unique="true" key-to-display="name" list="$ctrl.chosenUser" resource="$ctrl.usersList"></search-for-item>
+                <button class="app-button app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
             </section>
         </div>
         <div uib-tab heading="Set admin">
@@ -12,9 +12,10 @@
                 <h2>Set another admin</h2>
                 <drag-and-drop-table
                         keys-to-show="['name', 'email']"
-                        list-from="$ctrl.home.usersList"
+                        list-from="$ctrl.usersList"
                         list-to="$ctrl.newAdmins">
                 </drag-and-drop-table>
+                <button class="app-blue-btn" ng-click="$ctrl.setNewAdmins()">Save</button>
             </section>
         </div>
     </div>

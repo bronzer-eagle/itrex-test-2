@@ -103,6 +103,20 @@ button:disabled {
   min-height: calc(100vh - 50px);
 }
 
-.-relative {
-  position: relative;
+.show-by-hover {
+
+  .item {
+    display: none;
+  }
+
+  &:hover .item.inline {
+    display: inline;
+  }
+}
+
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

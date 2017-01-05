@@ -13,6 +13,7 @@ let     message          = new mongoose.Schema({
         required    : true
     },
     sender           : { type: String, ref: 'User' },
+    senderName       : String,
     receivers        : [{receiver: {ref: 'User', type: String}, is_read: Boolean}],
     date             : Date,
     attachment       : Object

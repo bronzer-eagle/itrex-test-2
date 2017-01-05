@@ -28,14 +28,18 @@ function dragAndDropTable() {
                 <div class="col-xs-6">
                     <div class="user-row row" ng-repeat="item in $ctrl.listFrom" ng-click="$ctrl.dragToAnotherList($index, 'From')">
                         <div class="col-xs-{{$ctrl.col}}" ng-repeat="key in keysToShow">
-                           {{item[key]}}
+                           <div class="ellipsis">
+                                {{item[key]}}
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-6">
                     <div class="user-row row" ng-repeat="item in listTo" ng-click="$ctrl.dragToAnotherList($index, 'To')">
                         <div class="col-xs-{{$ctrl.col}}" ng-repeat="key in keysToShow">
-                            {{item[key]}}
+                            <div class="ellipsis">
+                                {{item[key]}}
+                            </div>
                         </div>
                     </div>
                 </div>
