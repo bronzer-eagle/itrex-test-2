@@ -1,4 +1,5 @@
-let _ = require('underscore');
+let
+    _ = require('underscore');
 
 class Validator {
     constructor(){
@@ -17,8 +18,9 @@ class Validator {
 
     validate(obj, authType){
         return _.map(_.keys(this.types[authType]), item => {
-            let val     = obj[item];
-            let type    = this.types[authType][item];
+            let
+                val     = obj[item],
+                type    = this.types[authType][item];
 
             return Validator[type](val, item);
         })
@@ -36,8 +38,9 @@ class Validator {
     }
 
     static email(val) {
-        let re      = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let test    = re.test(val);
+        let
+            re      = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            test    = re.test(val);
 
         if (test) {
             return {

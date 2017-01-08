@@ -24,8 +24,8 @@ function dragAndDropTable() {
         },
         controllerAs: '$ctrl',
         template: `
-            <div class="row">
-                <div class="col-xs-6">
+            <div class="row drag-end-drop">
+                <div class="col-xs-6 section">
                     <div class="user-row row" ng-repeat="item in $ctrl.listFrom" ng-click="$ctrl.dragToAnotherList($index, 'From')">
                         <div class="col-xs-{{$ctrl.col}}" ng-repeat="key in keysToShow">
                            <div class="ellipsis">
@@ -34,7 +34,7 @@ function dragAndDropTable() {
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 section">
                     <div class="user-row row" ng-repeat="item in listTo" ng-click="$ctrl.dragToAnotherList($index, 'To')">
                         <div class="col-xs-{{$ctrl.col}}" ng-repeat="key in keysToShow">
                             <div class="ellipsis">

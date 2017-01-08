@@ -3,7 +3,7 @@ import './message-list-component.style.scss'
 
 class MessageListController {
     /** @ngInject */
-    constructor($http, utilService, $stateParams, paginationService, $timeout, $sce, $rootScope) {
+    constructor($http, utilService, $stateParams, paginationService, $timeout, $sce, $rootScope, alertService) {
         this.utilService        = utilService;
         this.$http              = $http;
         this.$timeout           = $timeout;
@@ -13,6 +13,7 @@ class MessageListController {
         this.$sce               = $sce;
         this.inFlight           = false;
         this.$rootScope         = $rootScope;
+        this.alertService       = alertService;
         this.$onInit            = this.init;
     }
 
@@ -52,6 +53,9 @@ class MessageListController {
             .then(res => {
                 this.messages.push(...res.messages);
                 this.$rootScope.$emit('checkingScroll');
+            })
+            .catch(error => {
+                this.alertService.showError(error);
             })
             .finally(()=>{
                 this.inFlight = false;
@@ -109,10 +113,11 @@ class MessageListController {
                 message_id: message._id
             }
         }).then(() => {
-            let receiver        = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
-            receiver[0].is_read = true;
+            let
+                receiver            = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
+                receiver[0].is_read = true;
         }).catch(err => {
-            console.log(err);
+            this.alertService.showError(err);
         });
     }
 
@@ -122,9 +127,8 @@ class MessageListController {
 
     getMessageReceivers(receivers) {
         let receiverArr = _.map(receivers, item => `${item.receiver.name} <span class="text-muted">${item.receiver.email}</span>`);
-        let receiverStr = this.$sce.trustAsHtml(receiverArr.join(', '));
 
-        return receiverStr;
+        return this.$sce.trustAsHtml(receiverArr.join(', '));
     }
 }
 

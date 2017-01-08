@@ -1,6 +1,7 @@
 require('../database/models/users');
 
-let mongoose            = require('mongoose'),
+let
+    mongoose            = require('mongoose'),
     nev                 = require('email-verification')(mongoose),
     User                = mongoose.model('User'),
     adminController     = require('./adminController');
@@ -10,31 +11,31 @@ class EmailVerification {
 
     init() {
         nev.configure({
-            verificationURL     : `${process.env.appHttp}auth/email-verification?token=\${URL}`,
-            persistentUserModel : User,
-            tempUserCollection  : 'tempusers',
-            shouldSendConfirmation: false,
+            verificationURL         : `${process.env.appHttp}auth/email-verification?token=\${URL}`,
+            persistentUserModel     : User,
+            tempUserCollection      : 'tempusers',
+            shouldSendConfirmation  : false,
 
-            transportOptions    : {
-                service         : 'Gmail',
-                auth            : {
-                    user        : process.env.email,
-                    pass        : process.env.emailPass
+            transportOptions        : {
+                service             : 'Gmail',
+                auth                : {
+                    user            : process.env.email,
+                    pass            : process.env.emailPass
                 }
             },
             verifyMailOptions   : {
-                from            : 'Do Not Reply <itrex-task@gmail.com>',
+                from            : 'Mailer',
                 subject         : 'Please confirm account',
                 html            : '<p>Click the following link to confirm your account:</p>'+
                                     '<a href="${URL}">${URL}</a>',
                 text            : 'Please confirm your account by clicking the following link: ${URL}'
             }
         }, (error) => {
-            if (error) console.log(error);
+            if (error) throw new Error(error);
         });
 
         nev.generateTempUserModel(User, function(error) {
-            if (error) console.log(error);
+            if (error) throw new Error(error);
         });
     }
 
@@ -49,7 +50,8 @@ class EmailVerification {
             }
 
             if (newTempUser) {
-                let URL = newTempUser[nev.options.URLFieldName];
+                let
+                    URL = newTempUser[nev.options.URLFieldName];
 
                 nev.sendVerificationEmail(newUser.email, URL, function(err, info) {
                     if (err) {
@@ -90,11 +92,12 @@ class EmailVerification {
     }
 
     verify(req, res) {
-        let token = req.body.token;
+        let
+            token = req.body.token;
 
         nev.confirmTempUser(token, function(err, user) {
             if (user) {
-                adminController.checkAdmin(user, ()=>{
+                adminController.checkAdminList(user, ()=>{
                     res.status(200);
                     res.json({
                         message: 'CONFIRMED!'

@@ -1,19 +1,18 @@
 require('../database/database');
 
-let async           = require('async'),
+let
     mongoose        = require('mongoose'),
     Message         = mongoose.model('Message'),
     User            = mongoose.model('User'),
-    nodemailer      = require('nodemailer'),
-    dataController  = require('./dataController'),
-    userController  = require('./userController');
+    dataController  = require('./dataController');
 
 class HomeController {
     constructor() {}
 
     sendData(req, res) {
-        let user    = req.user;
-        let fields = {name : 1, email : 1, admin : 1, blacklist: 1};
+        let
+            user    = req.user,
+            fields = {name : 1, email : 1, admin : 1, blacklist: 1};
 
         User.findOne({_id: user._id}, fields, (err, user) => {
             if (err) {
@@ -22,7 +21,6 @@ class HomeController {
             }
 
             if (user) {
-
                 User.find({_id: {$ne : user._id}}, {name : 1, email : 1, admin: 1}, (err, usersList) => {
                     res.status(200);
                     res.json({
@@ -38,8 +36,9 @@ class HomeController {
     }
 
     getMessages(req, res) {
-        let pagination          = JSON.parse(req.query.pagination);
-        let filters             = JSON.parse(req.query.options);
+        let
+            pagination          = JSON.parse(req.query.pagination),
+            filters             = JSON.parse(req.query.options);
 
         if (pagination) {
             User.findById(req.user._id, (err, user) => {
@@ -64,7 +63,8 @@ class HomeController {
     }
 
     readMessage(req, res) {
-        let messageId = req.query.message_id;
+        let
+            messageId = req.query.message_id;
 
         dataController.findMessage(messageId, (err, message) => {
             if (err) {

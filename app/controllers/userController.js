@@ -1,6 +1,7 @@
     require('../database/models/messages');
 
-let _           = require('underscore'),
+let
+    _           = require('underscore'),
     crypto      = require('crypto'),
     mongoose    = require('mongoose'),
     Message     = mongoose.model('Message'),
@@ -21,8 +22,9 @@ class UserController {
         });
     }
 
-    sendLinkforRestoreEmail(req, res) {
-        let token = crypto.randomBytes(16).toString('hex');
+    sendLinkToRestoreEmail(req, res) {
+        let
+            token = crypto.randomBytes(16).toString('hex');
 
         User.findOne({ _id: req.user._id }, (err, user) => {
 
@@ -39,13 +41,20 @@ class UserController {
                 user.save();
 
                 let mailOptions = {
-                    to: req.body.email,
-                    from: 'emailreset@demo.com',
-                    subject: 'Node.js email Reset',
-                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    process.env.appHttp + 'auth/email-verification?token=' + token + '&notNewUser=true\n\n' +
-                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                    to      : req.body.email,
+                    from    : 'Mailer',
+                    subject : 'Email Reset',
+                    text    :
+                        `You are receiving this because you (or someone else) have requested the reset of the email for your account.
+                        Please click on the following link, or paste this into your browser to complete the process:
+                        ${process.env.appHttp}auth/email-verification?token=${token}&notNewUser=true 
+                        If you did not request this, please ignore this email and your password will remain unchanged.`,
+                    html    :
+                        `<p>You are receiving this because you (or someone else) have requested the reset of the email for your account.
+                        Please click on the following link, or paste this into your browser to complete the process:</p>
+                        <a src='${process.env.appHttp}auth/email-verification?token=${token}&notNewUser=true'>
+                        ${process.env.appHttp}auth/email-verification?token=${token}&notNewUser=true</a> 
+                        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`
                 };
 
                 this.smtpTransport.sendMail(mailOptions, function(err) {
@@ -64,7 +73,8 @@ class UserController {
     }
 
     changeEmail(req, res) {
-        let query = { changeEmailToken: req.body.token, changeEmailExpires: { $gt: Date.now() } };
+        let
+            query = { changeEmailToken: req.body.token, changeEmailExpires: { $gt: Date.now() } };
 
         User.findOne(query, function(err, user) {
             if (!user) {
@@ -79,9 +89,12 @@ class UserController {
     }
 
     sendMessage(req, res) {
-        let file, mailOptions, receivers, message;
+        let
+            file, mailOptions, receivers, message;
 
         receivers                   = _.map(req.body.message.receivers, res => { return res.email});
+
+        if (receivers.length > 5) res.status(404).json('No more than 5 receivers!');
 
         mailOptions                 = {
             to                      : receivers,
@@ -128,7 +141,8 @@ class UserController {
     }
 
     changeName(req, res) {
-        let name = req.body.name;
+        let
+            name = req.body.name;
 
         User.findOne({_id: req.user._id}, function(err, user) {
             if (!user) {
@@ -143,7 +157,8 @@ class UserController {
     }
 
     changeBlacklist(req, res) {
-        let blacklist = _.map(req.body.blacklist, item => item._id);
+        let
+            blacklist = _.map(req.body.blacklist, item => item._id);
 
         User.findById(req.user._id, (err, user) => {
             if (user) {

@@ -4,17 +4,29 @@
             <section class="-pd-15">
                 <h2>Find user to watch</h2>
                 <search-for-item unique="true" key-to-display="name" list="$ctrl.chosenUser" resource="$ctrl.usersList"></search-for-item>
-                <button class="app-button app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
+                <div class="-pd-top-20">
+                    <button class="app-button app-blue-btn" ng-click="$ctrl.setWatchAsMe()">Save</button>
+                </div>
             </section>
         </div>
         <div uib-tab heading="Set admin">
             <section class="-pd-15">
                 <h2>Set another admin</h2>
-                <drag-and-drop-table
-                        keys-to-show="['name', 'email']"
-                        list-from="$ctrl.usersList"
-                        list-to="$ctrl.newAdmins">
-                </drag-and-drop-table>
+                <div class="row -al-c text-capitalize -fs-20 -bold">
+                    <div class="col-xs-6">
+                        Users available
+                    </div>
+                    <div class="col-xs-6">
+                        Admins
+                    </div>
+                </div>
+                <div class="-pd-15">
+                    <drag-and-drop-table
+                            keys-to-show="['name', 'email']"
+                            list-from="$ctrl.usersList"
+                            list-to="$ctrl.newAdmins">
+                    </drag-and-drop-table>
+                </div>
                 <button class="app-blue-btn" ng-click="$ctrl.setNewAdmins()">Save</button>
             </section>
         </div>

@@ -3,13 +3,14 @@ import _ from 'underscore';
 
 class AdminController {
     /** @ngInject */
-    constructor(utilService, $http, $timeout, $state) {
+    constructor(utilService, $http, $timeout, $state, alertService) {
         this.utilService = utilService;
         this.$http       = $http;
         this.$timeout    = $timeout;
         this.password    = {};
         this.$state     = $state;
         this.chosenUser = {};
+        this.alertService = alertService;
 
         this.$onInit = this.init;
     }
@@ -29,6 +30,8 @@ class AdminController {
         })
         .then(res => {
             this.processJWT(res.data.token);
+        }).catch((err) => {
+            this.alertService.showError(err);
         })
     }
 
@@ -40,9 +43,11 @@ class AdminController {
                 admins      : _.map(this.newAdmins, item => item._id)
             }
         })
-            .then(res => {
-                console.log(res);
-            })
+        .then(res => {
+            this.alertService.showSuccess(res)
+        }).catch((err) => {
+            this.alertService.showError(err);
+        })
     }
 
     processJWT(token) {

@@ -120,3 +120,8 @@ button:disabled {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.auto-scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

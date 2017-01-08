@@ -1,6 +1,7 @@
 require('../database/database');
 
-let _               = require('underscore'),
+let
+    _               = require('underscore'),
     async           = require('async'),
     mongoose        = require('mongoose'),
     Message         = mongoose.model('Message'),
@@ -8,10 +9,10 @@ let _               = require('underscore'),
 
 class DataController {
     constructor() {
-        this.messageFields          = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1, date: 1};
+        this.messageFields = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1, date: 1};
     }
 
-    getMessages(user, filters, pagination, callback) { //TODO: refactor this!!!
+    getMessages(user, filters, pagination, callback) {
         let
             query, searchByName, findByNameRegExp,
             options         = {
@@ -62,12 +63,7 @@ class DataController {
                     messages    = messages.splice(pagination.start, pagination.count);
                 }
 
-                // if (filters.sortByName) {
-                //     messages    = _.sortBy(messages, item => item.sender.name.toLowerCase());
-                //     messages    = (filters.sortByName == 'DESC') ? messages.reverse() : messages;
-                // }
-
-                pagination      = this.paginate(pagination, count);
+                pagination      = DataController.paginate(pagination, count);
 
                 callback({pagination, messages});
             };
@@ -168,9 +164,9 @@ class DataController {
         })
     }
 
-    paginate (pagination, count) {
-        pagination.start = pagination.start + pagination.count;
-        pagination.moreAvailable  = pagination.start < count;
+    static paginate (pagination, count) {
+        pagination.start            = pagination.start + pagination.count;
+        pagination.moreAvailable    = pagination.start < count;
 
         return pagination;
     }

@@ -1,4 +1,5 @@
-let _                   = require('underscore'),
+let
+    _                   = require('underscore'),
     passport            = require('passport'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User'),
@@ -9,7 +10,8 @@ class AuthFlow {
     constructor() {}
 
     register(req, res) {
-        let user;
+        let
+            user;
 
         if (!AuthFlow.validate(req, res, 'registration')) return;
 
@@ -27,7 +29,6 @@ class AuthFlow {
         if (!AuthFlow.validate(req, res, 'login')) return;
 
         passport.authenticate('local', function(err, user, info){
-            console.log(user);
             if (err) {
                 res.status(404).json(err);
                 return;
@@ -38,18 +39,14 @@ class AuthFlow {
             } else {
                 res.status(401).json(info);
             }
+
         })(req, res);
     };
 
     static validate(req, res, type) {
-        let arr     = validator.validate(req.body, type),
+        let
+            arr     = validator.validate(req.body, type),
             errors  = getErrors();
-
-        function getErrors() {
-            _.filter(arr, item => {
-                return !item.flag
-            });
-        }
 
         if (errors) {
             AuthFlow.sendJSONresponse(res, 400, {errors : errors});
@@ -58,6 +55,12 @@ class AuthFlow {
         }
 
         return true;
+
+        function getErrors() {
+            _.filter(arr, item => {
+                return !item.flag
+            });
+        }
     }
 
     static sendJSONresponse(res, status, content) {

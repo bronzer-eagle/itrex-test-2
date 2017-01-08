@@ -1,13 +1,12 @@
-let _                   = require('underscore'),
+let
+    _                   = require('underscore'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User');
 
 class AdminController {
-    constructor() {
+    constructor() {}
 
-    }
-
-    checkAdmin(user, callback) {
+    checkAdminList(user, callback) {
         User.findOne({admin: true}, function (err, admin) {
             if (!admin) {
                 user.setAdmin(true);
@@ -15,19 +14,6 @@ class AdminController {
 
             callback();
         });
-    }
-
-    isAdmin(id, res, callback) {
-        User.findById({_id: id, admin: true}, function (err, user) {
-            if (user) {
-                callback();
-            } else {
-                res.status(401);
-                res.json({
-                    'error' : 'not admin'
-                })
-            }
-        })
     }
 
     setWatchAsMe(req, res) {
@@ -43,21 +29,21 @@ class AdminController {
             } else {
                 res.status(500);
                 res.json({
-                    'error' : 'no user'
+                    'error' : 'There is no user with that id, please check your data'
                 })
             }
         })
     }
 
     setAdmins(req, res) {
-        let admins = req.body.admins;
+        let
+            admins = req.body.admins;
 
         User
             .find({_id: {$ne: req.user._id}, admin : true, superAdmin : {$ne: true}})
             .exec((err, users) => {
-                let deleteAdmins    = _.filter(users, item => {
-                    return !admins.includes(item._id);
-                });
+                let
+                    deleteAdmins    = _.filter(users, item => !admins.includes(item._id));
 
                 _.each(deleteAdmins, item => {
                     item.removeAdmin();

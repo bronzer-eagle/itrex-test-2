@@ -134,7 +134,7 @@
                 <div class="panel-body attachments">
                     <div class="row">
                         <div class="col-xs-4 img-container -al-c">
-                            <img ng-src="{{'http://localhost:8080/' + message.attachment.path}}"
+                            <img ng-src="{{$ctrl.utilService.apiPrefix(message.attachment.path)}}"
                                  class="-inbox"
                                  ng-if="message.attachment.type.indexOf('image') > -1" alt="Attachment image">
                             <span class="glyphicon glyphicon-file file-icon text-info -fs-50"
@@ -163,7 +163,7 @@
                                     <span class="label label-info w100">Url</span>
                                 </div>
                                 <div class="col-xs-9">
-                                    <a href="{{'http://localhost:8080/' + message.attachment.path}}">
+                                    <a href="{{$ctrl.utilService.apiPrefix(message.attachment.path)}}">
                                         Download
                                     </a>
                                 </div>
@@ -177,8 +177,8 @@
     <div ng-if="!$ctrl.messages.length" class="-fs-20 -al-c">
         No results.
     </div>
+    <div class="loader-wrapp" ng-show="$ctrl.inFlight">
+        <div class="loader"></div>
+    </div>
 </section>
-<div class="-centered loader-wrapp" ng-show="$ctrl.inFlight">
-    <div class="loader"></div>
-</div>
 

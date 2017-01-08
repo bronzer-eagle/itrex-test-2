@@ -44,33 +44,39 @@
     <div class="user-list" ng-class="{'active' : $ctrl.activeLeftSide}">
         <div class="-relative">
             <section class="hide-when-not-active">
-                <a ui-sref="send-message" class="-a-reset app-button compose-msg-btn -mg-bottom-15">
+                <a ui-sref="send-message"
+                   ng-click="$ctrl.closeMenu()"
+                   class="-a-reset app-button compose-msg-btn -mg-bottom-15">
                     Compose message
                 </a>
                 <h3 class="title -al-c -uppercase -bold ">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span> user list
                 </h3>
-                <div class="panel panel-default" ng-repeat="user in $ctrl.usersList">
-                    <div class="panel-body -pd-5">
-                        <div class="row item" >
-                            <a class="-a-reset email show-by-hover" ui-sref="send-message({receiver: user})">
-                                <div class="col-xs-12">
-                                    <div class="row">
-                                        <div class="col-xs-9">{{user.name}}</div>
-                                        <div class="col-xs-3 -al-r">
-                                            <span class="glyphicon glyphicon-pencil -fs-15 item inline" aria-hidden="true"></span>
+                <section class="auto-scroll-y">
+                    <div class="panel panel-default" ng-repeat="user in $ctrl.usersList">
+                        <div class="panel-body -pd-5">
+                            <div class="row item">
+                                <a class="-a-reset email show-by-hover"
+                                   ui-sref="send-message({receiver: user})"
+                                   ng-click="$ctrl.closeMenu()">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-9">{{user.name}}</div>
+                                            <div class="col-xs-3 -al-r">
+                                                <span class="glyphicon glyphicon-pencil -fs-15 item inline" aria-hidden="true"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </section>
-            <button class="-btn-reset -centered visible-xs left-side-caret" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
+            <button class="-btn-reset -centered visible-xs left-side-caret" ng-click="$ctrl.closeMenu()">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
-            <section class="outblock full-height" ng-click="$ctrl.activeLeftSide = !$ctrl.activeLeftSide">
+            <section class="outblock full-height" ng-click="$ctrl.closeMenu()">
             </section>
         </div>
     </div>

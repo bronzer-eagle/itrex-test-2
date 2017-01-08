@@ -5,7 +5,8 @@ function searchForItem() {
             list            : '=',
             resource        : '=',
             keyToDisplay    : '@',
-            unique          : '<'
+            unique          : '<',
+            max             : '='
         },
         controller          : function ($scope) {
             this.ownResource    = [];
@@ -13,15 +14,17 @@ function searchForItem() {
 
             this.ownResource.push(..._.difference($scope.resource, $scope.list));
 
+            if (!$scope.max) $scope.max = this.ownResource.length;
+
             this.addToObject = (obj) => {
-                if (!$scope.unique) {
+                if (!$scope.unique && $scope.max <= $scope.list.length) {
                     $scope.list.push(obj);
                 } else {
                     Object.assign($scope.list, obj);
                 }
 
                 this.ownResource = _.without(this.ownResource, obj);
-                
+
                 this.addMode = false;
                 this.search = '';
             };
@@ -52,7 +55,7 @@ function searchForItem() {
                                         <span class="glyphicon glyphicon-remove -fs-8 remove-btn" ng-click="$ctrl.removeItem(selected)"></span>
                                     </span>
                                     <butoon class="add-btn app-grey-btn"
-                                            ng-if="!$ctrl.addMode && $ctrl.checkUnique()" 
+                                            ng-if="!$ctrl.addMode && $ctrl.checkUnique() && max <= list.length" 
                                             ng-click="$ctrl.addMode = true">
                                             +
                                     </butoon>

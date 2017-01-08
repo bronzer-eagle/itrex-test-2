@@ -1,9 +1,10 @@
-const mongoose = require(`mongoose`);
+const
+    mongoose = require(`mongoose`);
 
-mongoose.connect(`mongodb://localhost:27017`, function (err) {
+mongoose.connect(process.env.dbPath, function (err) {
     if (err) throw new Error(err.message);
 
-    console.log(`Mongodb connected on port: 27017`);
+    console.log(`Mongodb connected on port: ${process.env.dbPort}`);
 });
 
 require('./models/users');

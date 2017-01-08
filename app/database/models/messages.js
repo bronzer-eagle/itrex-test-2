@@ -1,26 +1,27 @@
-const   _                   = require('underscore'),
-        mongoose            = require( 'mongoose' ),
-        crypto              = require('crypto'),
-        jwt                 = require('jsonwebtoken');
+const
+    _                       = require('underscore'),
+    mongoose                = require( 'mongoose' );
 
-let     message          = new mongoose.Schema({
-    text            : {
-        type        : String,
-        required    : true
-    },
-    subject         : {
-        type        : String,
-        required    : true
-    },
-    sender           : { type: String, ref: 'User' },
-    senderName       : String,
-    receivers        : [{receiver: {ref: 'User', type: String}, is_read: Boolean}],
-    date             : Date,
-    attachment       : Object
-});
+let
+    message                 = new mongoose.Schema({
+        text                : {
+            type            : String,
+            required        : true
+        },
+        subject             : {
+            type            : String,
+            required        : true
+        },
+        sender              : { type: String, ref: 'User' },
+        senderName          : String,
+        receivers           : [{receiver: {ref: 'User', type: String}, is_read: Boolean}],
+        date                : Date,
+        attachment          : Object
+    });
 
 message.methods.readMessage = function (userId) {
-    let obj = _.findWhere(this.receivers, {receiver: userId});
+    let
+        obj = _.findWhere(this.receivers, {receiver: userId});
 
     obj.is_read = true;
 

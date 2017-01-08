@@ -49,3 +49,14 @@
     cursor: pointer;
   }
 }
+
+.drag-end-drop {
+  margin-bottom: 20px;
+
+  .section {
+    padding: 15px;
+    border: 1px solid #a7abab;
+    height: 400px;
+    overflow: auto;
+  }
+}

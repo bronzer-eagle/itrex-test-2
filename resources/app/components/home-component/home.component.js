@@ -3,13 +3,14 @@ import './home-component.style.scss'
 
 class HomeController {
     /** @ngInject */
-    constructor($http, utilService, $state, $timeout, jwtHelper) {
+    constructor($http, utilService, $state, $timeout, jwtHelper, alertService) {
         this.utilService    = utilService;
         this.$http          = $http;
         this.$state         = $state;
         this.$timeout       = $timeout;
         this.inFlight       = false;
-        this.jwtHelper  = jwtHelper;
+        this.jwtHelper      = jwtHelper;
+        this.alertService   = alertService;
 
         this.$onInit        = this.init;
     }
@@ -29,7 +30,7 @@ class HomeController {
                 this.showAdminPanel();
             })
             .catch(error => {
-
+                this.alertService.showError(error);
             })
             .finally(() => {
                 this.inFlight       = false;
@@ -57,11 +58,16 @@ class HomeController {
         this.$http({
             url: this.utilService.apiPrefix('auth/logout'),
             method: 'GET'
+        }).then(() => {
+            localStorage.removeItem('token');
+            this.$state.go('login')
+        }).catch(error => {
+            this.alertService.showError(error);
         })
-            .then(() => {
-                localStorage.removeItem('token');
-                this.$state.go('login')
-            })
+    }
+
+    closeMenu() {
+        this.activeLeftSide = !this.activeLeftSide
     }
 
     showAdminPanel() {
