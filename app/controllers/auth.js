@@ -28,7 +28,7 @@ class AuthFlow {
     login(req, res) {
         if (!AuthFlow.validate(req, res, 'login')) return;
 
-        passport.authenticate('local', function(err, user, info){
+        passport.authenticate('local', function(err, user){
             if (err) {
                 res.status(404).json(err);
                 return;
@@ -37,7 +37,9 @@ class AuthFlow {
             if (user) {
                 res.status(200).json({'token' : user.generateJwt()});
             } else {
-                res.status(401).json(info);
+                res.status(401).json({
+                    message : 'Not authorized'
+                });
             }
 
         })(req, res);

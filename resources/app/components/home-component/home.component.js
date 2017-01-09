@@ -16,6 +16,12 @@ class HomeController {
     }
 
     init() {
+        if (!localStorage.getItem('token')) {
+            this.$state.go('login');
+
+            return;
+        }
+
         this.getData();
     }
 
@@ -68,8 +74,12 @@ class HomeController {
         })
     }
 
-    closeMenu() {
-        this.activeLeftSide = !this.activeLeftSide
+    closeMenu(flag) {
+        if (flag) {
+            this.activeLeftSide = false;
+        } else {
+            this.activeLeftSide = !this.activeLeftSide
+        }
     }
 
     showAdminPanel() {
