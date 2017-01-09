@@ -9,4 +9,8 @@
     max-width: 400px;
     //min-width: 400px;
   }
+
+  trix-toolbar .button_row {
+    flex-wrap: wrap;
+  }
 }

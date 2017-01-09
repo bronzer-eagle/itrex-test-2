@@ -1,5 +1,4 @@
 import './auth-component-style.scss';
-import _ from 'underscore';
 
 class AuthController {
     /** @ngInject */

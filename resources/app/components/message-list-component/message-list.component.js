@@ -9,11 +9,13 @@ class MessageListController {
         this.$timeout           = $timeout;
         this.$stateParams       = $stateParams;
         this.paginationService  = paginationService;
-        this.pagination         = paginationService.getPagination();
-        this.$sce               = $sce;
-        this.inFlight           = false;
         this.$rootScope         = $rootScope;
         this.alertService       = alertService;
+
+        this.$sce               = $sce;
+        this.inFlight           = false;
+        this.pagination         = paginationService.getPagination();
+
         this.$onInit            = this.init;
     }
 
@@ -34,19 +36,20 @@ class MessageListController {
 
         if (!this.pagination.current.moreAvailable) return;
 
-        let options = {
-            messageType: this.messageType,
-            sortByDate: this.sortByDate,
-            sortByName: this.sortByName,
-            searchByName: this.searchByName
-        };
+        let
+            options         = {
+                messageType     : this.messageType,
+                sortByDate      : this.sortByDate,
+                sortByName      : this.sortByName,
+                searchByName    : this.searchByName
+            };
 
-        this.inFlight = true;
+        this.inFlight       = true;
 
         this.paginationService.getInfiniteData({
-            url : this.utilService.apiPrefix('app/get-messages'),
-            method: 'GET',
-            params: {
+            url         : this.utilService.apiPrefix('app/get-messages'),
+            method      : 'GET',
+            params      : {
                 options
             }
         }, this.pagination)
@@ -64,20 +67,23 @@ class MessageListController {
 
     changeMessageType(type) {
         this.messageType = type;
+
         this.getMessages(true);
     }
 
     setText(message) {
-        let userEmail = this.home.user.email;
+        let receivers, receiver,
+            userEmail = this.home.user.email;
 
         if (userEmail) {
-            let receivers = _.map(message.receivers, item => {return item.receiver.name});
+            receivers = _.map(message.receivers, item => {return item.receiver.name});
 
             if (message.sender.email == userEmail) {
                 message.status = true;
+
                 return `To: ${receivers.toString()}`
             } else {
-                let receiver    = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
+                receiver        = _.filter(message.receivers, item => {return item.receiver.email == userEmail});
 
                 message.status  = receiver[0].is_read;
 
@@ -87,8 +93,9 @@ class MessageListController {
     }
 
     sortBy(sort) {
-        let sortName;
-        let type = sort.split('|')[1];
+        let
+            sortName,
+            type = sort.split('|')[1];
 
         sortName = sort.split('|')[0];
 
@@ -102,15 +109,18 @@ class MessageListController {
     }
 
     readMessage(message) {
+        let
+            userEmail;
+
         if (message.status) return;
 
-        let userEmail = this.home.user.email;
+        userEmail = this.home.user.email;
 
         this.$http({
-            url     : this.utilService.apiPrefix('app/read-message'),
-            method  : 'GET',
-            params: {
-                message_id: message._id
+            url             : this.utilService.apiPrefix('app/read-message'),
+            method          : 'GET',
+            params          : {
+                message_id  : message._id
             }
         }).then(() => {
             let
@@ -126,18 +136,20 @@ class MessageListController {
     }
 
     getMessageReceivers(receivers) {
-        let receiverArr = _.map(receivers, item => `${item.receiver.name} <span class="text-muted">${item.receiver.email}</span>`);
+        let
+            receiverArr = _.map(receivers, item => `${item.receiver.name} <span class="text-muted">${item.receiver.email}</span>`);
 
         return this.$sce.trustAsHtml(receiverArr.join(', '));
     }
 }
 
-const MessageListComponent = {
-    template        : require('./message-list-component.template.html'),
-    controller      : MessageListController,
-    require         : {
-        home        : '^homeComponent'
-    }
-};
+const
+    MessageListComponent = {
+        template        : require('./message-list-component.template.html'),
+        controller      : MessageListController,
+        require         : {
+            home        : '^homeComponent'
+        }
+    };
 
 export default MessageListComponent;

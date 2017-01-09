@@ -7,6 +7,7 @@
   width: 100%;
   position: fixed;
   z-index: 2;
+  top: 0;
 
   &, .item {
     height: 50px;
@@ -108,6 +109,8 @@
     width: 20px;
     padding: 0 5px;
     transition: width 0.2s ease;
+    bottom: 0;
+    top: 0;
 
     &.active {
       float: none;
@@ -144,6 +147,17 @@
       transform: rotate(-180deg);
       left: auto;
       right: -15px;
+    }
+
+    &.active .outblock {
+      width: 50%;
+      display: block;
+      position: fixed;
+      left: 50%;
+      top: 50px;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      animation: opacity-animate 1s ease;
     }
 
     &.active .outblock {

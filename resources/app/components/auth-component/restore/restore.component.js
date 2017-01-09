@@ -10,27 +10,26 @@ class RestoreController {
     }
 
     init() {
-        this.token = this.$location.search().token;
+        this.token          = this.$location.search().token;
     }
 
     changePassword() {
         this.inFlight       = true;
 
         this.$http({
-            url: this.utilService.apiPrefix('auth/restore-user-password'),
-            method: 'POST',
-            skipAuthorization: true,
-            data: {
-                password : this.restore.newPassword,
-                token    : this.token
+            url                     : this.utilService.apiPrefix('auth/restore-user-password'),
+            method                  : 'POST',
+            skipAuthorization       : true,
+            data                    : {
+                password            : this.restore.newPassword,
+                token               : this.token
             }})
             .then(res => {
-                console.log(res);
                 this.$state.go('info', {
-                    message: res.data.message,
-                    type: 'restore',
-                    options: {
-                        success: true
+                    message     : res.data.message,
+                    type        : 'restore',
+                    options     : {
+                        success : true
                     }
                 });
             })

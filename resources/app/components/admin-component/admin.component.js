@@ -1,18 +1,18 @@
 import './admin-component.style.sass';
-import _ from 'underscore';
 
 class AdminController {
     /** @ngInject */
     constructor(utilService, $http, $timeout, $state, alertService) {
-        this.utilService = utilService;
-        this.$http       = $http;
-        this.$timeout    = $timeout;
-        this.password    = {};
-        this.$state     = $state;
-        this.chosenUser = {};
-        this.alertService = alertService;
+        this.utilService        = utilService;
+        this.$http              = $http;
+        this.$timeout           = $timeout;
+        this.$state             = $state;
+        this.alertService       = alertService;
 
-        this.$onInit = this.init;
+        this.chosenUser         = {};
+        this.password           = {};
+
+        this.$onInit            = this.init;
     }
 
     init() {
@@ -22,9 +22,9 @@ class AdminController {
 
     setWatchAsMe() {
         this.$http({
-            url: this.utilService.apiPrefix('admin/set-watch-as-me'),
-            method: 'POST',
-            data: {
+            url             : this.utilService.apiPrefix('admin/set-watch-as-me'),
+            method          : 'POST',
+            data            : {
                 userId      : this.chosenUser._id
             }
         })
@@ -37,9 +37,9 @@ class AdminController {
 
     setNewAdmins() {
         this.$http({
-            url: this.utilService.apiPrefix('admin/set-admins'),
-            method: 'POST',
-            data: {
+            url             : this.utilService.apiPrefix('admin/set-admins'),
+            method          : 'POST',
+            data            : {
                 admins      : _.map(this.newAdmins, item => item._id)
             }
         })
@@ -51,23 +51,23 @@ class AdminController {
     }
 
     processJWT(token) {
-        let adminToken = localStorage.getItem('token');
+        let
+            adminToken = localStorage.getItem('token');
 
         localStorage.setItem('adminToken', adminToken);
         localStorage.setItem('token', token);
 
         this.$state.go('home', {}, {reload: true});
     }
-
-
 }
 
-const AdminComponent = {
-    template    : require('./admin-component.template.html'),
-    controller  : AdminController,
-    require         : {
-        home        : '^homeComponent'
-    }
-};
+const
+    AdminComponent    = {
+        template            : require('./admin-component.template.html'),
+        controller          : AdminController,
+        require             : {
+            home            : '^homeComponent'
+        }
+    };
 
 export default AdminComponent;

@@ -22,9 +22,9 @@ class AlertService {
     showSuccess(info, callback) {
         this.$uibModal.open({
             controller          : function($uibModalInstance){
-                this.info      = info;
+                this.info       = info;
                 this.closePopup = function () {
-                    this.info  = {};
+                    this.info   = {};
 
                     $uibModalInstance.dismiss('cancel');
 

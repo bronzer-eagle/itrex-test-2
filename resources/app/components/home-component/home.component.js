@@ -23,8 +23,8 @@ class HomeController {
         this.inFlight = true;
         this.$http(this._getHttpOptions())
             .then(res => {
-                this.user     = res.data.user;
-                this.usersList = res.data.usersList;
+                this.user           = res.data.user;
+                this.usersList      = res.data.usersList;
                 this.user.blacklist = _.filter(this.usersList, item => this.user.blacklist.includes(item._id));
                 this.processJWT();
                 this.showAdminPanel();
@@ -38,8 +38,9 @@ class HomeController {
     }
 
     processJWT() {
-        let token = localStorage.getItem('token');
-        let decodedToken = this.jwtHelper.decodeToken(token);
+        let
+            token           = localStorage.getItem('token'),
+            decodedToken    = this.jwtHelper.decodeToken(token);
 
         if (decodedToken.adminWatch){
             this.user.adminWatch = true;
@@ -47,7 +48,8 @@ class HomeController {
     }
 
     returnToAdmin() {
-        let adminToken = localStorage.getItem('adminToken');
+        let
+            adminToken = localStorage.getItem('adminToken');
 
         localStorage.setItem('token', adminToken);
 
@@ -56,8 +58,8 @@ class HomeController {
 
     logout() {
         this.$http({
-            url: this.utilService.apiPrefix('auth/logout'),
-            method: 'GET'
+            url         : this.utilService.apiPrefix('auth/logout'),
+            method      : 'GET'
         }).then(() => {
             localStorage.removeItem('token');
             this.$state.go('login')
@@ -82,16 +84,10 @@ class HomeController {
             method: 'GET'
         }
     }
-
-    // _parseToken() {
-    //     let token = localStorage.getItem('token');
-    //     let tokenPayload = jwtHelper.decodeToken(token);
-    //
-    //     console.log(tokenPayload);
-    // }
 }
 
-const HomeComponent = {
+const
+    HomeComponent = {
     template        : require('./home-component.template.html'),
     controller      : HomeController
 };

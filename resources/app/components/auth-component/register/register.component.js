@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 class RegisterController {
     /** @ngInject */
     constructor($http, $state, utilService, alertService) {
@@ -15,10 +13,10 @@ class RegisterController {
         this.$http(this._getHttpOptions(this.signUpData))
             .then(res => {
                 this.$state.go('info', {
-                    message: res.data.message,
-                    type: 'email-verification',
-                    options : {
-                        email: this.signUpData.email
+                    message     : res.data.message,
+                    type        : 'email-verification',
+                    options     : {
+                        email   : this.signUpData.email
                     }
                 });
             })
@@ -32,19 +30,20 @@ class RegisterController {
 
     _getHttpOptions(data) {
         return {
-            url : this.utilService.apiPrefix('auth/register'),
-            method: 'POST',
-            data: data
+            url         : this.utilService.apiPrefix('auth/register'),
+            method      : 'POST',
+            data        : data
         }
     }
 }
 
-const RegisterComponent = {
-    template        : require('./register-component.template.html'),
-    controller      : RegisterController,
-    require         : {
-        auth        : '^authComponent'
-    }
-};
+const
+    RegisterComponent = {
+        template            : require('./register-component.template.html'),
+        controller          : RegisterController,
+        require             : {
+            auth            : '^authComponent'
+        }
+    };
 
 export default RegisterComponent;

@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import './info-component.style.scss'
 
 class InfoController {
@@ -12,23 +11,23 @@ class InfoController {
 
         this.inFlight       = false;
 
-        this.init();
+        this.$onInit        = this.init;
     }
 
     init() {
-        this.message = this.$stateParams.message;
-        this.type = this.$stateParams.type;
-        this.options = this.$stateParams.options;
+        this.message    = this.$stateParams.message;
+        this.type       = this.$stateParams.type;
+        this.options    = this.$stateParams.options;
     }
 
     resendVerificationEmail() {
         this.inFlight = true;
 
         this.$http({
-            url: this.utilService.apiPrefix('auth/resend-verification'),
-            method: 'GET',
-            params: {
-                email: this.$stateParams.options.email
+            url         : this.utilService.apiPrefix('auth/resend-verification'),
+            method      : 'GET',
+            params      : {
+                email   : this.$stateParams.options.email
             }
         }).then(res => {
             this.message = res.data.message;

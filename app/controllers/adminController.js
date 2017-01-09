@@ -56,7 +56,9 @@ class AdminController {
                             item.setAdmin();
                         });
 
-                        res.sendStatus(200);
+                        res.status(200).json({
+                            message : 'You have successfully assign new admins!'
+                        });
                     });
             });
     }

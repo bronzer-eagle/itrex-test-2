@@ -102,6 +102,4 @@ angular.module('app', [
     .run(function(authManager) {
         authManager.redirectWhenUnauthenticated();
         authManager.checkAuthOnRefresh();
-    })
-
-;
+    });

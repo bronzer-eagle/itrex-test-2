@@ -1,7 +1,6 @@
 /**
  * Created by alexanderbondarenko on 9/27/16.
  */
-import _ from 'underscore';
 
 class PaginationService {
     /** @ngInject */
@@ -14,9 +13,10 @@ class PaginationService {
 
         return this._http(options)
             .then(response => {
-                let responseData                    = response.data;
+                let
+                    responseData                    = response.data;
 
-                pagination.current                  = responseData.pagination;
+                    pagination.current                  = responseData.pagination;
 
                 return responseData;
             }, error => {

@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import './messenger-component.style.scss'
 
 class MessengerController {
@@ -8,8 +7,9 @@ class MessengerController {
         this.$http              = $http;
         this.upload             = Upload;
         this.$stateParams       = $stateParams;
-        this.inFlight           = false;
         this.$state             = $state;
+
+        this.inFlight           = false;
         this.alertService       = alertService;
         this.message            = {
             receivers           : []
@@ -28,8 +28,8 @@ class MessengerController {
         this.inFlight = true;
 
         this.upload.upload({
-            url : this.utilService.apiPrefix('app/send-message'),
-            data: {file: this.file, message : this.message}
+            url         : this.utilService.apiPrefix('app/send-message'),
+            data        : {file: this.file, message : this.message}
         }).then((resp) => {
             this.alertService.showSuccess(resp, ()=>{
                 this.$state.go('home', {}, {reload: true});
@@ -37,17 +37,29 @@ class MessengerController {
         }).catch((err) => {
             this.alertService.showError(err);
         }).finally(() => {
-            this.inFlight = true;
+            this.inFlight = false;
         })
+    }
+
+    checkFileSize() {
+        if (this.messengerForm.file.$error.maxSize) {
+            this.alertService.showError({
+                status      : 400,
+                data        : {
+                    message : 'File cannot be more than 5MB'
+                }
+            });
+        }
     }
 }
 
-const MessengerComponent = {
-    template        : require('./messenger-component.template.html'),
-    controller      : MessengerController,
-    require         : {
-        home        : '^homeComponent'
-    }
-};
+const
+    MessengerComponent = {
+        template        : require('./messenger-component.template.html'),
+        controller      : MessengerController,
+        require         : {
+            home        : '^homeComponent'
+        }
+    };
 
 export default MessengerComponent;

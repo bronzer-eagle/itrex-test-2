@@ -1,14 +1,14 @@
 /** @ngInject */
 function angularJWTConfig($httpProvider, jwtOptionsProvider) {
     jwtOptionsProvider.config({
-        tokenGetter : function() {
+        tokenGetter                 : function() {
             return localStorage.getItem('token');
         },
-        unauthenticatedRedirectPath: '/auth/login',
-        unauthenticatedRedirector: ['$state', function($state) {
+        unauthenticatedRedirectPath : '/auth/login',
+        unauthenticatedRedirector   : ['$state', function($state) {
             $state.go('login');
         }],
-        whiteListedDomains: ['localhost', '192.168.0.103']
+        whiteListedDomains          : ['localhost', window.location.host]
     });
 
     $httpProvider.interceptors.push('jwtInterceptor');

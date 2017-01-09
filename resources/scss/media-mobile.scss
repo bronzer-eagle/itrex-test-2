@@ -1,0 +1,37 @@
+.mob-show {
+  display: none;
+}
+
+@media screen and (max-width: 450px) {
+  .mob-hide{
+    display: none;
+  }
+
+  .mob-show {
+    display: block;
+  }
+
+  .home-container {
+    padding-left: 25px !important;
+  }
+
+  .user-list {
+    width: 20px;
+    padding: 0 5px;
+    transition: width 0.2s ease;
+
+    &.active {
+      float: none;
+      width: 100%;
+      padding: 10px;
+    }
+
+    &.active .outblock {
+      display: none;
+    }
+  }
+
+  .message-accordion *{
+    text-align: left !important;
+  }
+}

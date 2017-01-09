@@ -8,13 +8,14 @@ class LoginController {
     }
 
     signIn() {
+        let
+            options        = this._getHttpOptions('auth/login', this.signInData);
+
         this.auth.inFlight = false;
 
-        this.$http(this._getHttpOptions(this.signInData))
+        this.$http(options)
             .then(res => {
-                let token = res.data.token;
-
-                if (token) this.processToken(token);
+                if (res.data.token) this.processToken(res.data.token);
             })
             .catch(err => {
                 this.alertService.showError(err);
@@ -25,20 +26,16 @@ class LoginController {
     }
 
     restorePassword() {
-        this.auth.inFlight = true;
+        let
+            options = this._getHttpOptions('auth/forgot-password', {email : this.emailForRestore});
 
-        this.$http({
-            url: this.utilService.apiPrefix('auth/forgot-password'),
-            method: 'POST',
-            skipAuthorization: true,
-            data: {
-                email: this.emailForRestore
-            }
-        })
+        this.auth.inFlight  = true;
+
+        this.$http(options)
             .then(res => {
                 this.$state.go('info', {
-                    message: res.data.message,
-                    type: 'restore',
+                    message : res.data.message,
+                    type    : 'restore',
                 });
             })
             .catch(err => {
@@ -47,7 +44,6 @@ class LoginController {
             .finally(() => {
                 this.auth.inFlight = false;
             })
-
     }
 
     processToken(token) {
@@ -56,22 +52,23 @@ class LoginController {
         this.$state.go('home');
     }
 
-    _getHttpOptions(data) {
+    _getHttpOptions(url, data) {
         return {
-            url : this.utilService.apiPrefix('auth/login'),
-            skipAuthorization: true,
-            method: 'POST',
-            data: data
+            url                 : this.utilService.apiPrefix(url),
+            skipAuthorization   : true,
+            method              : 'POST',
+            data                : data
         }
     }
 }
 
-const LoginComponent = {
-    template        : require('./login-component.template.html'),
-    controller      : LoginController,
-    require         : {
-        auth        : '^authComponent'
-    }
-};
+const
+    LoginComponent = {
+        template        : require('./login-component.template.html'),
+        controller      : LoginController,
+        require         : {
+            auth        : '^authComponent'
+        }
+    };
 
 export default LoginComponent;

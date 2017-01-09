@@ -86,14 +86,14 @@
              ng-repeat="message in $ctrl.messages"
              class="panel-default">
             <div uib-accordion-heading class="message-header">
-                <div class="row" ng-click="$ctrl.readMessage(message)" ng-class="{'unread' : !message.status}">
-                    <div class="col-xs-4">
+                <div class="row message-accordion" ng-click="$ctrl.readMessage(message)" ng-class="{'unread' : !message.status}">
+                    <div class="col-xs-12 col-sm-4">
                       <span class="receivers">{{$ctrl.setText(message)}}</span>
                     </div>
-                    <div class="col-xs-4 -al-c text-capitalize">
+                    <div class="col-xs-12 col-sm-4 -al-c text-capitalize">
                         {{message.subject}}
                     </div>
-                    <div class="col-xs-4 text-muted -al-r">
+                    <div class="col-xs-12 col-sm-4 text-muted -al-r">
                         {{message.date | dateFilter}}
                     </div>
                 </div>
@@ -104,18 +104,18 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-3 col-sm-2">
+                        <div class="col-xs-12 col-sm-2 -mg-bottom-5">
                             <span class="label label-info">Sender</span>
                         </div>
-                        <div class="col-xs-9 col-sm-10">
+                        <div class="col-xs-12 col-sm-10 -mg-bottom-5">
                             <p class="item">{{message.sender._id == $ctrl.home.user._id ? 'Me' : message.sender.name}}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-3 col-sm-2">
+                        <div class="col-xs-12 col-sm-2 -mg-bottom-5">
                             <span class="label label-info">Receivers</span>
                         </div>
-                        <div class="col-xs-9 col-sm-10">
+                        <div class="col-xs-12 col-sm-10 -mg-bottom-5">
                             <p class="item" ng-bind-html="$ctrl.getMessageReceivers(message.receivers)"></p>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                 </div>
                 <div class="panel-body attachments">
                     <div class="row">
-                        <div class="col-xs-4 img-container -al-c">
+                        <div class="col-xs-12 col-sm-4 img-container -al-c">
                             <img ng-src="{{$ctrl.utilService.apiPrefix(message.attachment.path)}}"
                                  class="-inbox"
                                  ng-if="message.attachment.type.indexOf('image') > -1" alt="Attachment image">
@@ -141,29 +141,31 @@
                                   ng-if="message.attachment.type.indexOf('image') == -1"
                                   aria-hidden="true"></span>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-12 col-sm-8">
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-12 col-sm-3">
                                     <span class="label label-info w100">Name</span>
                                 </div>
-                                <div class="col-xs-9">
-                                    {{message.attachment.name}}
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="ellipsis">
+                                        {{message.attachment.name}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-12 col-sm-3">
                                     <span class="label label-info w100">Size</span>
                                 </div>
-                                <div class="col-xs-9">
+                                <div class="col-xs-12 col-sm-9">
                                     {{message.attachment.size}} bytes
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-12 col-sm-3">
                                     <span class="label label-info w100">Url</span>
                                 </div>
-                                <div class="col-xs-9">
-                                    <a href="{{$ctrl.utilService.apiPrefix(message.attachment.path)}}">
+                                <div class="col-xs-12 col-sm-9">
+                                    <a target="_blank" ng-href="{{$ctrl.utilService.apiPrefix(message.attachment.path)}}">
                                         Download
                                     </a>
                                 </div>

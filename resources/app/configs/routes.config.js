@@ -33,27 +33,27 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             parent      : 'auth',
             url         : '/email-verification',
             controller  : function ($location, $http, utilService, $state) {
-                let token       = $location.search().token;
-                let notNewUser  = $location.search().notNewUser;
+                let
+                    token       = $location.search().token,
+                    notNewUser  = $location.search().notNewUser;
 
                 $http({
-                    url: utilService.apiPrefix('auth/email-confirmation'),
-                    method: 'POST',
-                    data: {
-                        token: token,
-                        notNewUser: !!notNewUser
+                    url             : utilService.apiPrefix('auth/email-confirmation'),
+                    method          : 'POST',
+                    data            : {
+                        token       : token,
+                        notNewUser  : !!notNewUser
                     }
                 }).then(res=>{
                     $state.go('info', {
-                        message: res.data.message,
-                        type: 'success',
-                        options: {
-                            signInBtn: function () {
+                        message         : res.data.message,
+                        type            : 'success',
+                        options         : {
+                            signInBtn   : function () {
                                 $state.go('login');
                             }
                         }
                     });
-                    console.log(res);
                 })
             },
             template    : `<ui-view></ui-view>`
@@ -70,9 +70,9 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
      */
 
         .state('base', {
-            url     : '/',
-            abstract: true,
-            template: require('../base/base.template.html')
+            url         : '/',
+            abstract    : true,
+            template    : require('../base/base.template.html')
         })
 
         .state('info', {
