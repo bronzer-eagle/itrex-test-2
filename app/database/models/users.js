@@ -47,11 +47,10 @@ userSchema.methods.setAdmin = function (isSuperAdmin) {
 
         this.superAdmin = true;
         this.markModified('superAdmin');
-    } else {
-
-        this.admin = true;
-        this.markModified('admin');
     }
+
+    this.admin = true;
+    this.markModified('admin');
 
     this.save();
 };
