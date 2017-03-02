@@ -21,53 +21,42 @@ class AuthFlow {
         });
 
         user.setPassword(req.body.password);
-
         emailVerification.sendVerification(user, res);
     };
 
     login(req, res) {
         if (!AuthFlow.validate(req, res, 'login')) return;
 
-        passport.authenticate('local', function(err, user){
+        passport.authenticate('local', (err, user) => {
             if (err) {
-                res.status(404).json(err);
+                helper.error(404, err, res);
                 return;
             }
 
             if (user) {
-                res.status(200).json({'token' : user.generateJwt()});
+                helper.success(200, {'token' : user.generateJwt()}, res);
             } else {
-                res.status(401).json({
-                    message : 'Not authorized'
-                });
+                helper.error(401, {message : 'Not authorized'}, res);
             }
-
         })(req, res);
     };
 
     static validate(req, res, type) {
         let
             arr     = validator.validate(req.body, type),
-            errors  = getErrors();
+            errors  = this.getErrors(arr);
 
-        if (errors) {
-            AuthFlow.sendJSONresponse(res, 400, {errors : errors});
-
+        if (errors.length) {
+            helper.error(400, {errors : errors}, res);
             return false;
         }
 
         return true;
-
-        function getErrors() {
-            _.filter(arr, item => {
-                return !item.flag
-            });
-        }
     }
 
-    static sendJSONresponse(res, status, content) {
-        res.status(status).json(content);
-    };
+    getErrors(arr) {
+        return _.filter(arr, item => !item.flag);
+    }
 }
 
 module.exports = new AuthFlow();

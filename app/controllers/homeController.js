@@ -12,70 +12,56 @@ class HomeController {
     sendData(req, res) {
         let
             user    = req.user,
-            fields = {name : 1, email : 1, admin : 1, blacklist: 1};
+            fields  = {name : 1, email : 1, admin : 1, blacklist: 1};
 
-        User.findOne({_id: user._id}, fields, (err, user) => {
-            if (err) {
-                res.status(500);
-                res.json(err);
-            }
+        User.findOne({_id: user._id}, fields)
+            .then(user => {
+                if (!user) {
+                    helper.error(404, { err: 'No such a user' }, res);
+                    return;
+                }
 
-            if (user) {
-                User.find({_id: {$ne : user._id}}, {name : 1, email : 1, admin: 1}, (err, usersList) => {
-                    res.status(200);
-                    res.json({
-                        user,
-                        usersList
+                return User.find({_id: {$ne : user._id}}, {name : 1, email : 1, admin: 1})
+                    .then(usersList => {
+                        helper.success(200, {user, usersList}, res);
                     });
-                });
-            } else {
-                res.status(404);
-                res.json({ err: 'No such a user' });
-            }
-        });
+            }, err => {
+                helper.error(500, err, res);
+            });
     }
 
     getMessages(req, res) {
         let
-            pagination          = JSON.parse(req.query.pagination),
-            filters             = JSON.parse(req.query.options);
+            pagination  = JSON.parse(req.query.pagination),
+            filters     = JSON.parse(req.query.options);
 
         if (pagination) {
-            User.findById(req.user._id, (err, user) => {
-                if (user) {
-                    dataController.getMessages(user, filters, pagination, (result) => {
-                        if (result.err) {
-                            res.status(500);
-                            res.json(result);
-                        } else {
+            User.findById(req.user._id)
+                .then(user => {
+                    if (!user) helper.error(403, {}, res);
+
+                    return dataController.getMessages(user, filters, pagination)
+                        .then((result) => {
                             res.status(200);
                             res.json(result);
-                        }
-                    })
-                }
-            })
+                        })
+                }, err => {
+                    helper.error(500, err, res);
+                })
         } else {
-            res.status(404);
-            res.json({
-                'error': 'No pagination!'
-            })
+            helper.error(404, {'error': 'No pagination!'}, res)
         }
     }
 
     readMessage(req, res) {
-        let
-            messageId = req.query.message_id;
-
-        dataController.findMessage(messageId, (err, message) => {
-            if (err) {
-                res.status(500);
-                res.json(err);
-            } else {
+        dataController
+            .findMessage(req.query.message_id)
+            .then(message => {
                 message.readMessage(req.user._id);
-                res.status(200);
-                res.json({});
-            }
-        })
+                helper.success(204, {}, res)
+            }, err => {
+                helper.error(500, err, res);
+            })
     }
 }
 

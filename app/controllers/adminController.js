@@ -6,6 +6,8 @@ let
 class AdminController {
     constructor() {}
 
+    //TODO: set promise
+
     checkAdminList(user, callback) {
         User.findOne({admin: true}, function (err, admin) {
             if (!admin) {
@@ -22,15 +24,11 @@ class AdminController {
                 let token = user.generateJwt({
                     adminWatch : true
                 });
-                res.status(200);
-                res.json({
-                    token
-                })
+                helper.success(200, {token}, res);
             } else {
-                res.status(500);
-                res.json({
+                helper.error(500, {
                     'error' : 'There is no user with that id, please check your data'
-                })
+                }, res);
             }
         })
     }
@@ -56,9 +54,7 @@ class AdminController {
                             item.setAdmin();
                         });
 
-                        res.status(200).json({
-                            message : 'You have successfully assign new admins!'
-                        });
+                        helper.success(200, {message : 'You have successfully assign new admins!'}, res);
                     });
             });
     }
