@@ -1,4 +1,6 @@
+//form config from .env file
 require('dotenv').config();
+
 require('./app/database/database');
 require('./app/config/passport');
 
@@ -10,12 +12,9 @@ let
     morgan                      = require('morgan'),
     passport                    = require('passport'),
     guard                       = require('express-jwt-permissions')(),
-    [
-        authRoutes,
-        testRoutes,
-        protectedRoutes,
-        adminRoutes
-    ]                           = require('./app/routes'),
+    authRoutes                  = require('./app/routes/authRoutes'),
+    protectedRoutes             = require('./app/routes/protectedRoutes'),
+    adminRoutes                 = require('./app/routes/adminRoutes'),
     jwt                         = require('express-jwt'),
     adminController             = require('./app/controllers/adminController'),
     app                         = express(),
@@ -56,7 +55,6 @@ app.use(express.static('./public'));
  */
 
 app.use('/auth', authRoutes);
-app.use('/test', testRoutes);
 app.use('/app', jwtCheck, protectedRoutes);
 app.use('/admin', [jwtCheck, (req, res, next) => {
     if (req.method != 'OPTIONS') {

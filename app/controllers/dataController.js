@@ -12,6 +12,18 @@ class DataController {
         this.messageFields = {sender: 1, receivers: 1, text: 1, subject: 1, attachment: 1, date: 1};
     }
 
+    setQueries(user) {
+        let
+            receiverUser        = {receiver: user._id},
+            senderUser          = {sender: user._id},
+            notInBlackList      = {$nin: user.blacklist},
+            inBlackList         = {$in: user.blacklist},
+            receivers           = {$elemMatch: receiverUser},
+            received            = {receivers: receivers, sender: notInBlackList},
+            blacklist           = {sender: inBlackList, receivers: receivers},
+            all                 = {$or : [received, senderUser]};
+    }
+
     getMessages(user, filters, pagination, callback) {
         let
             query, searchByName, findByNameRegExp,
@@ -35,14 +47,7 @@ class DataController {
              *  QUERIES TO DB
              */
 
-            receiverUser        = {receiver: user._id},
-            senderUser          = {sender: user._id},
-            notInBlackList      = {$nin: user.blacklist},
-            inBlackList         = {$in: user.blacklist},
-            receivers           = {$elemMatch: receiverUser},
-            received            = {receivers: receivers, sender: notInBlackList},
-            blacklist           = {sender: inBlackList, receivers: receivers},
-            all                 = {$or : [received, senderUser]},
+
 
             /**
              * CALLBACK FUNCTION AFTER GETTING MESSAGES FROM DB
@@ -91,6 +96,8 @@ class DataController {
                 query   = all;
                 break;
         }
+
+
 
         Message.count(query, (err, count) => {
             if (filters.searchByName) {
