@@ -107,7 +107,7 @@ class DataController {
     //TODO: set to promise
 
     findMessage(id) {
-        Message.findById(id).then(message => message, err => err)
+        return Message.findById(id).then(message => message, err => err)
     }
 
     /**

@@ -32,24 +32,20 @@ class HomeController {
 
     getMessages(req, res) {
         let
-            pagination  = JSON.parse(req.query.pagination),
+            pagination  = req.query.pagination,
             filters     = JSON.parse(req.query.options);
 
-        if (pagination) {
-            User.findById(req.user._id)
-                .then(user => {
-                    if (!user) res.error(403, {});
+        User.findById(req.user._id)
+            .then(user => {
+                if (!user) res.error(403, {});
 
-                    return dataController.getMessages(user, filters, pagination)
-                        .then((result) => {
-                        res.success(200, result);
-                        })
-                }, err => {
-                    res.error(500, err);
-                })
-        } else {
-            res.error(404, {'error': 'No pagination!'})
-        }
+                return dataController.getMessages(user, filters, pagination)
+                    .then((result) => {
+                    res.success(200, result);
+                    })
+            }, err => {
+                res.error(500, err);
+            })
     }
 
     readMessage(req, res) {
