@@ -8,6 +8,8 @@ let
     Promise         = require("bluebird"),
     User            = mongoose.model('User');
 
+Promise.promisifyAll(mongoose);
+
 class DataController {
     constructor() {}
 

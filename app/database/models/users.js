@@ -14,6 +14,7 @@ let
             type                : String,
             required            : true
         },
+        password                : String,
         admin                   : Boolean,
         superAdmin              : Boolean,
         hash                    : String,
@@ -26,13 +27,19 @@ let
         tempEmail               : String
     });
 
-userSchema.methods.setPassword = function (password, saveFlag) {
+userSchema.pre('save', function (next) {
+    let user = this;
+
+    //hash the password only if the password has been changed or user is new
+    if (!user.isModified('password')) return next();
 
     this.salt = crypto.randomBytes(16).toString('hex');
-    this.hash = crypto.pbkdf2Sync(String(password), this.salt, 1000, 64, 'sha512').toString('hex');
+    this.hash = crypto.pbkdf2Sync(String(user.password), this.salt, 1000, 64, 'sha512').toString('hex');
 
-    if (saveFlag) this.save();
-};
+    delete user.password;
+
+    return next();
+});
 
 userSchema.methods.validPassword = function (password) {
     let
@@ -100,8 +107,7 @@ userSchema.methods.setNewEmail = function () {
 };
 
 userSchema.methods.generateJwt = function(addData = {}) {
-    let
-        options,
+    let options,
         expiry = new Date();
         expiry.setDate(expiry.getDate() + 7);
 

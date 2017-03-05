@@ -4,14 +4,14 @@ let
     mongoose            = require('mongoose'),
     nev                 = require('email-verification')(mongoose),
     User                = mongoose.model('User'),
-    config              = require('../config/messages').emailVerification(User),
+    config              = require('../config/messages'),
     adminController     = require('./adminController');
 
 class EmailVerification {
     constructor () {}
 
     init() {
-        nev.configure(config, (error) => {
+        nev.configure(config.emailVerification(User), (error) => {
             if (error) throw new Error(error);
         });
 
@@ -23,36 +23,37 @@ class EmailVerification {
     sendVerification(newUser, res) {
         nev.createTempUser(newUser, (err, userExists, newTempUser) => {
             if (err) {
-                helper.error(404, {error : 'Creating temp user FAILED'}, res);
+                res.error(404, {error : 'Creating temp user FAILED'});
                 return;
             }
 
             if (userExists) {
-                helper.error(400, {
-                    message: 'You have already signed up and confirmed your account. Did you forget your password?'
-                }, res);
-
+                res.error(400, {
+                    message: `You have already signed up and 
+                              confirmed your account. 
+                              Did you forget your password?`
+                });
                 return;
             }
 
             if (newTempUser) {
-                let
-                    URL = newTempUser[nev.options.URLFieldName];
+                let URL = newTempUser[nev.options.URLFieldName];
 
                 nev.sendVerificationEmail(newUser.email, URL, (err, info) => {
                     if (err) {
-                        helper.error(404, {error: 'ERROR: sending verification email FAILED'}, res);
+                        res.error(404, {error: 'ERROR: sending verification email FAILED'});
                     }
-                    helper.success(200, {
+
+                    res.success(200, {
                         message: 'An email has been sent to you. Please check it to verify your account.',
                         info: info
-                    }, res);
+                    });
                 });
 
             } else {
-                helper.error(400, {
+                res.error(400, {
                     message: 'You have already signed up. Please check your email to verify your account.'
-                }, res);
+                });
             }
         });
     }
@@ -60,47 +61,40 @@ class EmailVerification {
     resendVerification(req, res) {
         nev.resendVerificationEmail(req.query.email, (err, userFound) => {
             if (err) {
-                helper.error(404, {
-                    message: 'ERROR: resending verification email FAILED'
-                }, res);
-
+                res.error(404, {message: 'ERROR: resending verification email FAILED'});
                 return;
             }
 
             if (userFound) {
-                helper.success(200, {
-                    message: 'An email has been sent to you, yet again. Please check it to verify your account.'
-                }, res);
+                res.success(200, {
+                    message: `An email has been sent to you, yet again. 
+                              Please check it to verify your account.`
+                });
             } else {
-                helper.error(400, {
-                    message: 'Your verification code has expired. Please sign up again.'
-                }, res);
+                res.error(400, {message: 'Your verification code has expired. Please sign up again.'});
             }
         });
     }
 
     verify(req, res) {
-        let
-            token = req.body.token;
+        let token = req.body.token;
 
-        nev.confirmTempUser(token, function(err, user) {
+        nev.confirmTempUser(token, (err, user) => {
             if (user) {
-                adminController.checkAdminList(user, ()=>{
-                    helper.success(200, {
-                        message: 'CONFIRMED!'
-                    }, res);
-                });
-                nev.sendConfirmationEmail(user.email, function(err) {
-                    if (err) {
-                        helper.error(404, {
-                            message : 'ERROR: sending confirmation email FAILED'
-                        }, res);
-                    }
+                adminController.checkAdminList(user)
+                    .then((res)=>{
+                        if (!res) user.setAdmin(true);
+
+                        res.success(200, {message: 'CONFIRMED!'});
+                    });
+
+                nev.sendConfirmationEmail(user.email, (err) => {
+                    if (!err) return;
+
+                    res.error(404, {message : 'ERROR: sending confirmation email FAILED'});
                 });
             } else {
-                helper.error(404, {
-                    message: 'ERROR: confirming temp user FAILED'
-                }, res);
+                res.error(404, {message: 'ERROR: confirming temp user FAILED'});
             }
         });
     }

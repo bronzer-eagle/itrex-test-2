@@ -7,6 +7,6 @@ let
     adminController          = require(`../controllers/adminController`);
 
 adminRoutes.post('/set-watch-as-me',                    adminController.setWatchAsMe.bind(adminController));
-adminRoutes.post('/set-admins',                         adminController.setAdmins.bind(adminController));
+adminRoutes.post('/set-admins',                         adminController.changeAdmins.bind(adminController));
 
 module.exports = adminRoutes;

@@ -1,62 +1,36 @@
-let
-    _                   = require('underscore'),
-    passport            = require('passport'),
+let passport            = require('passport'),
     mongoose            = require('mongoose'),
     User                = mongoose.model('User'),
-    validator           = require('../helpers/validator.js'),
     emailVerification   = require('./emailVerification');
 
 class AuthFlow {
     constructor() {}
 
     register(req, res) {
-        let
-            user;
-
-        if (!AuthFlow.validate(req, res, 'registration')) return;
-
-        user = new User({
+        let user = new User({
             name   : req.body.name,
-            email  : req.body.email
+            email  : req.body.email,
+            password: req.body.password
         });
 
-        user.setPassword(req.body.password);
+        //user.setPassword(req.body.password);
         emailVerification.sendVerification(user, res);
     };
 
     login(req, res) {
-        if (!AuthFlow.validate(req, res, 'login')) return;
-
         passport.authenticate('local', (err, user) => {
             if (err) {
-                helper.error(404, err, res);
+                res.error(404, err);
                 return;
             }
 
             if (user) {
-                helper.success(200, {'token' : user.generateJwt()}, res);
+                res.success(200, {'token' : user.generateJwt()});
             } else {
-                helper.error(401, {message : 'Not authorized'}, res);
+                res.error(401, {message : 'Not authorized'});
             }
         })(req, res);
     };
-
-    static validate(req, res, type) {
-        let
-            arr     = validator.validate(req.body, type),
-            errors  = this.getErrors(arr);
-
-        if (errors.length) {
-            helper.error(400, {errors : errors}, res);
-            return false;
-        }
-
-        return true;
-    }
-
-    getErrors(arr) {
-        return _.filter(arr, item => !item.flag);
-    }
 }
 
 module.exports = new AuthFlow();

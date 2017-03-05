@@ -52,6 +52,17 @@ app.use(express.static('./'));
 app.use(express.static('./public'));
 
 /**
+ * OTHER OPTIONS
+ */
+
+app.use((req, res, next) => {
+    res.success = helper.success;
+    res.error = helper.error;
+
+    next();
+});
+
+/**
  * SETTING ROUTES
  */
 
