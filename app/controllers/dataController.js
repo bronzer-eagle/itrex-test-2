@@ -103,8 +103,6 @@ class DataController {
                 }
         });
     }
-    
-    //TODO: set to promise
 
     findMessage(id) {
         return Message.findById(id).then(message => message, err => err)
