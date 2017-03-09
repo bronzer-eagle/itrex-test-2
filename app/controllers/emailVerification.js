@@ -1,13 +1,12 @@
 import '../database/models/users';
 
 import mongoose        from 'mongoose';
-import nev             from 'email-verification';
+import nevObj          from 'email-verification';
 import config          from '../config/messages';
 import adminController from './adminController';
 
-let User = mongoose.model('User');
-
-nev = nev(mongoose);
+const User = mongoose.model('User'),
+      nev = nevObj(mongoose);
     
 class EmailVerification {
     constructor () {}
@@ -84,8 +83,8 @@ class EmailVerification {
         nev.confirmTempUser(token, (err, user) => {
             if (user) {
                 adminController.checkAdminList(user)
-                    .then((res)=>{
-                        if (!res) user.setAdmin(true);
+                    .then((result)=>{
+                        if (!result) user.setAdmin(true);
 
                         res.success(200, {message: 'CONFIRMED!'});
                     });

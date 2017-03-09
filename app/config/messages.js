@@ -2,7 +2,7 @@
  * Created by alexander on 02.03.17.
  */
 
-module.exports = {
+export default {
     emailVerification : model => { return {
         verificationURL         : `${process.env.appHttp}auth/email-verification?token=\${URL}`,
         persistentUserModel     : model,

@@ -9,7 +9,7 @@ import validate           from 'express-validation';
 import rules              from '../validators/authValidator';
 import restorePass        from '../controllers/restorePasswordController';
 
-let authRoutes = express.Router;
+let authRoutes = express.Router();
 
 authRoutes.post('/register',
     validate(rules.register),

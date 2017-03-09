@@ -7,7 +7,7 @@ import validate         from 'express-validation';
 import rules            from '../validators/adminPageValidator';
 import adminController  from '../controllers/adminController';
 
-const adminRoutes = express.Router;
+let adminRoutes = express.Router();
 
 adminRoutes.post('/set-watch-as-me',
     validate(rules.watchAsMe),

@@ -10,7 +10,7 @@ import validation     from 'express-validation';
 import rules          from '../validators/homePageValidator';
 import restorePass    from '../controllers/restorePasswordController';
 
-let protectedRoutes = express.Router;
+let protectedRoutes = express.Router();
 
 protectedRoutes.get('/user-data',
     homeController.sendData.bind(homeController));

@@ -68,7 +68,7 @@ app.use('/admin', [jwtCheck, (req, res, next) => {
     } else {
         helper.success(200, {}, res);
     }
-}, guard.check('admin')],  adminRoutes);
+}, guard().check('admin')],  adminRoutes);
 
 /**
  * OTHERWISE ROUTES

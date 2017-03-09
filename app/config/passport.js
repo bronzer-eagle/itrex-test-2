@@ -1,11 +1,16 @@
-require('../controllers/emailVerification').init();
+import emailVerification from '../controllers/emailVerification';
 
-let strategy,
-    passport        = require('passport'),
-    LocalStrategy   = require('passport-local').Strategy,
-    mongoose        = require('mongoose'),
-    User            = mongoose.model('User'),
-    TempUser        = mongoose.model('tempusers');
+emailVerification.init();
+
+let strategy;
+
+import passport      from 'passport';
+import passportLocal from 'passport-local';
+import mongoose      from 'mongoose';
+
+const LocalStrategy = passportLocal.Strategy,
+      User          = mongoose.model('User'),
+      TempUser      = mongoose.model('tempusers');
 
 strategy = new LocalStrategy({usernameField: 'email'},
     (username, password, done) => {

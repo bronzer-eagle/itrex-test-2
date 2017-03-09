@@ -7,7 +7,7 @@ class AdminController {
     constructor() {}
 
     checkAdminList() {
-        User.findOne({admin: true}).then(admin => admin);
+        return User.findOne({admin: true}).then(admin => admin);
     }
 
     setWatchAsMe(req, res) {
