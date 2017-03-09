@@ -1,32 +1,26 @@
-//form config from .env file
-require('dotenv').config();
+import './app/database/database';
+import './app/config/passport';
 
-require('./app/database/database');
-require('./app/config/passport');
+import express         from 'express';
+import bodyParser      from 'body-parser';
+import morgan          from 'morgan';
+import passport        from 'passport';
+import guard           from 'express-jwt-permissions';
+import authRoutes      from './app/routes/authRoutes';
+import protectedRoutes from './app/routes/protectedRoutes';
+import adminRoutes     from './app/routes/adminRoutes';
+import jwt             from 'express-jwt';
+import helper          from './app/helpers/expressHelpers';
 
-let
-    express            = require(`express`),
-    bodyParser         = require(`body-parser`),
-    path               = require('path'),
-    morgan             = require('morgan'),
-    passport           = require('passport'),
-    guard              = require('express-jwt-permissions')(),
-    authRoutes         = require('./app/routes/authRoutes'),
-    protectedRoutes    = require('./app/routes/protectedRoutes'),
-    adminRoutes        = require('./app/routes/adminRoutes'),
-    jwt                = require('express-jwt'),
-    adminController    = require('./app/controllers/adminController'),
-    app                = express(),
-    jwtCheck           = jwt({secret: process.env.JWTSecret}),
-    port               = process.env.PORT || 8080;
-
-global.helper          = require('./app/helpers/expressHelpers');
+let app      = express(),
+    jwtCheck = jwt({secret: process.env.JWTSecret}),
+    port     = process.env.PORT || 8080;
 
 /**
  * SETTING HEADERS
  */
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
@@ -80,7 +74,7 @@ app.use('/admin', [jwtCheck, (req, res, next) => {
  * OTHERWISE ROUTES
  */
 
-app.use(function(req, res) {
+app.use((req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 

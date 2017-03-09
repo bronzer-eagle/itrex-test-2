@@ -1,9 +1,9 @@
 /**
  * Created by alexander on 05.03.17.
  */
-let Joi = require('joi');
+import Joi from 'joi';
 
-module.exports = {
+export default {
     'login' : {
         body: {
             email   : Joi.string().email().required(),

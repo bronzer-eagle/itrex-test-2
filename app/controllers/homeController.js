@@ -1,10 +1,10 @@
-require('../database/database');
+import '../database/database';
 
-let
-    mongoose        = require('mongoose'),
-    Message         = mongoose.model('Message'),
-    User            = mongoose.model('User'),
-    dataController  = require('./dataController');
+import mongoose       from 'mongoose';
+import dataController from './dataController';
+
+let Message = mongoose.model('Message'),
+    User    = mongoose.model('User');
 
 class HomeController {
     constructor() {}
@@ -60,4 +60,4 @@ class HomeController {
     }
 }
 
-module.exports = new HomeController();
+export default new HomeController();

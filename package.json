@@ -4,7 +4,7 @@
   "description": "itrex test task",
   "main": "app.js",
   "scripts": {
-    "start": "mongod --dbpath=./data & node app"
+    "start": "mongod --dbpath=./data & node -r dotenv/config -r babel-core/register app"
   },
   "repository": {
     "type": "git",
@@ -68,9 +68,13 @@
     "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.23.0",
     "babel-core": "^6.2.0",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-stage-3": "^6.22.0",
+    "babel-register": "^6.23.0",
     "copy-webpack-plugin": "^3.0.1",
     "css-loader": "^0.23.1",
     "del": "^2.0.2",

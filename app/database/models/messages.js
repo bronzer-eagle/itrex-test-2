@@ -1,6 +1,5 @@
-const
-    _                       = require('underscore'),
-    mongoose                = require( 'mongoose' );
+import _        from 'underscore';
+import mongoose from 'mongoose';
 
 let
     message                 = new mongoose.Schema({

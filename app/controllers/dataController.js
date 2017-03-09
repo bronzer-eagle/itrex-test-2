@@ -1,19 +1,13 @@
-require('../database/database');
+import '../database/database';
 
-let
-    _               = require('underscore'),
-    async           = require('async'),
-    mongoose        = require('mongoose'),
-    Message         = mongoose.model('Message'),
-    Promise         = require("bluebird"),
-    User            = mongoose.model('User');
+import _        from 'underscore';
+import mongoose from 'mongoose';
 
-Promise.promisifyAll(mongoose);
+let Message = mongoose.model('Message'),
+    User    = mongoose.model('User');
 
 class DataController {
     constructor() {}
-
-    //TODO: set to promise
     
     getMessages(user, filters, pagination) {
         let
@@ -171,4 +165,4 @@ class DataController {
     }
 }
 
-module.exports = new DataController();
+export default new DataController();

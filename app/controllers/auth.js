@@ -1,7 +1,8 @@
-let passport            = require('passport'),
-    mongoose            = require('mongoose'),
-    User                = mongoose.model('User'),
-    emailVerification   = require('./emailVerification');
+import passport          from 'passport';
+import mongoose          from 'mongoose';
+import emailVerification from './emailVerification';
+
+let User = mongoose.model('User');
 
 class AuthFlow {
     constructor() {}
@@ -13,7 +14,6 @@ class AuthFlow {
             password: req.body.password
         });
 
-        //user.setPassword(req.body.password);
         emailVerification.sendVerification(user, res);
     };
 
@@ -33,4 +33,4 @@ class AuthFlow {
     };
 }
 
-module.exports = new AuthFlow();
+export default new AuthFlow();

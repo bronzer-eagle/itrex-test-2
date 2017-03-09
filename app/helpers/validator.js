@@ -1,5 +1,4 @@
-let
-    _ = require('underscore');
+import _ from 'underscore';
 
 class Validator {
     constructor(){
@@ -55,4 +54,4 @@ class Validator {
     }
 }
 
-module.exports = new Validator();
+export default new Validator();

@@ -1,14 +1,15 @@
 /**
  * Created by alexander on 02.03.17.
  */
-let express                 = require('express'),
-    authRoutes              = express.Router(),
-    emailVerification       = require('../controllers/emailVerification'),
-    auth                    = require('../controllers/auth.js'),
-    userController          = require(`../controllers/userController`),
-    validate                = require('express-validation'),
-    rules                   = require('../validators/authValidator'),
-    restorePass             = require('../controllers/restorePasswordController');
+import express            from 'express';
+import emailVerification  from '../controllers/emailVerification';
+import auth               from '../controllers/auth.js';
+import userController     from '../controllers/userController';
+import validate           from 'express-validation';
+import rules              from '../validators/authValidator';
+import restorePass        from '../controllers/restorePasswordController';
+
+let authRoutes = express.Router;
 
 authRoutes.post('/register',
     validate(rules.register),
@@ -44,4 +45,4 @@ authRoutes.post('/email-confirmation', (req, res) => {
     }
 });
 
-module.exports = authRoutes;
+export default authRoutes;

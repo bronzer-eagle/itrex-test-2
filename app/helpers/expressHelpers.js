@@ -14,4 +14,4 @@ class ExpressHelper {
     }
 }
 
-module.exports = ExpressHelper;
+export default ExpressHelper;

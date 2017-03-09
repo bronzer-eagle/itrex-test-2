@@ -1,6 +1,7 @@
-let _                   = require('underscore'),
-    mongoose            = require('mongoose'),
-    User                = mongoose.model('User');
+import _        from 'underscore';
+import mongoose from 'mongoose';
+
+const User = mongoose.model('User');
 
 class AdminController {
     constructor() {}
@@ -53,4 +54,4 @@ class AdminController {
     }
 }
 
-module.exports = new AdminController();
+export default new AdminController();

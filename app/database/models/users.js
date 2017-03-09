@@ -1,7 +1,6 @@
-const
-    mongoose                    = require( 'mongoose' ),
-    crypto                      = require('crypto'),
-    jwt                         = require('jsonwebtoken');
+import mongoose from 'mongoose';
+import crypto   from 'crypto';
+import jwt      from 'jsonwebtoken';
 
 let
     userSchema                  = new mongoose.Schema({

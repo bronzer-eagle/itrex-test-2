@@ -1,12 +1,14 @@
-require('../database/models/users');
+import '../database/models/users';
 
-let
-    mongoose            = require('mongoose'),
-    nev                 = require('email-verification')(mongoose),
-    User                = mongoose.model('User'),
-    config              = require('../config/messages'),
-    adminController     = require('./adminController');
+import mongoose        from 'mongoose';
+import nev             from 'email-verification';
+import config          from '../config/messages';
+import adminController from './adminController';
 
+let User = mongoose.model('User');
+
+nev = nev(mongoose);
+    
 class EmailVerification {
     constructor () {}
 
@@ -100,7 +102,4 @@ class EmailVerification {
     }
 }
 
-module.exports = new EmailVerification();
-
-
-
+export default new EmailVerification();

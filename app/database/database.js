@@ -1,11 +1,13 @@
-const
-    mongoose = require(`mongoose`);
+import mongoose from 'mongoose';
+import Promise from "bluebird";
 
-mongoose.connect(process.env.dbPath, function (err) {
+Promise.promisifyAll(mongoose);
+
+mongoose.connect(process.env.dbPath, (err) => {
     if (err) throw new Error(err.message);
 
     console.log(`Mongodb connected on port: ${process.env.dbPort}`);
 });
 
-require('./models/users');
-require('./models/messages');
+import './models/users';
+import './models/messages';

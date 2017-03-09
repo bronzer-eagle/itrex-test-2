@@ -1,13 +1,9 @@
 /**
  * Created by alexander on 05.03.17.
  */
+import Joi from 'joi';
 
-/**
- * Created by alexander on 05.03.17.
- */
-let Joi = require('joi');
-
-module.exports = {
+export default {
     'watchAsMe' : {
         body: {
             userId : Joi.alternatives().try(Joi.number(), Joi.string())

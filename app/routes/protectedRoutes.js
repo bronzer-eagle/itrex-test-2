@@ -1,15 +1,16 @@
 /**
  * Created by alexander on 02.03.17.
  */
-let
-    express                 = require('express'),
-    protectedRoutes         = express.Router(),
-    multipart               = require('connect-multiparty'),
-    userController          = require(`../controllers/userController`),
-    homeController          = require(`../controllers/homeController`),
-    validation              = require('express-validation'),
-    rules                   = require('../validators/homePageValidator'),
-    restorePass             = require('../controllers/restorePasswordController');
+
+import express        from 'express';
+import multipart      from 'connect-multiparty';
+import userController from '../controllers/userController';
+import homeController from '../controllers/homeController';
+import validation     from 'express-validation';
+import rules          from '../validators/homePageValidator';
+import restorePass    from '../controllers/restorePasswordController';
+
+let protectedRoutes = express.Router;
 
 protectedRoutes.get('/user-data',
     homeController.sendData.bind(homeController));
@@ -41,4 +42,4 @@ protectedRoutes.post('/change-blacklist',
     validation(rules.changeBlacklist),
     userController.changeBlacklist.bind(userController));
 
-module.exports = protectedRoutes;
+export default protectedRoutes;

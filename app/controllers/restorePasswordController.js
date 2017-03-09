@@ -1,10 +1,11 @@
-require('../database/models/users');
+import '../database/models/users';
 
-let crypto      = require('crypto'),
-    mongoose    = require('mongoose'),
-    User        = mongoose.model('User'),
-    config      = require('../config/messages'),
-    nodemailer  = require('nodemailer');
+import crypto      from 'crypto';
+import mongoose    from 'mongoose';
+import config      from '../config/messages';
+import nodemailer  from 'nodemailer';
+
+const User = mongoose.model('User');
 
 class RestorePasswordFlow {
     constructor() {
@@ -83,4 +84,4 @@ class RestorePasswordFlow {
     }
 }
 
-module.exports = new RestorePasswordFlow();
+export default new RestorePasswordFlow();

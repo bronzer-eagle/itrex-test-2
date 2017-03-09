@@ -1,13 +1,13 @@
-    require('../database/models/messages');
+import '../database/models/users';
 
-let _           = require('underscore'),
-    crypto      = require('crypto'),
-    mongoose    = require('mongoose'),
-    Message     = mongoose.model('Message'),
-    User        = mongoose.model('User'),
-    path        = require('path'),
-    config      = require('../config/messages'),
-    nodemailer  = require('nodemailer');
+import _          from 'underscore';
+import crypto     from 'crypto';
+import mongoose   from 'mongoose';
+import config     from '../config/messages';
+import nodemailer from 'nodemailer';
+
+const Message = mongoose.model('Message'),
+      User    = mongoose.model('User');
 
 class UserController {
     constructor() {
@@ -139,4 +139,4 @@ class UserController {
     }
 }
 
-module.exports = new UserController();
+export default new UserController();
